@@ -1,5 +1,7 @@
 package util 
 {
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
@@ -358,7 +360,17 @@ package util
 			}
 			arr.length = 0;
 			return str;
-		}				
+		}	
+		
+		public static function Getbitmap(name:String):Bitmap
+		{
+			var mc:MovieClip = GetClassByString(name);
+			var b:BitmapData = new BitmapData(mc.width, mc.height, true, 0xFFFFFF);
+			b.draw(mc);
+			var bt:Bitmap = new Bitmap(b);
+			return bt;
+		}
+	
 		
 		/**
 		 * 線性內插等距N個點

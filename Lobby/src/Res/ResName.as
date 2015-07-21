@@ -16,6 +16,7 @@ package Res
 		
 		public static const L_name:String = "Lobby_player_name";
 		public static const L_credit:String = "Lobby_player_credit";
+		public static const L_altas:String = "Lobby_altas";
 		
 		public static const L_icon_1:String = "Lobby_icon_1";
 		public static const L_icon_2:String = "Lobby_icon_2";

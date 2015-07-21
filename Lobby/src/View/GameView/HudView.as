@@ -55,6 +55,14 @@ package View.GameView
 			playerinfo.container.x = 940;
 			playerinfo.container.y = 10;
 			
+			//name
+			var name:MultiObject = prepare("name", new MultiObject() , this);
+			name.CustomizedFun = _regular.ascii_idx_setting;			
+			name.CustomizedData = "test01".split("");//_model.getValue(modelName.NICKNAME).split("");
+			name.container.x = 1095 + (name.CustomizedData.length -1) * 24 *-0.5;
+			name.container.y = 22;
+			name.Create_by_bitmap(name.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, name.CustomizedData.length, 24, 34.16, "o_");			
+			
 			var topicon:MultiObject = prepare("topicon", new MultiObject(), this);
 			topicon.Posi_CustzmiedFun = _regular.Posi_x_Setting;
 			topicon.Post_CustomizedData = [0, 160, 230];
@@ -66,7 +74,7 @@ package View.GameView
 			
 		
 			
-			_tool.SetControlMc(topGameState.container);
+			_tool.SetControlMc(name.container);
 			//_tool.SetControlMc(topicon.ItemList[2]);
 			addChild(_tool);
 		}

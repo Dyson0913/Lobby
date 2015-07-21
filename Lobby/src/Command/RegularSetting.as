@@ -77,6 +77,17 @@ package Command
 			str = str.substr(0, len) + ".";
 			if ( str.length > orlength + limit) str = str.substr(0, len - limit) + ".";			
 			s.text = str;
+		}	
+			
+		public function sliding(mc:MovieClip,t:Number, x:Number =0, y:Number = 0):void
+		{
+			Tweener.addTween(mc, { x:x ,y:y,time:t, transition:"easeOutCubic"} );
+		}
+		
+		public function ascii_idx_setting(mc:*, idx:int, data:Array):void
+		{
+			var code:int  = data[idx].toString().charCodeAt(0) -32;
+			mc.drawTile(code);
 		}
 		
 	}

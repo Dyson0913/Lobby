@@ -66,6 +66,8 @@ package View.GameView
 			page.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
 			page.CustomizedFun = this.roation;			
 			page.mousedown = _betCommand.test_reaction;
+			//page.CustomizedFun = _regular.FrameSetting;
+			//page.CustomizedData = [3, 2, 2, 2, 2];
 			page.Create_by_list(2, [ResName.L_arrow, ResName.L_arrow], 0 , 0, 2, 1880 , 0, "Bet_");
 			page.container.x = 10;
 			page.container.y = 502;
@@ -109,31 +111,7 @@ package View.GameView
 			//coinob.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
 			//coinob.CustomizedFun = _regular.FrameSetting;
 			//coinob.CustomizedData = [3, 2, 2, 2, 2];
-			//coinob.Posi_CustzmiedFun = _regular.Posi_y_Setting;
-			//coinob.Post_CustomizedData = [0,10,20,10,0];
-			//coinob.Create_by_list(5,  [ResName.coin1,ResName.coin2,ResName.coin3,ResName.coin4,ResName.coin5], 0 , 0, 5, 130, 0, "Coin_");
-			//coinob.mousedown = _visual_coin.betSelect;			
-			//
-			//下注區容器
-			//var playerzone:MultiObject = prepare("betzone", new MultiObject() , this);			
-			//playerzone.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			//playerzone.mousedown = _betCommand.betTypeMain;
-			//playerzone.container.x = 196;
-			//playerzone.container.y = 502;
-			//playerzone.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			//playerzone.Post_CustomizedData = [[760,0],[0,0],[575,-33]];
-			//playerzone.Create_by_list(3, [ResName.betzone_banker, ResName.betzone_player, ResName.betzone_tie], 0, 0, 3, 0, 0, "time_");
-			//
-			//stick cotainer  
-			//var coinstack:MultiObject = prepare("coinstakeZone", new MultiObject(), playerzone.container);	
-			//coinstack.autoClean = true;
-			//coinstack.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			//coinstack.Post_CustomizedData = [[830,200],[180,100],[615,57]];
-			//coinstack.Create_by_list(3, [ResName.emptymc], 0, 0, 3, 0, 0, "time_");
-			//_tool.SetControlMc(coinstack.ItemList[0]);
-			//addChild(_tool);
-			//
-			//
+			
 			//CurveModifiers.init();
 			
 			//_tool.SetControlMc(hintmsg);
@@ -151,169 +129,9 @@ package View.GameView
 		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
 		public function round_result():void
 		{		
-			var a:String = _model.getValue(modelName.ROUND_RESULT);
-			var result:Array = a.split(_model.getValue(modelName.SPLIT_SYMBOL));
-			result.pop();
-			var betresult:int = parseInt( result[0])			
-			if ( betresult== CardType.PLAYER) 
-			{			 
-			    _regular.Twinkle(GetSingleItem("betzone",1), 3, 10,2);
-			  
-				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone"));	
-				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",2));
-		    }
-			else if (betresult == CardType.BANKER) 
-			{				
-				_regular.Twinkle(GetSingleItem("betzone"), 3, 10,2);
-			   
-				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",1));	
-				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",2));
-			}
-			else
-			{
-				_regular.Twinkle(GetSingleItem("betzone",2), 3, 10,2);			
-			   
-				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",0));	
-				utilFun.Clear_ItemChildren(GetSingleItem("coinstakeZone",1));			
-			}	
-				
-			//點數顥示			
-			var BPresult:MultiObject = Get("zone");
-			BPresult.container.visible = true;
-			var playerpoint:Array = utilFun.arrFormat(countPoint(_model.getValue(modelName.BANKER_POKER)), 2);
-			if ( playerpoint[0] == 0 ) playerpoint[0] = 10;
-			if ( playerpoint[1] == 0 ) playerpoint[1] = 10;			
-			BPresult.ItemList[0]["_num0"].gotoAndStop(playerpoint[0]);
-			BPresult.ItemList[0]["_num1"].gotoAndStop(playerpoint[1]);
-			var bpoint:Array = utilFun.arrFormat(countPoint(_model.getValue(modelName.PLAYER_POKER)), 2);
-			if ( bpoint[0] == 0 ) bpoint[0] = 10;
-			if ( bpoint[1] == 0 ) bpoint[1] = 10;		
-			BPresult.ItemList[1]["_num0"].gotoAndStop(bpoint[0]);
-			BPresult.ItemList[1]["_num1"].gotoAndStop(bpoint[1]);
-			
-			//主路單更新
-			//var idx:int = _mainTable.current.data.getValue("current_idx");				
-			//addBall(betresult,_model.getValue("Position")[idx] , _mainTable.current.Item,"mainball");
-			//idx = (idx + 1) % 6;
-			//if ( idx == 0) 
-			//{
-				//_mainTable.Next();
-			//}
-			//_mainTable.current.data.putValue("current_idx",idx);
-			//
-			//大路單更新
-			//bigRoadupdate();		
-									
+
 		}
 		
-		public function addBall(balltype:int,y:int,contain:MovieClip,objectName:String):void
-		{
-			var ball:MovieClip = utilFun.GetClassByString(objectName);
-			ball.x = 17;
-			ball.y = y;			
-			ball.gotoAndStop(balltype);
-			contain.addChild(ball)			
-		}	
-		
-		public function bigRoadupdate():void
-		{
-			var result:int = _model.getValue(modelName.ROUND_RESULT);			
-			if ( result != CardType.Tie )
-			{					
-				_model.putValue("PreResult",   _model.getValue("currntResult"));		
-				_model.putValue("currntResult",  result);
-				
-				//與上次不同
-			    if (  _model.getValue("PreResult") != -1 )					
-				{
-					if ( _model.getValue("PreResult") !=  _model.getValue("currntResult") )
-					{
-						//未超過的換行
-						_bigroadTable.Next_empty();
-						_bigroadTable.current.data.putValue("current_idx",0);
-					}						
-				}					
-			}
-				
-				var idx:int = _bigroadTable.current.data.getValue("current_idx");				
-				if ( _bigroadTable.current.data.getValue("result_row")[idx] == -1)
-				{
-				
-					//檢查前一列和前一格結果 (第一格不用檢查)
-					if ( _bigroadTable.current.pre != null)
-					{
-						if ( idx !=0 )
-						{					  
-						   var pre_resutl:int = _bigroadTable.current.pre.data.getValue("result_row")[idx];
-						    if ( _bigroadTable.current.data.getValue("result_row")[idx - 1] == pre_resutl && pre_resutl != 3) 
-							{
-								_bigroadTable.Next();
-								idx -=1;
-							}
-					   }
-					  
-					}
-					
-					
-					// 前後二格是一樣的 (第五格不用檢查)
-					if ( idx != 5 )
-					{
-						var up_result:int = _bigroadTable.current.data.getValue("result_row")[idx - 1] ;
-						if ( up_result != -1 ) 
-						{ 
-							if (up_result == _bigroadTable.current.data.getValue("result_row")[idx + 1] )
-							{
-								_bigroadTable.Next();
-								idx -= 1;
-							}
-						}
-					}
-					
-					
-					addBall(result, _model.getValue("Position")[idx] , _bigroadTable.current.Item,"bigRoadBall");
-				   _bigroadTable.current.data.getValue("result_row")[idx] = result;
-					
-					idx += 1;
-					
-					//1.到底 
-					//2下一格不是-1,己經有放東西
-					if ( idx == 6)
-					{
-						_bigroadTable.Next();
-						idx = 5;
-					}
-					else if ( _bigroadTable.current.data.getValue("result_row")[idx] != -1) 
-					{
-					  	_bigroadTable.Next();
-						idx -=1;
-					}
-					
-					_bigroadTable.current.data.putValue("current_idx", idx );
-				}
-		}
-		
-		private function countPoint(poke:Array):int
-		{
-			var total:int = 0;
-			for (var i:int = 0; i < poke.length ; i++)
-			{
-				var strin:String =  poke[i];
-				var arr:Array = strin.match((/(\w|d)+(\w)+/));					
-				var numb:String = arr[1];				
-				
-				var point:int = 0;
-				if ( numb == "i" || numb == "j" || numb == "q" || numb == "k" ) 				
-				{
-					point = 10;
-				}				
-				else 	point = parseInt(numb);
-				
-				total += point;
-			}	
-			
-			return total %= 10;
-		}
-			
 		
 		
 		private function clearn():void
