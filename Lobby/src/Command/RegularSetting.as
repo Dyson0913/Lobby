@@ -1,6 +1,7 @@
 package Command 
 {
 	import flash.display.MovieClip;
+	import flash.events.Event;
 	import flash.text.TextField;
 	import util.utilFun;
 	import caurina.transitions.Tweener;
@@ -15,7 +16,7 @@ package Command
 		public function RegularSetting() 
 		{
 			
-		}
+		}		
 		
 		//relative position adjust
 		public function Posi_x_Setting(mc:MovieClip, idx:int, data:Array):void

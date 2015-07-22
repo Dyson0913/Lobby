@@ -11,6 +11,7 @@ package View.GameView
 	import util.DI;
 	import Model.*
 	import util.node;
+	import View.ViewComponent.Visual_BtnHandle;
 	import View.Viewutil.*;
 	import View.ViewBase.ViewBase;
 	import util.*;
@@ -35,13 +36,8 @@ package View.GameView
 		[Inject]
 		public var _visual_coin:Visual_Coin;
 		
-		private var _mainroad:MultiObject = new MultiObject();
-				
-		public var _mainTable:LinkList = new LinkList();
-		public var _bigroadTable:LinkList = new LinkList();
-		
-		//private var fwd:Array = [];
-		private var dynamicpoker:Array = [];
+		[Inject]
+		public var _btn:Visual_BtnHandle;
 		
 		public function LobbyView()  
 		{
@@ -56,32 +52,51 @@ package View.GameView
 			//清除前一畫面
 			utilFun.Log("in to EnterBetview=");			
 			
-			_tool = new AdjustTool();
+			//_tool = new AdjustTool();
 			
 			
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Lobby_Scene], 0, 0, 1, 0, 0, "a_");			
 			
-			var page:MultiObject = prepare("pagearr", new MultiObject(), this);
-			page.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			page.CustomizedFun = this.roation;			
-			page.mousedown = _betCommand.test_reaction;
+			//var page:MultiObject = prepare("pagearr", new MultiObject(), this);
+			//page.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			//page.CustomizedFun = this.roation;			
+			//page.mousedown = _btn.test_reaction;
 			//page.CustomizedFun = _regular.FrameSetting;
 			//page.CustomizedData = [3, 2, 2, 2, 2];
-			page.Create_by_list(2, [ResName.L_arrow, ResName.L_arrow], 0 , 0, 2, 1880 , 0, "Bet_");
-			page.container.x = 10;
-			page.container.y = 502;
+			//page.Create_by_list(2, [ResName.L_arrow, ResName.L_arrow], 0 , 0, 2, 1880 , 0, "Bet_");
+			//page.container.x = 10;
+			//page.container.y = 502;
 			
+			//TODO fun -->map 
+			var arr:Array = _model.getValue(modelName.OPEN_STATE);
+			//
+			var gamestat:Array = [];
+			for ( var i:int = 0; i < arr.length ; i++)
+			{
+				var resultinfo:Array = arr[i].split("|");
+				if (resultinfo[1] == 0)  resultinfo[1] = 3;
+				if (resultinfo[1] == -1)  resultinfo[1] = 4;
+				gamestat.push(resultinfo[1]);
+			}			
 			var gameIcon:MultiObject = prepare("gameIcon", new MultiObject(), this);
-			gameIcon.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			gameIcon.mousedown = _betCommand.test_reaction;
+			gameIcon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [1, 2, 2, 1]);
+			gameIcon.rollover = _btn.Game_iconhandle;
+			gameIcon.rollout = _btn.Game_iconhandle;
+			gameIcon.mousedown = _btn.Game_iconclick_down;
+			gameIcon.mouseup = _btn.Game_iconclick_up;
+			gameIcon.CustomizedFun = _regular.FrameSetting;
+			gameIcon.CustomizedData = gamestat;
 			gameIcon.Create_by_list(6, [ResName.L_game_2, ResName.L_game_3, ResName.L_game_4, ResName.L_game_5], 0 , 0, 3, 550 , 400, "Bet_");
 			gameIcon.container.x = 210;
 			gameIcon.container.y = 192;
+		
+			
+			
 			//
 			//_tool.SetControlMc(gameIcon.container);
-			_tool.SetControlMc(page.ItemList[1]);
-			addChild(_tool);
+			//_tool.SetControlMc(page.ItemList[1]);
+			//addChild(_tool);
 //
 			//var info:MultiObject = prepare(modelName.CREDIT, new MultiObject() , this);
 			//info.container.x = 11.3;
@@ -118,7 +133,7 @@ package View.GameView
 			//addChild(_tool);
 			//return
 		
-		}
+		}		
 		
 	   public function roation(mc:MovieClip, idx:int, data:Array):void
 		{

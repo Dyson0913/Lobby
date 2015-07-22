@@ -36,12 +36,7 @@ package Command
 			_model.putValue("coin_selectIdx", 0);
 			_model.putValue("coin_list", [100, 500, 1000, 5000, 10000]);
 			_model.putValue("after_bet_credit", 0);
-		}
-		
-		public function test_reaction(e:Event, idx:int):Boolean
-		{
-			return true;
-		}
+		}		
 		
 		public function betTypeMain(e:Event,idx:int):Boolean
 		{			

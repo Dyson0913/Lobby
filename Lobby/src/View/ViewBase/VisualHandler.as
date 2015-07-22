@@ -13,6 +13,9 @@ package View.ViewBase
 
 	public class VisualHandler
 	{
+		[MessageDispatcher]
+        public var dispatcher:Function;
+		
 		[Inject]
 		public var _model:Model;
 		

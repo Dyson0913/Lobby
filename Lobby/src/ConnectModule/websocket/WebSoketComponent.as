@@ -52,7 +52,7 @@ package ConnectModule.websocket
 		{
 			var object:Object = _model.getValue(modelName.LOGIN_INFO);						
 			//websocket = new WebSocket("ws://106.186.116.216:9001/gamesocket/token/" + object.accessToken, "");
-			websocket = new WebSocket("ws://106.186.116.216:9001/gamesocket/token/123", "");
+			websocket = new WebSocket("ws://106.186.116.216:8888/gamesocket/token/123", "");
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
@@ -114,17 +114,24 @@ package ConnectModule.websocket
 						
 						//接收大廳資料
 						
-						//dispatcher(new ViewState(ViewState.Lobb,ViewState.ENTER) );
-						//dispatcher(new ViewState(ViewState.Loading,ViewState.LEAVE) );
+						dispatcher(new ValueObject( result.playerinfo.nickname,modelName.NICKNAME) );
+						dispatcher(new ValueObject( result.playerinfo.userid,modelName.UUID) );
+						dispatcher(new ValueObject( result.playerinfo.credit,modelName.CREDIT) );
+						dispatcher(new ValueObject( result.open_state,modelName.OPEN_STATE) );
+						
+						
+						
+						dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH));		
+						dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;				
 						
 						//模擬點擊某遊戲ICON (單一遊戲都1
-						var lobby:Object = {"message_type":Message.MSG_TYPE_SELECT_GAME, "game_type":1};
-						SendMsg(lobby);
+						//var lobby:Object = {"message_type":Message.MSG_TYPE_SELECT_GAME, "game_type":1};
+						//SendMsg(lobby);
 						break;
 					}
 					case Message.MSG_TYPE_GAME_LOBBY:
 					{						
-						//接收特定遊戲大廳資料
+						//接收特定遊/戲大廳資料
 						//dispatcher(new ViewState(ViewState.Lobb,ViewState.ENTER) );
 						//dispatcher(new ViewState(ViewState.Loading,ViewState.LEAVE) );
 						

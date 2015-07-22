@@ -64,8 +64,15 @@ package View.GameView
 		{
 			_result = result;
 			_model.putValue(modelName.LOGIN_INFO, _result);
-			dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH));		
-			dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
+			
+			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));		
+			//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
+			return;
+			
+			//local test
+			//dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH));		
+			//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
+			
 		}
 		
 		[MessageHandler(type="Model.valueObject.Intobject",selector="EnterView")]
@@ -75,19 +82,20 @@ package View.GameView
 			super.EnterView(View);
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Loading_Scene], 0, 0, 1, 0, 0, "a_");			
-			_tool = new AdjustTool();
+			//_tool = new AdjustTool();
 					
 			//_tool.SetControlMc(Mascot.container);
 			//addChild(_tool);
 			Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );		
 			
-			//utilFun.SetTime(connet, 2);
+			
 		}
 		
 		public function test():void
 		{
 			utilFun.Log("ok");
-			dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH) );			
+			//dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH) );		
+			utilFun.SetTime(connet,1);
 			
 		}
 		
