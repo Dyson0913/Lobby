@@ -17,15 +17,24 @@ package View.ViewComponent
 	public class Visual_PlayerInfo  extends VisualHandler
 	{
 		
+		[Inject]
+		public var _regular:RegularSetting;	
+		
 		public function Visual_PlayerInfo() 
 		{
 			
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "updateCredit")]
+		[MessageHandler(type = "Model.ModelEvent", selector = "HandShake_updateCredit")]
 		public function updateCredit():void
 		{							
-			utilFun.SetText(GetSingleItem(modelName.CREDIT)["credit"], _model.getValue("after_bet_credit").toString());
+			var credit:MultiObject = Get(modelName.CREDIT)
+			credit.CustomizedFun = _regular.ascii_idx_setting;						
+			credit.CustomizedData = _model.getValue(modelName.CREDIT).toString().split("");
+			credit.container.x = 1593 + (credit.CustomizedData.length -1) * 37 *-1;   //right -> left *-1
+			credit.container.y = 16;
+			credit.Create_by_bitmap(credit.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, credit.CustomizedData.length, 37, 51, "o_");
+			utilFun.scaleXY(credit.container,1, 0.9);
 		}		
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "update_result_Credit")]

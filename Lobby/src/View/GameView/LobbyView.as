@@ -58,15 +58,12 @@ package View.GameView
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Lobby_Scene], 0, 0, 1, 0, 0, "a_");			
 			
-			//var page:MultiObject = prepare("pagearr", new MultiObject(), this);
-			//page.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			//page.CustomizedFun = this.roation;			
-			//page.mousedown = _btn.test_reaction;
-			//page.CustomizedFun = _regular.FrameSetting;
-			//page.CustomizedData = [3, 2, 2, 2, 2];
-			//page.Create_by_list(2, [ResName.L_arrow, ResName.L_arrow], 0 , 0, 2, 1880 , 0, "Bet_");
-			//page.container.x = 10;
-			//page.container.y = 502;
+			var page:MultiObject = prepare("pagearr", new MultiObject(), this);
+			page.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);			
+			page.mousedown = _btn.test_reaction;		
+			page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1880 , 0, "Bet_");
+			page.container.x = 10;
+			page.container.y = 502;
 			
 			//TODO fun -->map 
 			var arr:Array = _model.getValue(modelName.OPEN_STATE);
@@ -133,13 +130,7 @@ package View.GameView
 			//addChild(_tool);
 			//return
 		
-		}		
-		
-	   public function roation(mc:MovieClip, idx:int, data:Array):void
-		{
-			if ( idx == 1) mc.rotationY= -180;
-		}
-		
+		}			 
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
 		public function round_result():void

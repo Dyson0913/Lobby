@@ -24,7 +24,7 @@ package
 		//public var _LoadingView:LoadingView
 		public var result:Object ;
 		
-		private var _appconfig:L_appConfig = new L_appConfig();
+		private var _appconfig:appConfig = new appConfig();
 		
 		public function Main():void 
 		{
@@ -45,7 +45,7 @@ package
 			Debug.monitor(stage);
 			utilFun.Log("welcome to alcon");
 			
-			_context  = ActionScriptContextBuilder.build(L_appConfig, stage);
+			_context  = ActionScriptContextBuilder.build(appConfig, stage);
 			
 			addChild(_context.getObjectByType(LoadingView) as LoadingView);			
 			addChild(_context.getObjectByType(LobbyView) as LobbyView);

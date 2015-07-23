@@ -63,6 +63,7 @@ package View.GameView
 		public function FirstLoad(result:Object):void
 		{
 			_result = result;
+			utilFun.Log("_result = "+_result);
 			_model.putValue(modelName.LOGIN_INFO, _result);
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));		

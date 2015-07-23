@@ -80,7 +80,7 @@ package View.ViewComponent
 		
 		public function gonewpage(e:Event, idx:int):Boolean
 		{
-			var request = new URLRequest("https://www.google.com.tw/");			
+			var request:URLRequest = new URLRequest("https://www.google.com.tw/");			
 			navigateToURL( request, "_blank" );
 			return true;
 		}
