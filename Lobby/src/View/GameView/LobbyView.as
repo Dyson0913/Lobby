@@ -52,7 +52,7 @@ package View.GameView
 			//清除前一畫面
 			utilFun.Log("in to EnterBetview=");			
 			
-			//_tool = new AdjustTool();
+			
 			
 			
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
@@ -61,7 +61,8 @@ package View.GameView
 			var page:MultiObject = prepare("pagearr", new MultiObject(), this);
 			page.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);			
 			page.mousedown = _btn.test_reaction;		
-			page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1880 , 0, "Bet_");
+			page.mouseup = _btn.test_reaction;		
+			page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1820 , 0, "Bet_");
 			page.container.x = 10;
 			page.container.y = 502;
 			
@@ -89,6 +90,19 @@ package View.GameView
 			gameIcon.container.y = 192;
 		
 			
+			//pretan data
+		
+			//gamedi.putValue(1,1);
+			//gamedi.putValue(1,2);
+			//gamedi.putValue(3,3);
+			//_model.putValue("gameloaderid", 0);
+			//_model.putValue("container", new DI());
+			//_model.putValue("Loader", new DI());
+			//var gameName:DI = new DI();
+			//gameName.putValue(0,"bigwin.swf")
+			//gameName.putValue(1,"perfectangel.swf")
+			//gameName.putValue(2,"bingo.swf")
+			//_model.putValue("gamename", gameName);
 			
 			//
 			//_tool.SetControlMc(gameIcon.container);

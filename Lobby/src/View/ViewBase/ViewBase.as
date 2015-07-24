@@ -34,7 +34,8 @@ package View.ViewBase
 		
 		public function ViewBase() 
 		{
-		
+			_tool = new AdjustTool();
+			
 		}
 		
 		//[MessageHandler]

@@ -52,7 +52,13 @@ package View.ViewComponent
 		public function loading(gameidx:Intobject):void
 		{
 			utilFun.Log("game = " + gameidx.Value);
-			
+			//var gameloadid:int = _model.getValue("gameloaderid");
+			//var container:DI  = _model.getValue("container");
+			//var myLoader:DI  = _model.getValue("Loader");
+			//container.putValue(gameloadid, new MovieClip());
+			//myLoader.putValue(gameloadid, new Loader() );
+			//_model.putValue("container", container);
+			//_model.putValue("Loader",my);
 			startup(gameidx.Value);
 			
 		}
@@ -103,24 +109,29 @@ package View.ViewComponent
 		
 		private function startup(gameidx:int):void 
 		{
-			_canve1 = utilFun.GetClassByString(ResName.L_emptymc);
-			_canve1.width = 1024;
-			_canve1.height = 576;
-			//_canve1.width = 1920;
-			//_canve1.height = 1080;
+			//var container:DI  = _model.getValue("container");
+			//var myLoader:DI  = _model.getValue("Loader");
 			
-			_canve1.addEventListener(MouseEvent.MOUSE_DOWN, ScrollDrag);
+			
+			_canve1 = utilFun.GetClassByString(ResName.L_emptymc);
+			//_canve1.width = 1024;
+			//_canve1.height = 576;
+			_canve1.width = 1920;
+			_canve1.height = 1080;
+			
+			//_canve1.addEventListener(MouseEvent.MOUSE_DOWN, ScrollDrag);
 			//_canve1.doubleClickEnabled = true;
 			//_canve1.mouseChildren = false;
 			//_canve1.addEventListener(MouseEvent.DOUBLE_CLICK, ScrollDrag);
-	
+			//_model.putValue("gamename", gameName);
 			
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadend);
 			_loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, gameprogress);
 			
-			
+			var object:Object = _model.getValue(modelName.LOGIN_INFO);	
 			//var url:URLRequest = new URLRequest(result.game + "?para=" + result);
 			var game:String = "perfectangel.swf";
+			//var game:String = "http://106.186.116.216:7000/static/perfectangel.swf"
 			//var url:URLRequest = new URLRequest(game + "?para=" + result);
 			var url:URLRequest = new URLRequest(game);
 			
@@ -162,12 +173,12 @@ package View.ViewComponent
 			topicon.Posi_CustzmiedFun = _regular.Posi_x_Setting;
 			topicon.Post_CustomizedData = [0, 160, 230];
 			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
-			topicon.rollover = _btn.BtnHint;
+			topicon.rollover = this.BtnHint;
 			topicon.rollout = _btn.test_reaction;
 			topicon.mousedown = swfcommand;
 			topicon.Create_by_list(1, [ResName.L_icon_3], 0 , 0, 1, 50 , 0, "game_");
-			topicon.container.x = 1844;
-			topicon.container.y = 10;
+			topicon.container.x = 1854;
+			topicon.container.y = 80;
 			//utilFun.scaleXY(topicon.container, 1, 0.9);
 			
 			//_tool.SetControlMc(topicon.container);
@@ -175,7 +186,14 @@ package View.ViewComponent
 			
 			//removeChild(loadingPro);		
 		}
-	
+		
+		public function BtnHint(e:Event, idx:int):Boolean
+		{
+			e.currentTarget.gotoAndStop(2);
+			e.currentTarget["_hintText"].gotoAndStop(3);
+			return true;
+		}
+		
 		public function handshake(Client_idx:int , data:Array):void
 		{
 			utilFun.Log("handshake response " + Client_idx + " date = " + data);
