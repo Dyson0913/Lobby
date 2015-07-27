@@ -52,7 +52,7 @@ package ConnectModule.websocket
 		{
 			var object:Object = _model.getValue(modelName.LOGIN_INFO);						
 			//websocket = new WebSocket("ws://106.186.116.216:8080/gamesocket/token/" + object.accessToken, "");
-			websocket = new WebSocket("ws://106.186.116.216:8080/gamesocket/token/123", "");
+			websocket = new WebSocket("ws://106.186.116.216:8888/gamesocket/token/123", "");
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
