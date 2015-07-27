@@ -1,0 +1,4 @@
+*.swf
+*.bak
+lobby/obj/*
+lobby/bin/*
