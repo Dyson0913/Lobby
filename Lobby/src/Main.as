@@ -19,9 +19,6 @@ package
 	public class Main extends MovieClip 
 	{
 		private var _context:Context;
-		
-		//[ObjectDefinition(id="Enter")]
-		//public var _LoadingView:LoadingView
 		public var result:Object ;
 		
 		private var _appconfig:appConfig = new appConfig();

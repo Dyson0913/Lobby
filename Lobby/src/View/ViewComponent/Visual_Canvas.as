@@ -141,7 +141,7 @@ package View.ViewComponent
 			var gameswf:String = "";			
 			var rul:String = swfname;
 			utilFun.Log("rul = "+ rul);
-			//var rul:String = "http://106.186.116.216:7000/static/" + rul;			
+			var rul:String = "http://106.186.116.216:7000/static/" + rul;			
 			var url:URLRequest = new URLRequest(rul);
 			
 			//var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
