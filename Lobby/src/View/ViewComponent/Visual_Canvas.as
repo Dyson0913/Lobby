@@ -51,7 +51,7 @@ package View.ViewComponent
 			_model.putValue("canvas_Open_Serial",[]);
 			_model.putValue("canvas_container", new DI());
 			_model.putValue("canvas_loader", new DI());			
-			_model.putValue("canvas_swfname", new DI());			
+			//_model.putValue("canvas_swfname", new DI());			
 		}
 		
 		[MessageHandler(type="Model.valueObject.Intobject",selector="Load_flash")]
@@ -59,13 +59,14 @@ package View.ViewComponent
 		{
 			
 			//gameidx.Value = 4;
-			utilFun.Log("game = " + gameidx.Value);			
+			utilFun.Log("game = " + gameidx.Value);	
+			
 			_model.getValue("canvas_container").putValue(_model.getValue("canvas_Serial").toString(), new Sprite());
 			_model.getValue("canvas_loader").putValue(_model.getValue("canvas_Serial").toString(), new Loader());
-			_model.getValue("canvas_swfname").putValue(_model.getValue("canvas_Serial").toString(), _model.getValue("swf_"+gameidx.Value.toString()) );
+			//_model.getValue("canvas_swfname").putValue(_model.getValue("canvas_Serial").toString(), _model.getValue("swf_"+gameidx.Value.toString()) );
 				
 			//serial 產生
-			startup(_model.getValue("canvas_Serial"));
+			startup(_model.getValue("canvas_Serial"),gameidx.Value);
 			
 		}
 		
@@ -116,11 +117,11 @@ package View.ViewComponent
 			}
 		}
 		
-		private function startup(serial:int):void 
+		private function startup(serial:int,gameidx:int):void 
 		{
 			var _canve:Sprite =  _model.getValue("canvas_container").getValue(serial.toString());
 			var _loader:Loader =  _model.getValue("canvas_loader").getValue(serial.toString());
-			var swfname:String =  _model.getValue("canvas_swfname").getValue(serial.toString());
+			//var swfname:String =  _model.getValue("canvas_swfname").getValue(serial.toString());
 			_canve = utilFun.GetClassByString(ResName.L_emptymc);
 			_canve.width = 1920;
 			_canve.height = 1080;			
@@ -138,11 +139,12 @@ package View.ViewComponent
 			_loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, gameprogress);
 			
 			
-			var gameswf:String = "";			
-			var rul:String = swfname;
-			utilFun.Log("rul = "+ rul);
-			var rul:String = "http://106.186.116.216:7000/static/" + rul;			
-			var url:URLRequest = new URLRequest(rul);
+			//var gameswf:String = "";			
+			var rul:String = _model.getValue("gameweb")[gameidx];
+			utilFun.Log("rul = " + rul);
+			//return
+			//var rul:String = "http://106.186.116.216:7000/static/" + rul;			
+			var url:URLRequest = new URLRequest("perfectangel.swf");
 			
 			//var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
 			var loaderContext:LoaderContext = new LoaderContext(false, new ApplicationDomain());
@@ -175,7 +177,8 @@ package View.ViewComponent
 			{
 				//var result:Object  = JSON.decode(_para);
 				var idx:int = serial;
-				(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.LOGIN_INFO));
+				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.LOGIN_INFO));
+				(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.UUID));
 			}
 			
 			add(_canve);			

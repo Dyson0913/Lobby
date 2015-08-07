@@ -51,8 +51,8 @@ package ConnectModule.websocket
 		public function Connect():void
 		{
 			var object:Object = _model.getValue(modelName.LOGIN_INFO);						
-			//websocket = new WebSocket("ws://106.186.116.216:8080/gamesocket/token/" + object.accessToken, "");
-			websocket = new WebSocket("ws://106.186.116.216:8888/gamesocket/token/123", "");
+			//websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/" + object.accessToken, "");
+			websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/a87ff679a2f3e71d9181a67b7542122c", "");
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
@@ -68,7 +68,7 @@ package ConnectModule.websocket
 			}
 			else if ( event.type == WebSocketEvent.CLOSED)
 			{
-				utilFun.Log("Connected close="+ event.type );
+				utilFun.Log("Connected close lobby="+ event.type );
 			}
 		}
 		
@@ -96,6 +96,26 @@ package ConnectModule.websocket
 			   var result:Object  = _MsgModel.getMsg();
 				switch(result.message_type)
 				{
+					case "MsgLogin":
+					{
+						if ( result.game_type == "Lobby")
+						{
+							dispatcher(new ValueObject( result.player_info.player_account,modelName.NICKNAME) );
+							dispatcher(new ValueObject( result.player_info.player_uuid,modelName.UUID) );
+							//player_id
+							//player_currency
+							dispatcher(new ValueObject( result.player_info.player_credit, modelName.CREDIT) );
+							
+							
+						
+							dispatcher(new ValueObject( result.game_list, modelName.OPEN_STATE) );
+							
+							dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH));		
+							dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;				
+						}
+					}
+					break
+					
 					case Message.MSG_TYPE_LOGIN:
 					{					
 						//server 要求login 資料

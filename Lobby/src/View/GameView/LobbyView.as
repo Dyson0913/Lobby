@@ -70,13 +70,39 @@ package View.GameView
 			var arr:Array = _model.getValue(modelName.OPEN_STATE);
 			//
 			var gamestat:Array = [];
+			var gameweb:Array = [];
+			var gametype:Array = [];
+			var game_online:Array = [];
 			for ( var i:int = 0; i < arr.length ; i++)
 			{
-				var resultinfo:Array = arr[i].split("|");
-				if (resultinfo[1] == 0)  resultinfo[1] = 3;
-				if (resultinfo[1] == -1)  resultinfo[1] = 4;
-				gamestat.push(resultinfo[1]);
+				//	var resultinfo:Array = arr[i].split("|");
+				if ( arr[i].game_type == "PerfectAngel")
+				{
+					gamestat.push(arr[i].game_online);
+				}
+				if ( arr[i].game_type == "BigWin")
+				{
+					gamestat.push( arr[i].game_online);
+				}
+				if ( arr[i].game_type == "Bingo")
+				{
+					gamestat.push( arr[i].game_online);
+				}
+				if ( arr[i].game_type == "Finance")
+				{
+					gamestat.push( arr[i].game_online);
+				}
+				
+				gameweb.push(arr[i].game_website);
+				gametype.push(arr[i].gametype);
+				game_online.push(arr[i].game_online);
+						
+			
 			}			
+			
+			utilFun.Log("gameweb = "+gameweb);
+			utilFun.Log("game_online = "+game_online);
+			_model.putValue("gameweb", gameweb);
 			var gameIcon:MultiObject = prepare("gameIcon", new MultiObject(), this);
 			gameIcon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [1, 2, 2, 1]);
 			gameIcon.rollover = _btn.Game_iconhandle;

@@ -90,12 +90,12 @@ package View.GameView
 			//_tool = new AdjustTool();
 					
 			_canvas.init();
-			_model.putValue("swf_0","bigwin.swf");		
-			_model.putValue("swf_1","perfectangel.swf");		
-			_model.putValue("swf_2","bingo.swf");
-			_model.putValue("swf_3","finacial.swf");					
-			_model.putValue("swf_4","baccarat.swf");			
-			
+			//_model.putValue("swf_0","bigwin.swf");		
+			//_model.putValue("swf_1","perfectangel.swf");		
+			//_model.putValue("swf_2","bingo.swf");
+			//_model.putValue("swf_3","finacial.swf");					
+			//_model.putValue("swf_4","baccarat.swf");			
+			//
 			//_tool.SetControlMc(Mascot.container);
 			//addChild(_tool);
 			Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );		
