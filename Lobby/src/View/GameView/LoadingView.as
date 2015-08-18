@@ -17,7 +17,7 @@ package View.GameView
 	import View.ViewBase.ViewBase;
 	import Command.DataOperation;
 	import flash.text.TextFormat;
-	import View.ViewComponent.Visual_Canvas;
+	import View.ViewComponent.*;
 	import View.Viewutil.AdjustTool;
 	import View.Viewutil.LinkList;
 	import View.Viewutil.MultiObject;
@@ -58,6 +58,10 @@ package View.GameView
 		[Inject]
 		public var _canvas:Visual_Canvas;	
 		
+		[Inject]
+		public var _activelist:Visual_ActiveList;	
+		
+		
 		public function LoadingView()  
 		{
 			
@@ -89,16 +93,12 @@ package View.GameView
 			view.Create_by_list(1, [ResName.Loading_Scene], 0, 0, 1, 0, 0, "a_");			
 			//_tool = new AdjustTool();
 					
-			_canvas.init();
-			//_model.putValue("swf_0","bigwin.swf");		
-			//_model.putValue("swf_1","perfectangel.swf");		
-			//_model.putValue("swf_2","bingo.swf");
-			//_model.putValue("swf_3","finacial.swf");					
-			//_model.putValue("swf_4","baccarat.swf");			
-			//
+			_canvas.init();			
 			//_tool.SetControlMc(Mascot.container);
 			//addChild(_tool);
 			Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );		
+			
+			//_activelist.ini
 			
 			
 		}

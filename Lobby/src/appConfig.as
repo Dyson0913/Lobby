@@ -49,6 +49,7 @@ package
 		public var _coin:Visual_Coin = new Visual_Coin();
 		public var _btn:Visual_BtnHandle = new Visual_BtnHandle();
 		public var _canvas:Visual_Canvas = new Visual_Canvas();
+		public var _active:Visual_ActiveList = new Visual_ActiveList();
 		
 		//[ProcessSuperclass]
 		//public var _vibase:ViewBase = new ViewBase();

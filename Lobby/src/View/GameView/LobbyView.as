@@ -67,6 +67,7 @@ package View.GameView
 			page.container.y = 502;
 			
 			//TODO fun -->map 
+			var gameIconlist:Array = [ResName.L_game_3,ResName.L_game_2, ResName.L_game_4, ResName.L_game_5];
 			var arr:Array = _model.getValue(modelName.OPEN_STATE);
 			//
 			var gamestat:Array = [];
@@ -76,14 +77,15 @@ package View.GameView
 			for ( var i:int = 0; i < arr.length ; i++)
 			{
 				//	var resultinfo:Array = arr[i].split("|");
-				if ( arr[i].game_type == "PerfectAngel")
-				{
-					gamestat.push(arr[i].game_online);
-				}
 				if ( arr[i].game_type == "BigWin")
 				{
 					gamestat.push( arr[i].game_online);
 				}
+				if ( arr[i].game_type == "PerfectAngel")
+				{
+					gamestat.push(arr[i].game_online);
+				}
+			
 				if ( arr[i].game_type == "Bingo")
 				{
 					gamestat.push( arr[i].game_online);
@@ -94,83 +96,36 @@ package View.GameView
 				}
 				
 				gameweb.push(arr[i].game_website);
-				gametype.push(arr[i].gametype);
+				gametype.push(arr[i].game_type);
 				game_online.push(arr[i].game_online);
-						
+				//game_description
 			
 			}			
 			
 			utilFun.Log("gameweb = "+gameweb);
 			utilFun.Log("game_online = "+game_online);
 			_model.putValue("gameweb", gameweb);
+			_model.putValue("gamestat", gamestat);
+			_model.putValue("gametype", gametype);
 			var gameIcon:MultiObject = prepare("gameIcon", new MultiObject(), this);
 			gameIcon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [1, 2, 2, 1]);
 			gameIcon.rollover = _btn.Game_iconhandle;
 			gameIcon.rollout = _btn.Game_iconhandle;
 			gameIcon.mousedown = _btn.Game_iconclick_down;
 			gameIcon.mouseup = _btn.Game_iconclick_up;
-			gameIcon.CustomizedFun = _regular.FrameSetting;
+			gameIcon.CustomizedFun = FrameSetting
 			gameIcon.CustomizedData = gamestat;
-			gameIcon.Create_by_list(6, [ResName.L_game_2, ResName.L_game_3, ResName.L_game_4, ResName.L_game_5], 0 , 0, 3, 550 , 400, "Bet_");
+			gameIcon.Create_by_list(gamestat.length,gameIconlist, 0 , 0, 3, 550 , 400, "Bet_");
 			gameIcon.container.x = 210;
 			gameIcon.container.y = 192;
-		
 			
-			//pretan data
-		
-			//gamedi.putValue(1,1);
-			//gamedi.putValue(1,2);
-			//gamedi.putValue(3,3);
-			//_model.putValue("gameloaderid", 0);
-			//_model.putValue("container", new DI());
-			//_model.putValue("Loader", new DI());
-			//var gameName:DI = new DI();
-			//gameName.putValue(0,"bigwin.swf")
-			//gameName.putValue(1,"perfectangel.swf")
-			//gameName.putValue(2,"bingo.swf")
-			//_model.putValue("gamename", gameName);
-			
-			//
-			//_tool.SetControlMc(gameIcon.container);
-			//_tool.SetControlMc(page.ItemList[1]);
-			//addChild(_tool);
-//
-			//var info:MultiObject = prepare(modelName.CREDIT, new MultiObject() , this);
-			//info.container.x = 11.3;
-			//info.container.y = 910.5;
-			//info.Create_by_list(1, [ResName.playerInfo], 0, 0, 1, 0, 0, "info_");			
-			//utilFun.SetText(info.ItemList[0]["_Account"], _model.getValue(modelName.UUID) );
-			//utilFun.SetText(info.ItemList[0]["nickname"], _model.getValue(modelName.NICKNAME) );			
-			//utilFun.SetText(info.ItemList[0]["credit"], _model.getValue(modelName.CREDIT).toString());
-			//
-			//var countDown:MultiObject = prepare(modelName.REMAIN_TIME,new MultiObject()  , this);
-		   //countDown.Create_by_list(1, [ResName.Timer], 0, 0, 1, 0, 0, "time_");
-		   //countDown.container.x = 350;
-		   //countDown.container.y = 280;
-		   //countDown.container.visible = false;
-		   //
-			//var hintmsg:MultiObject = prepare(modelName.HINT_MSG, new MultiObject()  , this);
-			//hintmsg.Create_by_list(1, [ResName.Hint], 0, 0, 1, 0, 0, "time_");
-			//hintmsg.container.x = 627.3;			
-			//hintmsg.container.y = 459.3;			
-			//
-			//
-			//bet區容器
-			//coin
-			//var coinob:MultiObject = prepare("CoinOb", new MultiObject(), this);
-			//coinob.container.x = 640;
-			//coinob.container.y = 800;
-			//coinob.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,3,0]);
-			//coinob.CustomizedFun = _regular.FrameSetting;
-			//coinob.CustomizedData = [3, 2, 2, 2, 2];
-			
-			//CurveModifiers.init();
-			
-			//_tool.SetControlMc(hintmsg);
-			//addChild(_tool);
-			//return
-		
 		}			 
+		
+		public function FrameSetting(mc:MovieClip, idx:int, data:Array):void
+		{
+			if( data[idx] ==0) mc.gotoAndStop(3);
+			else mc.gotoAndStop(data[idx]);
+		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
 		public function round_result():void

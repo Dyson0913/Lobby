@@ -144,7 +144,13 @@ package View.ViewComponent
 			utilFun.Log("rul = " + rul);
 			//return
 			//var rul:String = "http://106.186.116.216:7000/static/" + rul;			
-			var url:URLRequest = new URLRequest("perfectangel.swf");
+			if ( CONFIG::debug ) 
+			{
+				rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+			}
+			utilFun.Log("rul = " + rul);
+			//var url:URLRequest = new URLRequest("perfectangel.swf");
+			var url:URLRequest = new URLRequest(rul);
 			
 			//var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
 			var loaderContext:LoaderContext = new LoaderContext(false, new ApplicationDomain());

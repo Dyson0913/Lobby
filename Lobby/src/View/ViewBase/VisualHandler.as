@@ -44,7 +44,7 @@ package View.ViewBase
 		protected function Get(name:*):*
 		{			
 			return _viewcom.currentViewDI.getValue(name);
-		}
+		}		
 		
 		protected function GetSingleItem(name:*,idx:int = 0):*
 		{

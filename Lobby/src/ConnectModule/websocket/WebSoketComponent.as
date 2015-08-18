@@ -51,8 +51,14 @@ package ConnectModule.websocket
 		public function Connect():void
 		{
 			var object:Object = _model.getValue(modelName.LOGIN_INFO);						
-			//websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/" + object.accessToken, "");
-			websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/a87ff679a2f3e71d9181a67b7542122c", "");
+			
+			if ( CONFIG::debug ) 
+			{
+				 websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/1679091c5a880faf6fb5e6087eb1b2dc", "");
+			}
+			else {
+				websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/" + object.accessToken, "");
+			}
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
@@ -115,6 +121,16 @@ package ConnectModule.websocket
 						}
 					}
 					break
+					
+					case "MsgPlayerCreditUpdate":
+					{
+						if ( result.game_type == "Lobby")
+						{
+							dispatcher(new ValueObject( result.player_credit, modelName.CREDIT) );						
+							dispatcher(new ModelEvent("update_result_Credit"));
+						}
+					}
+					
 					
 					case Message.MSG_TYPE_LOGIN:
 					{					

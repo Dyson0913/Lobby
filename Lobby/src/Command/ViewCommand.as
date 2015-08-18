@@ -119,7 +119,8 @@ package Command
 		public function GetHud(name:*):*
 		{
 			return HudViewDI.getValue(name);
-		}
+		}	
+		
 		
 		private function hudView_clean():void
 		{			
