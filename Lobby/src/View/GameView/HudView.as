@@ -29,8 +29,8 @@ package View.GameView
 		[Inject]
 		public var _btn:Visual_BtnHandle;		
 		
-		[Inject]
-		public var _activelist:Visual_ActiveList;	
+		//[Inject]
+		//public var _activelist:Visual_ActiveList;	
 		
 		
 		public function HudView()  
@@ -152,10 +152,42 @@ package View.GameView
 		public function test_reaction(e:Event, idx:int):Boolean
 		{
 			utilFun.Log("e.u" + e.currentTarget.currentFrame);
-			utilFun.Log("idx" + idx);
-			
-			if ( e.currentTarget.currentFrame == 1)  dispatcher(new Intobject(idx, "Load_flash") );
+			//utilFun.Log("idx" + idx);
+			//1 載入,2
+			if ( e.currentTarget.currentFrame == 1) 
+			{
+				//get cavs id to reopen
+				var open:Array = _model.getValue("opengamelistid");
+				utilFun.Log("open" + open);
+				if ( open == null ) 
+				{
+					var cav_id:int = _model.getValue("canvas_Serial");
+					_model.putValue("opengamelistid", open.push([idx,cav_id]));
+					dispatcher(new Intobject(idx, "Load_flash") );
+				}
+				else
+				{
+					for ( var i:int = 0; i < open.length ; i++)
+					{
+						var btnid_cavid:Array = open[i];
+						var newcanvas:Object  = _model.getValue("newcanvas" + btnid_cavid[1]);
+						if ( btnid_cavid[0] == idx )
+						{
+							//swith to up							
+							
+							newcanvas.canvas_container.visible = true;
+						}
+						else
+						{
+							newcanvas.canvas_container.visible = false;
+						}
+					}
+				}
+				
+			}
 			else ;
+			var activelist:MultiObject = Get("avtivelist");			
+			activelist.exclusive(idx,1);
 			return true;
 		}
 		

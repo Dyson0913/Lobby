@@ -1,5 +1,6 @@
 package View.ViewComponent 
 {
+	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -37,6 +38,10 @@ package View.ViewComponent
 		public var _betCommand:BetCommand;
 		
 		[Inject]
+		public var _opration:DataOperation;
+		
+		
+		[Inject]
 		public var _btn:Visual_BtnHandle;		
 		
 		public function Visual_Canvas() 
@@ -47,11 +52,6 @@ package View.ViewComponent
 		public function init():void
 		{
 			_model.putValue("canvas_Serial",0);
-			_model.putValue("canvas_Current_Serial",0);
-			_model.putValue("canvas_Open_Serial",[]);
-			_model.putValue("canvas_container", new DI());
-			_model.putValue("canvas_loader", new DI());			
-			//_model.putValue("canvas_swfname", new DI());			
 		}
 		
 		[MessageHandler(type="Model.valueObject.Intobject",selector="Load_flash")]
@@ -60,26 +60,31 @@ package View.ViewComponent
 			
 			//gameidx.Value = 4;
 			utilFun.Log("game = " + gameidx.Value);	
+			var serial:int = _model.getValue("canvas_Serial");
+			var newcanvas:Object = { "Serial": serial, 
+			                                        "canvas_container":  new Sprite(),
+										            "canvas_loader":new Loader()
+			                                      };
+												  
+			_model.putValue("newcanvas" + serial, newcanvas);
+			_opration.operator("canvas_Serial", DataOperation.add);
 			
-			_model.getValue("canvas_container").putValue(_model.getValue("canvas_Serial").toString(), new Sprite());
-			_model.getValue("canvas_loader").putValue(_model.getValue("canvas_Serial").toString(), new Loader());
-			//_model.getValue("canvas_swfname").putValue(_model.getValue("canvas_Serial").toString(), _model.getValue("swf_"+gameidx.Value.toString()) );
+			startup(serial,gameidx.Value);
 				
-			//serial 產生
-			startup(_model.getValue("canvas_Serial"),gameidx.Value);
-			
 		}
 		
 		
 		private function ScrollDrag(e:Event):void
 		{
-			//utilFun.Log("e.cur =" + e.type);
+			utilFun.Log("e.cur =" + e.type);			
+			//utilFun.Log("e =" + e.currentTarget.name);
 			switch (e.type)
 			{
 				case "mouseDown":
 					utilFun.Log("e.cur =  + mouseDown ");
-					var serial:int = _model.getValue("canvas_Current_Serial");				
-					var _canve:Sprite =  _model.getValue("canvas_container").getValue(serial.toString());
+					var serial:int = _model.getValue("canvas_Current_Serial");	
+					var newcanvas:Object  = _model.getValue("newcanvas" + serial);
+					var _canve:Sprite =  newcanvas.canvas_container; //_model.getValue("canvas_container").getValue(serial.toString());
 					//限制拖曳的範圍
 					var sRect:Rectangle = new Rectangle(0,0,1920,1080);
 					_canve.startDrag(false,sRect);
@@ -92,8 +97,9 @@ package View.ViewComponent
 				break;
 				case "mouseUp":
 					//utilFun.Log("e.cur =  + up ");
-					var serial:int = _model.getValue("canvas_Current_Serial");		
-					var _canve:Sprite =  _model.getValue("canvas_container").getValue(serial.toString());
+					var serial:int = _model.getValue("canvas_Current_Serial");
+					var newcanvas:Object  = _model.getValue("newcanvas" + serial);
+					var _canve:Sprite =  newcanvas.canvas_container; //_model.getValue("canvas_container").getValue(serial.toString());
 					_canve.stopDrag();
 					_canve.removeEventListener(MouseEvent.MOUSE_MOVE, ScrollDrag);
 					_canve.removeEventListener(MouseEvent.MOUSE_UP, ScrollDrag);
@@ -119,31 +125,36 @@ package View.ViewComponent
 		
 		private function startup(serial:int,gameidx:int):void 
 		{
-			var _canve:Sprite =  _model.getValue("canvas_container").getValue(serial.toString());
-			var _loader:Loader =  _model.getValue("canvas_loader").getValue(serial.toString());
-			//var swfname:String =  _model.getValue("canvas_swfname").getValue(serial.toString());
-			_canve = utilFun.GetClassByString(ResName.L_emptymc);
-			_canve.width = 1920;
-			_canve.height = 1080;			
+			var newcanvas:Object  = _model.getValue("newcanvas" + serial);
 			
-			//移除完才觸發scroll事件,idx 會錯亂目前不用
+			var _canve:Sprite =  newcanvas.canvas_container;
+			var _loader:Loader =  newcanvas.canvas_loader;
+			
+			_canve = utilFun.GetClassByString(ResName.L_emptymc);
+			_canve.width = 920;
+			_canve.height = 1080;		
+			_canve.name = newcanvas.Serial;
+			
+			//移除完才觸發scroll事件,idx 會錯亂目前不用 (用name 解)
 			//_canve.addEventListener(MouseEvent.MOUSE_DOWN, ScrollDrag);
-			_model.getValue("canvas_container").putValue(_model.getValue("canvas_Serial").toString(), _canve);
+			//_model.getValue("canvas_container").putValue(_model.getValue("canvas_Serial").toString(), _canve);
+			_model.putValue("newcanvas" + serial,newcanvas);
+			
 			
 			//_canve1.doubleClickEnabled = true;
-			//_canve1.mouseChildren = false;
-			//_canve1.addEventListener(MouseEvent.DOUBLE_CLICK, ScrollDrag);
-			//_model.putValue("gamename", gameName);
+			//_canve.mouseChildren = false;
+			//_canve.addEventListener(MouseEvent.DOUBLE_CLICK, ScrollDrag);
 			
+			_loader.name = "canvas_" + serial;
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadend);
 			_loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, gameprogress);
 			
-			
+		
 			//var gameswf:String = "";			
 			var rul:String = _model.getValue("gameweb")[gameidx];
-			utilFun.Log("rul = " + rul);
-			//return
-			//var rul:String = "http://106.186.116.216:7000/static/" + rul;			
+			//if ( serial %2 ==0) var rul:String = "http://190,123,123,123:8080/perfectangel.swf";
+			//else var rul:String = "http://190,123,123,123:8080/bigwin.swf";
+			utilFun.Log("rul = " + rul);	
 			if ( CONFIG::debug ) 
 			{
 				rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
@@ -171,13 +182,18 @@ package View.ViewComponent
 		
 		private function loadend(event:Event):void
 		{			
-			//TODO current serial
-			var serial:int = _model.getValue("canvas_Serial")
-			var _loader:Loader =  _model.getValue("canvas_loader").getValue(serial.toString());
-			var _canve:Sprite =  _model.getValue("canvas_container").getValue(serial.toString());
+			var loader:LoaderInfo = event.currentTarget as LoaderInfo;
+			var s:String = utilFun.Regex_CutPatten(loader.loader.name, new RegExp("canvas_", "i"));
+			var idx:int = parseInt( s);
+			
+			var newcanvas:Object  = _model.getValue("newcanvas" + idx);
+			
+			var serial:int = newcanvas.Serial ; 
+			var _loader:Loader = newcanvas.canvas_loader; 
+			var _canve:Sprite =    newcanvas.canvas_container;
 			
 			_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadend);
-			utilFun.Log("loadn");
+			utilFun.Log("load down");
 			//接口
 			if ( (_loader.content as MovieClip )["handshake"] != null)
 			{
@@ -190,25 +206,19 @@ package View.ViewComponent
 			add(_canve);			
 			_canve.addChild(_loader);
 			
-			var topicon:MultiObject = prepare("gameicon_" + serial.toString(), new MultiObject(), _canve);
+			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);
 			topicon.Posi_CustzmiedFun = _regular.Posi_x_Setting;
 			topicon.Post_CustomizedData = [0, 160, 230];
 			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
 			topicon.rollover = this.BtnHint;
 			topicon.rollout = _btn.test_reaction;
 			topicon.mousedown = swfcommand;
-			topicon.Create_by_list(1, [ResName.L_icon_3], 0 , 0, 1, 50 , 0, "game_");
+			topicon.Create_by_list(1, [ResName.L_icon_3], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
 			topicon.container.x = 1854;
-			topicon.container.y = 80;
+			topicon.container.y = 80;			
 			//utilFun.scaleXY(topicon.container, 1, 0.9);
-			_model.getValue("canvas_container").putValue(serial.toString(), _canve);
 			
-			_model.putValue("canvas_Current_Serial", serial);
-			_model.putValue("canvas_Serial", ++serial);			
-			
-			
-			//_tool.SetControlMc(topicon.container);
-			//_canve1.addChild(_tool);
+			_model.putValue("newcanvas" + serial, newcanvas);
 			
 			//removeChild(loadingPro);		
 		}
@@ -234,17 +244,18 @@ package View.ViewComponent
 		
 		public function swfcommand(e:Event, idx:int):Boolean
 		{
-			//TODO how to know which cave click
+			var s:Array = utilFun.Regex_Match(e.currentTarget.name, new RegExp("game_(.)_.","i"));		
+			var idx:int = parseInt(s[1]);
+			var newcanvas:Object  = _model.getValue("newcanvas" + idx);
 			
-			var serial:int = _model.getValue("canvas_Current_Serial");			
-			var _loader:Loader =  _model.getValue("canvas_loader").getValue(serial.toString());
-			var _canve:Sprite =  _model.getValue("canvas_container").getValue(serial.toString());
+			var serial:int = newcanvas.Serial ;		
+			var _loader:Loader = newcanvas.canvas_loader;
+			var _canve:Sprite =  newcanvas.canvas_container; 
 			if ( _canve ) 
 			{			
 				_loader.unloadAndStop(true);
 				Del("gameicon_" + serial.toString() );
-				removie(_canve);
-				_model.putValue("canvas_Current_Serial",--serial);				
+				removie(_canve);				
 			}
 			return true;
 		}
