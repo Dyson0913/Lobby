@@ -52,6 +52,20 @@ package util
 			return n;
 		}
 		
+		//TODO put CollectionsInterface
+		public function firstitem():*
+		{
+			var firstKey:*;
+			var firstValue:*;
+			for (firstKey in _dic)
+			{
+			   firstValue = _dic[firstKey];	
+			   break;
+			}
+			utilFun.Log("firstValue " + firstValue );
+			return firstValue;
+		}
+		
 	}
 
 }

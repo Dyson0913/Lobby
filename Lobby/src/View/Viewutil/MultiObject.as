@@ -194,6 +194,15 @@ package View.Viewutil
 			}
 		}
 		
+		public function anti_exclusive(idx:int,gotoFrame:int,otherFrame:int):void
+		{
+			for (var i:int = 0; i < _ItemList.length; i++)
+			{
+				if ( i == idx ) _ItemList[i].gotoAndStop(gotoFrame);
+				else _ItemList[i].gotoAndStop(otherFrame);
+			}
+		}
+		
 		public function CleanList():void
 		{
 			//removeListen();

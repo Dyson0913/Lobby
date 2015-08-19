@@ -51,7 +51,10 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			_model.putValue("canvas_Serial",0);
+			_model.putValue("canvas_Serial", 0);
+			_model.putValue("Topgameicon_blind", new DI());
+			_model.putValue("cavasid_btnid", new DI());
+			
 		}
 		
 		[MessageHandler(type="Model.valueObject.Intobject",selector="Load_flash")]
@@ -246,9 +249,10 @@ package View.ViewComponent
 		{
 			var s:Array = utilFun.Regex_Match(e.currentTarget.name, new RegExp("game_(.)_.","i"));		
 			var idx:int = parseInt(s[1]);
-			var newcanvas:Object  = _model.getValue("newcanvas" + idx);
+			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
+			var serial:int = newcanvas.Serial;
 			
-			var serial:int = newcanvas.Serial ;		
+			
 			var _loader:Loader = newcanvas.canvas_loader;
 			var _canve:Sprite =  newcanvas.canvas_container; 
 			if ( _canve ) 
@@ -257,6 +261,20 @@ package View.ViewComponent
 				Del("gameicon_" + serial.toString() );
 				removie(_canve);				
 			}
+			
+			var cavasid_btn:DI = _model.getValue("cavasid_btnid");
+			var btn_cavasid:DI =  _model.getValue("Topgameicon_blind");
+			var cancel_btn_id:int =  cavasid_btn.getValue(serial)
+			
+			btn_cavasid.Del(cancel_btn_id); 
+			cavasid_btn.Del(serial);
+			//find first avtive canvas		
+			
+			var pass:int = -1;
+			var first_live_cavas_btn:* = cavasid_btn.firstitem();
+			if ( first_live_cavas_btn != undefined) pass = first_live_cavas_btn; 
+			dispatcher(new Intobject(pass, "close_cavas"));		
+			
 			return true;
 		}
 	}

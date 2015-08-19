@@ -5,6 +5,7 @@ package View.GameView
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import Interface.CollectionsInterface;
 	import Model.valueObject.Intobject;
 	import util.DI;
 	import View.ViewBase.ViewBase;
@@ -102,20 +103,20 @@ package View.GameView
 			utilFun.scaleXY(topicon.container, 1, 0.9);
 		
 			// TODO hud di
-			//var gamestate:Array  =_model.getValue("gamestat");
-			//utilFun.Log("gamestate ="+gamestate);			
-			//
-			//var avalibe:Array =  get_avalible(gamestate);
-			//utilFun.Log("avalibe ="+avalibe);			
-			//var avtivelist:MultiObject = prepare("avtivelist", new MultiObject() , this);				
-			//avtivelist.container.x = 120;
-			//avtivelist.container.x = 120;
-			//avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			//avtivelist.mousedown = test_reaction;
-			//avtivelist.CustomizedFun = gameframe;
-			//avtivelist.CustomizedData = avalibe;
-			//avtivelist.Create_by_list(avalibe.length, [ResName.L_top_icon], 0, 0, avalibe.length, 102, 51, "o_");			
-			//
+			var gamestate:Array  =_model.getValue("gamestat");
+			utilFun.Log("gamestate ="+gamestate);			
+			
+			var avalibe:Array =  get_avalible(gamestate);
+			utilFun.Log("avalibe ="+avalibe);			
+			var avtivelist:MultiObject = prepare("avtivelist", new MultiObject() , this);				
+			avtivelist.container.x = 120;
+			avtivelist.container.x = 120;
+			avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			avtivelist.mousedown = test_reaction;
+			avtivelist.CustomizedFun = gameframe;
+			avtivelist.CustomizedData = avalibe;
+			avtivelist.Create_by_list(avalibe.length, [ResName.L_top_icon], 0, 0, avalibe.length, 102, 51, "o_");			
+			
 			//_tool = new AdjustTool();
 			//_tool.SetControlMc(avtivelist.container);
 			//addChild(_tool);
@@ -151,44 +152,78 @@ package View.GameView
 		
 		public function test_reaction(e:Event, idx:int):Boolean
 		{
-			utilFun.Log("e.u" + e.currentTarget.currentFrame);
-			//utilFun.Log("idx" + idx);
+			//utilFun.Log("e.u" + e.currentTarget.currentFrame);		
 			//1 載入,2
 			if ( e.currentTarget.currentFrame == 1) 
 			{
-				//get cavs id to reopen
-				var open:Array = _model.getValue("opengamelistid");
-				utilFun.Log("open" + open);
-				if ( open == null ) 
-				{
+				var btn_cavasid:DI =  _model.getValue("Topgameicon_blind");					
+				if (btn_cavasid.getValue(idx)== null)
+				{						
 					var cav_id:int = _model.getValue("canvas_Serial");
-					_model.putValue("opengamelistid", open.push([idx,cav_id]));
-					dispatcher(new Intobject(idx, "Load_flash") );
+					utilFun.Log("no find");									
+					btn_cavasid.putValue(idx, cav_id);
+					
+					var cavasid_btn:DI = _model.getValue("cavasid_btnid");
+					cavasid_btn.putValue(cav_id, idx);
+					dispatcher(new Intobject(idx, "Load_flash") );						
 				}
 				else
 				{
-					for ( var i:int = 0; i < open.length ; i++)
+					var cav_id:int = btn_cavasid.getValue(idx);
+					utilFun.Log("find " +cav_id);
+					
+					//swith visible for all  newcanvas
+					var allcanvas:int = _model.getValue("canvas_Serial");
+					for ( var i:int = 0; i < allcanvas ; i++)
 					{
-						var btnid_cavid:Array = open[i];
-						var newcanvas:Object  = _model.getValue("newcanvas" + btnid_cavid[1]);
-						if ( btnid_cavid[0] == idx )
-						{
-							//swith to up							
-							
-							newcanvas.canvas_container.visible = true;
-						}
-						else
-						{
-							newcanvas.canvas_container.visible = false;
-						}
+						var newcanvas:Object  = _model.getValue("newcanvas" + i);
+						if ( i == cav_id) newcanvas.canvas_container.visible = true;
+						else newcanvas.canvas_container.visible = false;
 					}
+					
 				}
 				
 			}
-			else ;
+			else 
+			{
+				//show current game
+				utilFun.Log("show current game");				
+			};
+			
 			var activelist:MultiObject = Get("avtivelist");			
 			activelist.exclusive(idx,1);
 			return true;
+		}
+		
+		[MessageHandler(type = "Model.valueObject.Intobject",selector="close_cavas")]
+		public function change(clickbtn:Intobject):void
+		{			
+			utilFun.Log("clickbtn.Value " + clickbtn.Value );
+			if ( clickbtn.Value == -1) 
+			{
+				var activelist:MultiObject = Get("avtivelist");			
+				activelist.anti_exclusive( clickbtn.Value,2,1);
+				return;
+			}
+			
+			
+			
+			var btn_cavasid:DI =  _model.getValue("Topgameicon_blind");
+			var cav_id:int = btn_cavasid.getValue(clickbtn.Value);		
+			
+			//swith visible for all  newcanvas
+			var allcanvas:int = _model.getValue("canvas_Serial");
+			for ( var i:int = 0; i < allcanvas ; i++)
+			{
+				var newcanvas:Object  = _model.getValue("newcanvas" + i);
+				if ( i == cav_id) newcanvas.canvas_container.visible = true;
+				else newcanvas.canvas_container.visible = false;
+			}
+			
+			
+			
+			var activelist:MultiObject = Get("avtivelist");			
+			activelist.anti_exclusive( clickbtn.Value,2,1);
 		}
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="LeaveView")]
