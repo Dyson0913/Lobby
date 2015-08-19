@@ -51,9 +51,9 @@ package View.GameView
 			barback.Create_by_list(1920, [ResName.Lobby_topbar], 0 , 0, 1920, 1, 0, "Bet_");			
 			utilFun.scaleXY(barback.container, 1, 0.9);
 			
-			//var Mascot:MultiObject = prepare("Mascot", new MultiObject(), this);
-			//Mascot.Create_by_list(1, [ResName.L_Mascot], 0 , 0, 1, 0, 0, "Bet_");
-			//utilFun.scaleXY(Mascot.container, 1, 0.9);
+			var Mascot:MultiObject = prepare("Mascot", new MultiObject(), this);
+			Mascot.Create_by_list(1, [ResName.L_Mascot], 0 , 0, 1, 0, 0, "Bet_");
+			utilFun.scaleXY(Mascot.container, 1, 0.9);
 			
 			
 			
@@ -102,23 +102,23 @@ package View.GameView
 			utilFun.scaleXY(topicon.container, 1, 0.9);
 		
 			// TODO hud di
-			var gamestate:Array  =_model.getValue("gamestat");
-			utilFun.Log("gamestate ="+gamestate);			
-			
-			var avalibe:Array =  get_avalible(gamestate);
-			utilFun.Log("avalibe ="+avalibe);			
-			var avtivelist:MultiObject = prepare("avtivelist", new MultiObject() , this);				
-			avtivelist.container.x = 120;
+			//var gamestate:Array  =_model.getValue("gamestat");
+			//utilFun.Log("gamestate ="+gamestate);			
+			//
+			//var avalibe:Array =  get_avalible(gamestate);
+			//utilFun.Log("avalibe ="+avalibe);			
+			//var avtivelist:MultiObject = prepare("avtivelist", new MultiObject() , this);				
 			//avtivelist.container.x = 120;
-			avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			avtivelist.mousedown = test_reaction;
-			avtivelist.CustomizedFun = gameframe;
-			avtivelist.CustomizedData = avalibe;
-			avtivelist.Create_by_list(avalibe.length, [ResName.L_top_icon], 0, 0, avalibe.length, 102, 51, "o_");			
-			
-			_tool = new AdjustTool();
-			_tool.SetControlMc(avtivelist.container);
-			addChild(_tool);
+			//avtivelist.container.x = 120;
+			//avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
+			//avtivelist.mousedown = test_reaction;
+			//avtivelist.CustomizedFun = gameframe;
+			//avtivelist.CustomizedData = avalibe;
+			//avtivelist.Create_by_list(avalibe.length, [ResName.L_top_icon], 0, 0, avalibe.length, 102, 51, "o_");			
+			//
+			//_tool = new AdjustTool();
+			//_tool.SetControlMc(avtivelist.container);
+			//addChild(_tool);
 			
 			//_activelist.init();
 			//_tool.SetControlMc(credit.container);
