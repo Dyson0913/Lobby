@@ -130,13 +130,16 @@ package View.ViewComponent
 		{
 			var newcanvas:Object  = _model.getValue("newcanvas" + serial);
 			
-			var _canve:Sprite =  newcanvas.canvas_container;
 			var _loader:Loader =  newcanvas.canvas_loader;
 			
-			_canve = utilFun.GetClassByString(ResName.L_emptymc);
-			_canve.width = 920;
-			_canve.height = 1080;		
-			_canve.name = newcanvas.Serial;
+			newcanvas.canvas_container = utilFun.GetClassByString(ResName.L_emptymc);
+			newcanvas.canvas_container.opaqueBackground = "#000000";
+			add(newcanvas.canvas_container);			
+			newcanvas.canvas_container.width = 1920;
+			newcanvas.canvas_container.height = 1080;		
+			newcanvas.canvas_container.addChild( utilFun.GetClassByString(ResName.Loading_Scene));
+			newcanvas.canvas_container.name = newcanvas.Serial;
+			
 			
 			//移除完才觸發scroll事件,idx 會錯亂目前不用 (用name 解)
 			//_canve.addEventListener(MouseEvent.MOUSE_DOWN, ScrollDrag);
@@ -152,18 +155,13 @@ package View.ViewComponent
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadend);
 			_loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, gameprogress);
 			
-		
-			//var gameswf:String = "";			
+			
 			var rul:String = _model.getValue("gameweb")[gameidx];
-			//if ( serial %2 ==0) var rul:String = "http://190,123,123,123:8080/perfectangel.swf";
-			//else var rul:String = "http://190,123,123,123:8080/bigwin.swf";
-			utilFun.Log("rul = " + rul);	
 			if ( CONFIG::debug ) 
 			{
 				rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
 			}
-			utilFun.Log("rul = " + rul);
-			//var url:URLRequest = new URLRequest("perfectangel.swf");
+			utilFun.Log("rul = " + rul);			
 			var url:URLRequest = new URLRequest(rul);
 			
 			//var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
@@ -179,8 +177,15 @@ package View.ViewComponent
 			var loaded:Number = Math.round(e.bytesLoaded / 1024);
 			var percent:Number = Math.round(loaded / total * 100);
 			
-			//loadingPro._Progress.gotoAndStop(percent);
-			//loadingPro._Progress._Percent._TextFild.text = percent.toString()+"%";
+			var loader:LoaderInfo = e.currentTarget as LoaderInfo;
+			var s:String = utilFun.Regex_CutPatten(loader.loader.name, new RegExp("canvas_", "i"));
+			var idx:int = parseInt( s);			
+			//utilFun.Log("percent "+percent);
+			
+			var canvas:Object  = _model.getValue("newcanvas" + idx);		
+			var y:int = canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y;			
+			var shift_amount:Number = utilFun.NPointInterpolateDistance( 101-percent, y,458 );						
+			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y = shift_amount;
 		}
 		
 		private function loadend(event:Event):void
@@ -204,9 +209,7 @@ package View.ViewComponent
 				var idx:int = serial;
 				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.LOGIN_INFO));
 				(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.UUID));
-			}
-			
-			add(_canve);			
+			}			
 			_canve.addChild(_loader);
 			
 			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);
