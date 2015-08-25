@@ -15,6 +15,7 @@ package View.ViewComponent
 	import View.GameView.*;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
+	import flash.display.StageDisplayState;
 	
 	/**
 	 * btn handle present way
@@ -98,18 +99,80 @@ package View.ViewComponent
 			return true;
 		}
 		
+		public function Btn_setting(mc:MovieClip, idx:int, data:Array):void
+		{			
+			mc.gotoAndStop(2);
+			mc["_hintText"].gotoAndStop(data[idx]);			
+		}
+		
 		
 		public function BtnHint(e:Event, idx:int):Boolean
 		{
+			var data:Array  = Get("topicon").CustomizedData;
+			if ( e.currentTarget.currentFrame == 4 )			
+			{
+				e.currentTarget.gotoAndStop(5);
+				e.currentTarget["_hintText"].gotoAndStop(data[idx]);
+				return false;
+			}
+			
+			if (  e.currentTarget.currentFrame == 5)
+			{
+				e.currentTarget.gotoAndStop(4);
+				//e.currentTarget["_hintText"].gotoAndStop(data[idx]);
+				return false;
+			}
+			
 			e.currentTarget.gotoAndStop(2);
-			e.currentTarget["_hintText"].gotoAndStop(idx+1);
+			e.currentTarget["_hintText"].gotoAndStop(data[idx]);
 			return true;
 		}
 		
+		public function Btn_roout(e:Event, idx:int):Boolean
+		{
+			var data:Array  = Get("topicon").CustomizedData;
+			utilFun.Log("idx =" + idx);
+			if ( e.currentTarget.currentFrame == 4)
+			{
+				return false;
+			}
+			if ( e.currentTarget.currentFrame == 5)
+			{
+				e.currentTarget.gotoAndStop(4);
+				return false;
+			}
+			
+			e.currentTarget.gotoAndStop(2);
+			e.currentTarget["_hintText"].gotoAndStop(data[idx]);
+			return true;
+		}
+		
+		
 		public function gonewpage(e:Event, idx:int):Boolean
 		{
-			var request:URLRequest = new URLRequest("https://www.google.com.tw/");			
-			navigateToURL( request, "_blank" );
+			if ( idx == 1)
+			{
+				//GetSingleItem("_view").parent.parent.stage
+				if ( GetSingleItem("_view").parent.parent.stage.displayState == StageDisplayState.NORMAL)
+				{
+					GetSingleItem("_view").parent.parent.stage.displayState = StageDisplayState.FULL_SCREEN; 
+					
+					e.currentTarget.gotoAndStop(4);
+				}
+				else
+				{
+					GetSingleItem("_view").parent.parent.stage.displayState = StageDisplayState.NORMAL; 
+					e.currentTarget.gotoAndStop(1);
+				}
+				return false;
+			}
+			else
+			{
+				var request:URLRequest = new URLRequest("https://www.google.com.tw/");			
+				navigateToURL( request, "_blank" );
+				return true;
+			}
+			
 			return true;
 		}
 	}

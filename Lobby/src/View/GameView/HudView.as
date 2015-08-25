@@ -91,13 +91,15 @@ package View.GameView
 			utilFun.scaleXY(credit.container,1, 0.9);
 			
 			var topicon:MultiObject = prepare("topicon", new MultiObject(), this);
-			topicon.Posi_CustzmiedFun = _regular.Posi_x_Setting;
-			topicon.Post_CustomizedData = [0, 160, 230,230];
-			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			//topicon.CustomizedFun =  _btn.Btn_setting;
+			topicon.CustomizedData = [1, 6, 2, 4];
+			topicon.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			topicon.Post_CustomizedData = [[0, 0], [80, 0], [157, -2], [230, 0]];
+			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,0]);			
 			topicon.rollover = _btn.BtnHint;
-			topicon.rollout = _btn.test_reaction;
+			topicon.rollout = _btn.Btn_roout;
 			topicon.mousedown = _btn.gonewpage;
-			topicon.Create_by_list(4, [ResName.L_icon_1, ResName.L_icon_2 ,ResName.L_icon_3,ResName.L_icon_4], 0 , 0, 4, 0 , 0, "Bet_");
+			topicon.Create_by_list(4, [ResName.L_icon_add_Credit, ResName.L_icon_Full_Screen,ResName.L_icon_Coustomer_call ,ResName.L_icon_back_to_EnterWeb,], 0 , 0, 4, 0 , 0, "Bet_");
 			topicon.container.x = 1624;
 			topicon.container.y = 10;
 			utilFun.scaleXY(topicon.container, 1, 0.9);
@@ -124,6 +126,7 @@ package View.GameView
 			//_activelist.init();
 			//_tool.SetControlMc(credit.container);
 			//_tool.SetControlMc(topicon.ItemList[2]);
+			//_tool.y = 200;
 			//addChild(_tool);
 		}
 		

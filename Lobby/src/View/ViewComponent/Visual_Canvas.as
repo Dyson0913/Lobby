@@ -212,14 +212,12 @@ package View.ViewComponent
 			}			
 			_canve.addChild(_loader);
 			
-			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);
-			topicon.Posi_CustzmiedFun = _regular.Posi_x_Setting;
-			topicon.Post_CustomizedData = [0, 160, 230];
+			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);			
 			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
 			topicon.rollover = this.BtnHint;
 			topicon.rollout = _btn.test_reaction;
 			topicon.mousedown = swfcommand;
-			topicon.Create_by_list(1, [ResName.L_icon_3], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
+			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
 			topicon.container.x = 1854;
 			topicon.container.y = 80;			
 			//utilFun.scaleXY(topicon.container, 1, 0.9);
@@ -230,9 +228,9 @@ package View.ViewComponent
 		}
 		
 		public function BtnHint(e:Event, idx:int):Boolean
-		{
+		{			
 			e.currentTarget.gotoAndStop(2);
-			e.currentTarget["_hintText"].gotoAndStop(3);
+			e.currentTarget["_hintText"].gotoAndStop(5);
 			return true;
 		}
 		

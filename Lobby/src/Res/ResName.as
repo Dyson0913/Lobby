@@ -20,11 +20,12 @@ package Res
 		public static const L_credit:String = "Lobby_player_credit";
 		public static const L_altas:String = "Lobby_altas";
 		
-		public static const L_icon_1:String = "Lobby_icon_1";
-		public static const L_icon_2:String = "Lobby_icon_2";
-		public static const L_icon_3:String = "Lobby_icon_3";
-		public static const L_icon_4:String = "Lobby_icon_4";
-		public static const L_icon_5:String = "Lobby_icon_3";
+		public static const L_icon_add_Credit:String = "Lobby_icon_1";
+		public static const L_icon_Coustomer_call:String = "Lobby_icon_2";
+		public static const L_icon_back_to_lobby:String = "Lobby_icon_3";
+		public static const L_icon_back_to_EnterWeb:String = "Lobby_icon_4";
+		public static const L_icon_exit_game:String = "Lobby_icon_5";
+		public static const L_icon_Full_Screen:String = "Lobby_icon_6";
 		
 		public static const L_arrow_l:String = "Lobby_arrow_left";
 		public static const L_arrow_r:String = "Lobby_arrow_right";
