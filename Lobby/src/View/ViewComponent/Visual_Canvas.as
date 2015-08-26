@@ -66,7 +66,8 @@ package View.ViewComponent
 			var serial:int = _model.getValue("canvas_Serial");
 			var newcanvas:Object = { "Serial": serial, 
 			                                        "canvas_container":  new Sprite(),
-										            "canvas_loader":new Loader()
+										            "canvas_loader":new Loader(),
+													"call_back":null
 			                                      };
 												  
 			_model.putValue("newcanvas" + serial, newcanvas);
@@ -208,7 +209,14 @@ package View.ViewComponent
 				//var result:Object  = JSON.decode(_para);
 				var idx:int = serial;
 				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.LOGIN_INFO));
-				(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.UUID));
+				(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID));
+				
+				if  ((_loader.content as MovieClip )["call_back"] != null)
+				{
+					utilFun.Log("call_back != null");
+					newcanvas.call_back = (_loader.content as MovieClip )["call_back"];
+					utilFun.Log("newcanvas.call_back ="+newcanvas.call_back);
+				}
 			}			
 			_canve.addChild(_loader);
 			
@@ -278,6 +286,24 @@ package View.ViewComponent
 			
 			return true;
 		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "update_result_Credit")]
+		public function updateCredit():void
+		{
+			var allcanvas:int = _model.getValue("canvas_Serial");
+			for ( var i:int = 0; i < allcanvas ; i++)
+			{
+				var newcanvas:Object  = _model.getValue("newcanvas" + i);
+				utilFun.Log("ca =" + i);
+					utilFun.Log("newcanvas.call_back ="+newcanvas.call_back);
+				utilFun.Log("newcanvas.credit =" + _model.getValue(modelName.CREDIT));
+				utilFun.Log("newcanvas.credit =" + typeof( _model.getValue(modelName.CREDIT) ));
+				
+				newcanvas.call_back(_model.getValue(modelName.CREDIT));
+			
+			}
+		}
+		
 	}
 
 }

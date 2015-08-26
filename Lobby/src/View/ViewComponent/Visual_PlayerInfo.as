@@ -36,7 +36,9 @@ package View.ViewComponent
 			credit.container.x = 1593 + (credit.CustomizedData.length -1) * 37 *-1;   //right -> left *-1
 			credit.container.y = 16;
 			credit.Create_by_bitmap(credit.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, credit.CustomizedData.length, 37, 51, "o_");
-			utilFun.scaleXY(credit.container,1, 0.9);
+			utilFun.scaleXY(credit.container, 1, 0.9);
+			
+			
 		}		
 		
 		//[MessageHandler(type = "Model.ModelEvent", selector = "update_result_Credit")]
