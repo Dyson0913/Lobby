@@ -49,12 +49,13 @@ package View.GameView
 			//view.Create_by_list(1, [ResName.L_emptymc], 0, 0, 1, 0, 0, "a_");			
 			
 			var barback:MultiObject = prepare("TopBar", new MultiObject(), this);
-			barback.Create_by_list(1920, [ResName.Lobby_topbar], 0 , 0, 1920, 1, 0, "Bet_");			
-			utilFun.scaleXY(barback.container, 1, 0.9);
+			barback.Create_by_list(1, [ResName.Lobby_topbar], 0 , 0, 1, 1, 0, "Bet_");			
+			
 			
 			var Mascot:MultiObject = prepare("Mascot", new MultiObject(), this);
 			Mascot.Create_by_list(1, [ResName.L_Mascot], 0 , 0, 1, 0, 0, "Bet_");
-			utilFun.scaleXY(Mascot.container, 1, 0.9);
+			Mascot.container.x = -60;
+			Mascot.container.y = -40;
 			
 			
 			
@@ -72,6 +73,8 @@ package View.GameView
 			playerinfo.container.y = 10;
 			utilFun.scaleXY(playerinfo.container,1, 0.9);
 			
+			
+			
 			//name
 			var name:MultiObject = prepare("name", new MultiObject() , this);
 			name.CustomizedFun = _regular.ascii_idx_setting;			
@@ -80,6 +83,12 @@ package View.GameView
 			name.container.y = 14;
 			name.Create_by_bitmap(name.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, name.CustomizedData.length, 37, 51, "o_");			
 			utilFun.scaleXY(name.container, 1, 0.9);
+			
+			//_tool.SetControlMc(gameIcon.ItemList[1]);
+			_tool.SetControlMc(Mascot.container);
+			_tool.y = 200;
+			addChild(_tool);
+			return;
 			
 			var creadit:int = _model.getValue(modelName.CREDIT);
 			var credit:MultiObject = prepare(modelName.CREDIT, new MultiObject() , this);
@@ -105,8 +114,8 @@ package View.GameView
 			utilFun.scaleXY(topicon.container, 1, 0.9);
 		
 			// TODO hud di
-			var gamestate:Array  =_model.getValue("gamestat");
-			utilFun.Log("gamestate ="+gamestate);			
+			var gamestate:Array  =_model.getValue("gameonline");
+			utilFun.Log("gameonline ="+gamestate);			
 			
 			var avalibe:Array =  get_avalible(gamestate);
 			utilFun.Log("avalibe ="+avalibe);			

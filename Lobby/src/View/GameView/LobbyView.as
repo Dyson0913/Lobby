@@ -5,6 +5,7 @@ package View.GameView
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.media.ID3Info;
 	import flash.text.TextField;
 	import Model.valueObject.*
 	import Res.ResName;
@@ -67,34 +68,31 @@ package View.GameView
 			page.container.y = 502;
 			
 			//TODO fun -->map 
-			var gameIconlist:Array = [ResName.L_game_3,ResName.L_game_2, ResName.L_game_4, ResName.L_game_5];
+			var icon_mapping:DI = new DI();
+			icon_mapping.putValue("BigWin", 0);
+			icon_mapping.putValue("PerfectAngel", 1);
+			icon_mapping.putValue("Bingo", 2);
+			icon_mapping.putValue("Finance", 3);
+			var gameIconlist:Array = [ResName.L_game_2,ResName.L_game_3, ResName.L_game_4, ResName.L_game_5];
 			var arr:Array = _model.getValue(modelName.OPEN_STATE);
-			//
-			var gamestat:Array = [];
+			
 			var gameweb:Array = [];
 			var gametype:Array = [];
 			var game_online:Array = [];
 			for ( var i:int = 0; i < arr.length ; i++)
-			{
-				//	var resultinfo:Array = arr[i].split("|");
-				if ( arr[i].game_type == "BigWin")
-				{
-					gamestat.push( arr[i].game_online);
-				}
-				if ( arr[i].game_type == "PerfectAngel")
-				{
-					gamestat.push(arr[i].game_online);
-				}
-			
-				if ( arr[i].game_type == "Bingo")
-				{
-					gamestat.push( arr[i].game_online);
-				}
-				if ( arr[i].game_type == "Finance")
-				{
-					gamestat.push( arr[i].game_online);
-				}
-				
+			{				
+				//{"game_website": "http://106.186.116.216:8000/static/perfectangel.swf",
+				   //"game_description": "Perfect Angel",
+				   //"game_online": 1,
+				   //"game_type": "PerfectAngel", 
+				   //"game_id": "PerfectAngel-1", 
+				   //"game_avaliable": 1}
+				var gameinfo:Object = { "game_online": arr[i].game_online, 
+														"game_website":  arr[i].game_website,
+														"game_type":arr[i].game_type
+														
+			                                      };
+								
 				gameweb.push(arr[i].game_website);
 				gametype.push(arr[i].game_type);
 				game_online.push(arr[i].game_online);
@@ -104,9 +102,10 @@ package View.GameView
 			
 			utilFun.Log("gameweb = "+gameweb);
 			utilFun.Log("game_online = "+game_online);
-			_model.putValue("gameweb", gameweb);
-			_model.putValue("gamestat", gamestat);
+			_model.putValue("gameweb", gameweb);			
 			_model.putValue("gametype", gametype);
+			_model.putValue("gameonline", game_online);
+			
 			var gameIcon:MultiObject = prepare("gameIcon", new MultiObject(), this);
 			gameIcon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [1, 2, 2, 1]);
 			gameIcon.rollover = _btn.Game_iconhandle;
@@ -114,10 +113,11 @@ package View.GameView
 			gameIcon.mousedown = _btn.Game_iconclick_down;
 			gameIcon.mouseup = _btn.Game_iconclick_up;
 			gameIcon.CustomizedFun = FrameSetting
-			gameIcon.CustomizedData = gamestat;
-			gameIcon.Create_by_list(gamestat.length,gameIconlist, 0 , 0, 3, 550 , 400, "Bet_");
-			gameIcon.container.x = 210;
+			gameIcon.CustomizedData = game_online;
+			gameIcon.Create_by_list(game_online.length,gameIconlist, 0 , 0, 3, 460 , 400, "Bet_");
+			gameIcon.container.x = 270;
 			gameIcon.container.y = 192;
+			
 			
 		}			 
 		

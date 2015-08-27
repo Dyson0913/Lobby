@@ -211,12 +211,12 @@ package View.ViewComponent
 				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.LOGIN_INFO));
 				(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID));
 				
-				if  ((_loader.content as MovieClip )["call_back"] != null)
-				{
-					utilFun.Log("call_back != null");
-					newcanvas.call_back = (_loader.content as MovieClip )["call_back"];
-					utilFun.Log("newcanvas.call_back ="+newcanvas.call_back);
-				}
+				//if  ((_loader.content as MovieClip )["call_back"] != null)
+				//{
+					//utilFun.Log("call_back != null");
+					//newcanvas.call_back = (_loader.content as MovieClip )["call_back"];
+					//utilFun.Log("newcanvas.call_back ="+newcanvas.call_back);
+				//}
 			}			
 			_canve.addChild(_loader);
 			

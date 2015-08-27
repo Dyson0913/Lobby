@@ -54,7 +54,7 @@ package ConnectModule.websocket
 			
 			if ( CONFIG::debug ) 
 			{
-				 websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/1679091c5a880faf6fb5e6087eb1b2dc", "");
+				 websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/c9f0f895fb98ab9159f51fd0297e236d", "");
 			}
 			else {
 				websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/" + object.accessToken, "");
