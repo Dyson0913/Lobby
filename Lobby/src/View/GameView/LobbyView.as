@@ -60,12 +60,16 @@ package View.GameView
 			view.Create_by_list(1, [ResName.Lobby_Scene], 0, 0, 1, 0, 0, "a_");			
 			
 			var page:MultiObject = prepare("pagearr", new MultiObject(), this);
-			page.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);			
-			page.mousedown = _btn.test_reaction;		
+			page.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			page.mousedown = _btn.test_reaction;
 			page.mouseup = _btn.test_reaction;		
-			page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1820 , 0, "Bet_");
+			page.rollover = _btn.test_reaction;		
+			page.rollout = _btn.test_reaction;		
+			page.CustomizedFun = arror_turn;
+			page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1880 , 0, "Bet_");
 			page.container.x = 10;
 			page.container.y = 502;
+			
 			
 			//TODO fun -->map 
 			var icon_mapping:DI = new DI();
@@ -73,7 +77,7 @@ package View.GameView
 			icon_mapping.putValue("PerfectAngel", 1);
 			icon_mapping.putValue("Bingo", 2);
 			icon_mapping.putValue("Finance", 3);
-			var gameIconlist:Array = [ResName.L_game_2,ResName.L_game_3, ResName.L_game_4, ResName.L_game_5];
+			var gameIconlist:Array = [ResName.L_game_3,ResName.L_game_2, ResName.L_game_4, ResName.L_game_5];
 			var arr:Array = _model.getValue(modelName.OPEN_STATE);
 			
 			var gameweb:Array = [];
@@ -118,6 +122,11 @@ package View.GameView
 			gameIcon.container.x = 270;
 			gameIcon.container.y = 192;
 			
+			//_tool.SetControlMc(page.ItemList[1]);
+			//_tool.y = 200;
+			//addChild(_tool);
+			//return;
+			
 			
 		}			 
 		
@@ -125,6 +134,12 @@ package View.GameView
 		{
 			if( data[idx] ==0) mc.gotoAndStop(3);
 			else mc.gotoAndStop(data[idx]);
+		}
+		
+		public function arror_turn(mc:MovieClip, idx:int, data:Array):void
+		{
+			if ( idx == 1) mc.rotationY = 180;
+			
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]

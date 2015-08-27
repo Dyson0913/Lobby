@@ -159,15 +159,6 @@ package util
 			}			
 		}
 		
-		public static function GotoAndStop(e:Event,frame:int):void
-		{			
-			if ( frame == 0 )
-			{				
-				return;
-			}			
-			e.currentTarget.gotoAndStop(frame);		
-		}
-		
 		public static function Frametype(type:int,customized:Array = null):Array
 		{
 			var BtnMouseFrame:Array;
@@ -176,6 +167,15 @@ package util
 			if (type == MouseBehavior.Customized ) BtnMouseFrame = customized;
 			
 			return BtnMouseFrame;
+		}
+		
+		public static function GotoAndStop(e:Event,frame:int):void
+		{			
+			if ( frame == 0 )
+			{				
+				return;
+			}			
+			e.currentTarget.gotoAndStop(frame);		
 		}
 		
 		public static function easy_combination(list:Array, lenght:int):Array

@@ -227,9 +227,8 @@ package View.ViewComponent
 			topicon.mousedown = swfcommand;
 			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
 			topicon.container.x = 1854;
-			topicon.container.y = 80;			
-			//utilFun.scaleXY(topicon.container, 1, 0.9);
-			
+			topicon.container.y = 80;						
+			utilFun.Log("add leave");
 			_model.putValue("newcanvas" + serial, newcanvas);
 			
 			//removeChild(loadingPro);		
@@ -290,18 +289,18 @@ package View.ViewComponent
 		[MessageHandler(type = "Model.ModelEvent", selector = "update_result_Credit")]
 		public function updateCredit():void
 		{
-			var allcanvas:int = _model.getValue("canvas_Serial");
-			for ( var i:int = 0; i < allcanvas ; i++)
-			{
-				var newcanvas:Object  = _model.getValue("newcanvas" + i);
-				utilFun.Log("ca =" + i);
-					utilFun.Log("newcanvas.call_back ="+newcanvas.call_back);
-				utilFun.Log("newcanvas.credit =" + _model.getValue(modelName.CREDIT));
-				utilFun.Log("newcanvas.credit =" + typeof( _model.getValue(modelName.CREDIT) ));
-				
-				newcanvas.call_back(_model.getValue(modelName.CREDIT));
-			
-			}
+			//var allcanvas:int = _model.getValue("canvas_Serial");
+			//for ( var i:int = 0; i < allcanvas ; i++)
+			//{
+				//var newcanvas:Object  = _model.getValue("newcanvas" + i);
+				//utilFun.Log("ca =" + i);
+					//utilFun.Log("newcanvas.call_back ="+newcanvas.call_back);
+				//utilFun.Log("newcanvas.credit =" + _model.getValue(modelName.CREDIT));
+				//utilFun.Log("newcanvas.credit =" + typeof( _model.getValue(modelName.CREDIT) ));
+				//
+				//newcanvas.call_back(_model.getValue(modelName.CREDIT));
+			//
+			//}
 		}
 		
 	}

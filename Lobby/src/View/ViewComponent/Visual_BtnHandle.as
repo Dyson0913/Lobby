@@ -150,6 +150,7 @@ package View.ViewComponent
 		
 		public function gonewpage(e:Event, idx:int):Boolean
 		{
+			//TODO button mapping to multiob ?
 			if ( idx == 1)
 			{
 				//GetSingleItem("_view").parent.parent.stage

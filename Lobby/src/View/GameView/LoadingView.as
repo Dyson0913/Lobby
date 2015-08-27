@@ -104,17 +104,8 @@ package View.GameView
 		}
 		
 		public function test():void
-		{
-			utilFun.Log("ok");
-			//_model.putValue(modelName.NICKNAME,"aaa");
-			//_model.putValue(modelName.UUID,"sdf" );
-						//
-						//_model.putValue(modelName.CREDIT, "123" );
-						//_model.putValue("gamestat",[1,1,0,0]);
-			//dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH) );		
-			//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;	
+		{			
 			utilFun.SetTime(connet,1);
-			
 		}
 		
 		private function connet():void
