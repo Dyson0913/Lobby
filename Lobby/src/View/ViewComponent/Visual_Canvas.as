@@ -289,6 +289,7 @@ package View.ViewComponent
 		[MessageHandler(type = "Model.ModelEvent", selector = "update_result_Credit")]
 		public function updateCredit():void
 		{
+			//TODO new credit pass to game
 			//var allcanvas:int = _model.getValue("canvas_Serial");
 			//for ( var i:int = 0; i < allcanvas ; i++)
 			//{

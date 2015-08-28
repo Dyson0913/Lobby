@@ -74,7 +74,7 @@ package ConnectModule.websocket
 			}
 			else if ( event.type == WebSocketEvent.CLOSED)
 			{
-				utilFun.Log("Connected close lobby="+ event.type );
+				utilFun.Log("Connected close lobby="+ event.type );				
 			}
 		}
 		
@@ -111,7 +111,8 @@ package ConnectModule.websocket
 							//player_id
 							//player_currency
 							dispatcher(new ValueObject( result.player_info.player_credit, modelName.CREDIT) );
-							
+							dispatcher(new ValueObject( result.player_info.player_credit, modelName.NEW_CREDIT_UPDATE) );
+							//
 							
 						
 							dispatcher(new ValueObject( result.game_list, modelName.OPEN_STATE) );
@@ -126,7 +127,9 @@ package ConnectModule.websocket
 					{
 						if ( result.game_type == "Lobby")
 						{
-							dispatcher(new ValueObject( result.player_credit, modelName.CREDIT) );						
+							dispatcher(new ValueObject( result.player_credit, modelName.CREDIT) );
+							//dispatcher(new ValueObject( result.player_info.player_credit, modelName.NEW_CREDIT_UPDATE) );
+							//
 							dispatcher(new ModelEvent("update_result_Credit"));
 						}
 					}

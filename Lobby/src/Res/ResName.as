@@ -38,6 +38,9 @@ package Res
 		public static const pa_icons:String = "s_icon1";
 		public static const dk_icons:String = "s_icon2";
 		
+		public static const coin_In_pack:String = "coin_In";
+		public static const PopMsg:String = "Pop_Msg";
+		
 		
 		
 		//swc res

@@ -61,6 +61,9 @@ package View.GameView
 		//[Inject]
 		//public var _activelist:Visual_ActiveList;	
 		
+		//[Inject]
+		//public var _popmsg:Visual_PopMsg;
+		
 		
 		public function LoadingView()  
 		{
@@ -94,8 +97,10 @@ package View.GameView
 			//_tool = new AdjustTool();
 					
 			_canvas.init();			
+			//_popmsg.init();
 			//_tool.SetControlMc(Mascot.container);
 			//addChild(_tool);
+			
 			Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );		
 			
 			//_activelist.ini

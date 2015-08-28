@@ -14,6 +14,8 @@ package Model
 		public static const NICKNAME:int = Num++;
 		public static const UUID:int = Num++;
 		
+		public static const NEW_CREDIT_UPDATE:int = Num++;
+		
 		public static const OPEN_STATE:int = Num++;
 		
 		public static const HINT_MSG:int = Num++;

@@ -1,5 +1,6 @@
 package View.ViewComponent 
 {
+	import flash.display.MovieClip;
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
@@ -40,6 +41,31 @@ package View.ViewComponent
 			//utilFun.scaleXY(credit.container, 1, 0.9);
 			//
 			//
+			
+			var new_credit:int = _model.getValue(modelName.CREDIT);
+			var old_credit:int = _model.getValue(modelName.NEW_CREDIT_UPDATE);
+			
+			//utilFun.Log("new_credit n= "+ new_credit);
+			//utilFun.Log("old_credit c= "+ old_credit);
+			
+			if ( new_credit < old_credit) 
+			{
+				_model.putValue(modelName.NEW_CREDIT_UPDATE, new_credit);
+				//utilFun.Log("put oldcreid = "+ new_credit);
+				//utilFun.Log("new oldcreid = "+ _model.getValue(modelName.NEW_CREDIT_UPDATE));
+			}
+			else
+			{
+				_model.putValue(modelName.NEW_CREDIT_UPDATE, new_credit);
+				GetSingleItem("update_coin").gotoAndPlay(2);
+			}
+		
+			
+			utilFun.SetText(GetSingleItem("playinfo", 1)["_Text"], _model.getValue(modelName.CREDIT));
+			
+			
+			
+			
 		}		
 		
 		//[MessageHandler(type = "Model.ModelEvent", selector = "update_result_Credit")]

@@ -57,14 +57,21 @@ package View.GameView
 			Mascot.container.x = -60;
 			Mascot.container.y = -40;
 			
+			utilFun.Log("model n= "+ _model.getValue(modelName.NICKNAME));
+			utilFun.Log("model c= "+ parseInt(_model.getValue(modelName.CREDIT) ));
 			var playerinfo:MultiObject = prepare("playinfo", new MultiObject(), this);
 			playerinfo.CustomizedFun = _regular.textSetting;
-			playerinfo.CustomizedData = [_model.getValue(modelName.NICKNAME),_model.getValue(modelName.CREDIT)]
+			playerinfo.CustomizedData = [_model.getValue(modelName.NICKNAME), parseInt( _model.getValue(modelName.CREDIT))]
 			playerinfo.Create_by_list(2, [ResName.L_name,ResName.L_credit], 0 , 0, 2, 250, 0, "Bet_");
 			playerinfo.container.x = 960;
 			playerinfo.container.y= 2;
 			
-			//name
+			var coin_ani:MultiObject = prepare("update_coin", new MultiObject(), this);								
+			coin_ani.Create_by_list(1, [ResName.coin_In_pack], 0 , 0, 1, 0 , 0, "Bet_");
+			coin_ani.container.x = 1300;
+			coin_ani.container.y = -8;
+			
+			//name						
 			//var name:MultiObject = prepare("name", new MultiObject() , this);
 			//name.CustomizedFun = _regular.ascii_idx_setting;			
 			//name.CustomizedData =  _model.getValue(modelName.NICKNAME).split("");
@@ -83,7 +90,7 @@ package View.GameView
 			//credit.Create_by_bitmap(credit.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, credit.CustomizedData.length, 37, 51, "o_");
 			//
 			
-		
+			
 			
 			var topicon:MultiObject = prepare("topicon", new MultiObject(), this);
 			//topicon.CustomizedFun =  _btn.Btn_setting;
@@ -94,15 +101,12 @@ package View.GameView
 			topicon.rollover = _btn.BtnHint;
 			topicon.rollout = _btn.Btn_roout;
 			topicon.mousedown = _btn.gonewpage;
-			topicon.Create_by_list(4, [ ResName.L_icon_Coustomer_call ,ResName.L_icon_Full_Screen,ResName.L_icon_back_to_EnterWeb,ResName.L_icon_exit_game], 0 , 0, 4, 70 , 0, "Bet_");
-			topicon.container.x = 1590;
+			topicon.Create_by_list(2, [ ResName.L_icon_Coustomer_call ,ResName.L_icon_Full_Screen], 0 , 0,2 , 50 , 0, "Bet_");
+			topicon.container.x = 1790;
 			topicon.container.y = 2;
 			
-			//_tool.SetControlMc(topicon.ItemList[1]);
-			//_tool.SetControlMc(topicon.container);
-			//_tool.y = 200;
-			//addChild(_tool);
-			//return;
+			
+		
 		
 			// TODO hud di
 			var gamestate:Array  =_model.getValue("gameonline");
@@ -112,14 +116,17 @@ package View.GameView
 			utilFun.Log("avalibe ="+avalibe);			
 			var avtivelist:MultiObject = prepare("avtivelist", new MultiObject() , this);				
 			avtivelist.container.x = 180;
+			avtivelist.container.y= 4;
 			avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,2,0]);
 			avtivelist.mousedown = myreaction;
 			avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons], 0, 0, avalibe.length, 42, 0, "o_");			
 			
 			
-			//_tool.SetControlMc(avtivelist.ItemList[1]);
+			//_tool.SetControlMc(topicon.ItemList[1]);
+			//_tool.SetControlMc(coin_ani.container);
 			//_tool.y = 200;
-			//this.addChild(_tool);
+			//addChild(_tool);
+			//return;
 			
 			//_activelist.init();
 			//_tool.SetControlMc(credit.container);

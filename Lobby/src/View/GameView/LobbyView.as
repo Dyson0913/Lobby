@@ -127,6 +127,7 @@ package View.GameView
 			//addChild(_tool);
 			//return;
 			
+			//coin_ani.ItemList[0];
 			
 		}			 
 		
