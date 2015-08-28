@@ -27,6 +27,8 @@ package View.Viewutil
 			return _ItemList;
 		}
 		
+		public var stop_Propagation:Boolean = false;
+		
 		//客制化功能
 		public var CustomizedFun:Function = null;
 		public var CustomizedData:Array = null;
@@ -293,7 +295,9 @@ package View.Viewutil
 					if ( mousedown != null) 
 					{
 						_contido = mousedown(e, idx);
-						if( _contido ) utilFun.GotoAndStop(e, MouseFrame[2]);
+						if ( _contido ) utilFun.GotoAndStop(e, MouseFrame[2]);
+						
+						if( stop_Propagation) e.stopPropagation();
 					}
 				}
 				break;
@@ -302,7 +306,9 @@ package View.Viewutil
 					if ( mouseup != null) 
 					{
 						_contido = mouseup(e, idx);
-						if( _contido ) utilFun.GotoAndStop(e, MouseFrame[3]);
+						if ( _contido ) utilFun.GotoAndStop(e, MouseFrame[3]);
+						
+						if( stop_Propagation) e.stopPropagation();
 					}
 					
 				}

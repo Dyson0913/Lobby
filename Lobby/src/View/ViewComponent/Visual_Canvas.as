@@ -30,10 +30,7 @@ package View.ViewComponent
 	 * @author ...
 	 */
 	public class Visual_Canvas  extends VisualHandler
-	{
-		[Inject]
-		public var _regular:RegularSetting;
-	
+	{		
 		[Inject]
 		public var _betCommand:BetCommand;
 		

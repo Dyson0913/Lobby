@@ -43,8 +43,15 @@ package Command
 		
 		public function textSetting(mc:MovieClip, idx:int, data:Array):void
 		{			
-			utilFun.SetText(mc["_Text"],data[idx])
+			text_setting_single(mc, data[idx]);
+			//utilFun.SetText(mc["_Text"],data[idx])
 		}
+		
+		public function text_setting_single(mc:MovieClip, str:String):void
+		{			
+			utilFun.SetText(mc["_Text"],str)
+		}
+		
 		
 		public function FadeIn(mc:MovieClip,  in_t:int , out_t:int, onComF:Function):void
 		{

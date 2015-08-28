@@ -36,34 +36,19 @@ package View.GameView
 	 
 	public class LoadingView extends ViewBase
 	{	
-		private var _mainroad:MultiObject = new MultiObject();
-		private var _localDI:DI = new DI();
-		
-		private var but:MultiObject = new MultiObject();
-		
-		public var _mainTable:LinkList = new LinkList();
-		public var _bigroadTable:LinkList = new LinkList();
-		
-		private var _too:AdjustTool = new AdjustTool();
-		
-		private var _result:Object;
-		
-		private var fwd:Array = [];
-		private var mclist:Array = [];
-        private var bwd:Array = [];
-		
 		[Inject]
 		public var _regular:RegularSetting;	
 		
 		[Inject]
-		public var _canvas:Visual_Canvas;	
+		public var _canvas:Visual_Canvas;
 		
-		//[Inject]
-		//public var _activelist:Visual_ActiveList;	
+		[Inject]
+		public var _popmsg:Visual_PopMsg;
 		
-		//[Inject]
-		//public var _popmsg:Visual_PopMsg;
+		[Inject]
+		public var _test:Visual_testInterface;
 		
+		private var _result:Object;
 		
 		public function LoadingView()  
 		{
@@ -98,13 +83,9 @@ package View.GameView
 					
 			_canvas.init();			
 			//_popmsg.init();
-			//_tool.SetControlMc(Mascot.container);
-			//addChild(_tool);
+			//_test.init();			
 			
-			Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );		
-			
-			//_activelist.ini
-			
+			Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );			
 			
 		}
 		

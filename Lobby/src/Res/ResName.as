@@ -40,6 +40,7 @@ package Res
 		
 		public static const coin_In_pack:String = "coin_In";
 		public static const PopMsg:String = "Pop_Msg";
+		public static const PopBtn:String = "Pop_btn";
 		
 		
 		
