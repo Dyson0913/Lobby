@@ -78,20 +78,20 @@ package View.GameView
 			if (View.Value != modelName.Loading) return;
 			super.EnterView(View);
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
-			view.Create_by_list(1, [ResName.Loading_Scene], 0, 0, 1, 0, 0, "a_");			
+			view.Create_by_list(1, [ResName.L_emptymc], 0, 0, 1, 0, 0, "a_");			
 			//_tool = new AdjustTool();
 					
 			_canvas.init();			
 			//_popmsg.init();
 			//_test.init();			
 			
-			Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );			
-			
+			//Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );			
+			utilFun.SetTime(connet,0.1);
 		}
 		
 		public function test():void
 		{			
-			utilFun.SetTime(connet,1);
+			
 		}
 		
 		private function connet():void

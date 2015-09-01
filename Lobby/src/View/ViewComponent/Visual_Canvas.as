@@ -177,13 +177,17 @@ package View.ViewComponent
 			
 			var loader:LoaderInfo = e.currentTarget as LoaderInfo;
 			var s:String = utilFun.Regex_CutPatten(loader.loader.name, new RegExp("canvas_", "i"));
-			var idx:int = parseInt( s);			
-			//utilFun.Log("percent "+percent);
+			var idx:int = parseInt( s);
 			
 			var canvas:Object  = _model.getValue("newcanvas" + idx);		
-			var y:int = canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y;			
-			var shift_amount:Number = utilFun.NPointInterpolateDistance( 101-percent, y,458 );						
-			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y = shift_amount;
+			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_percent"].text = percent.toString() + "%";
+			//var y:int = canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y;			
+			//var shift_amount:Number = utilFun.NPointInterpolateDistance( 101-percent, y,458 );						
+			//canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y = shift_amount;
+			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y =  622 -  ( 164 *  (percent / 100));
+			
+			//utilFun.Log("percent "+canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_percent"].text );
+//		utilFun.Log("y "+canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y);
 		}
 		
 		private function loadend(event:Event):void
