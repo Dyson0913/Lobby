@@ -228,8 +228,7 @@ package View.ViewComponent
 			topicon.mousedown = swfcommand;
 			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
 			topicon.container.x = 1854;
-			topicon.container.y = 80;						
-			utilFun.Log("add leave");
+			topicon.container.y = 80;			
 			_model.putValue("newcanvas" + serial, newcanvas);
 			
 			//removeChild(loadingPro);		
@@ -255,8 +254,8 @@ package View.ViewComponent
 		}
 		
 		public function swfcommand(e:Event, idx:int):Boolean
-		{
-			var s:Array = utilFun.Regex_Match(e.currentTarget.name, new RegExp("game_(.)_.","i"));		
+		{			
+			var s:Array = utilFun.Regex_Match(e.currentTarget.name, new RegExp("game_(.+)_.", "i"));
 			var idx:int = parseInt(s[1]);
 			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
 			var serial:int = newcanvas.Serial;
