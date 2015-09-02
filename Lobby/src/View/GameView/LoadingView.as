@@ -9,6 +9,8 @@ package View.GameView
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;	
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	import flash.text.TextField;
 	import Model.valueObject.Intobject;
 	import Res.ResName;
@@ -28,6 +30,12 @@ package View.GameView
 	import caurina.transitions.Tweener;
 	import caurina.transitions.properties.CurveModifiers;
 	
+	import flash.utils.ByteArray;	
+	
+	import flash.system.ApplicationDomain;
+	import flash.system.LoaderContext;
+	import flash.net.URLLoaderDataFormat;
+	import com.adobe.serialization.json.JSON
 	/**
 	 * ...
 	 * @author hhg
@@ -49,6 +57,8 @@ package View.GameView
 		public var _test:Visual_testInterface;
 		
 		private var _result:Object;
+		
+		public var _Gameconfig:URLLoader;
 		
 		public function LoadingView()  
 		{
@@ -84,14 +94,37 @@ package View.GameView
 			_canvas.init();			
 			//_popmsg.init();
 			//_test.init();			
+			_Gameconfig = new URLLoader();
+			_Gameconfig.addEventListener(Event.COMPLETE, configload); //載入聊天禁言清單 完成後執行 儲存清單內容
+			_Gameconfig.dataFormat = URLLoaderDataFormat.BINARY; 
+			//_Gameconfig.load(new URLRequest("http://sqoo.t28.net/swf/gameconfig.json")); 
+			_Gameconfig.load(new URLRequest("gameconfig.json")); 
 			
-			//Tweener.addTween(view.ItemList[0]["_mask"], { y:view.ItemList[0]["_mask"].y-164, time:3,onComplete:test,transition:"easeInOutQuart"} );			
-			utilFun.SetTime(connet,0.1);
+			//utilFun.SetTime(connet,0.1);
+		}
+		
+		public function configload(e:Event):void
+		{
+			var ba:ByteArray = ByteArray(URLLoader(e.target).data); //把載入文字 丟入Byte陣列裡面
+		   var utf8Str:String = ba.readMultiByte(ba.length, 'utf8'); //把Byte陣列 轉 UTF8 格式
+		      //utilFun.Log("online " + utf8Str);		 
+		  var result:Object  = JSON.decode(utf8Str);
+		  
+		  //result.online.DomainName[0].lobby_ws;	
+		  
+		   utilFun.Log("online " + result.online.DomainName[0].lobby_ws);
+		   utilFun.Log("online " + result.online.DomainName[0].PA_ws);
+		   utilFun.Log("online " + result.online.DomainName[0].DK_ws);		   
+		   
+		   _model.putValue("lobby_ws",result.online.DomainName[0].lobby_ws);
+		   _model.putValue("Pa_ws",result.online.DomainName[0].PA_ws);
+		   _model.putValue("DK_ws", result.online.DomainName[0].DK_ws);
+		   utilFun.SetTime(connet,0.1);
 		}
 		
 		public function test():void
 		{			
-			
+			//utilFun.SetTime(connet,0.1);
 		}
 		
 		private function connet():void
