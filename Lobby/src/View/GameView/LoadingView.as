@@ -88,7 +88,7 @@ package View.GameView
 			if (View.Value != modelName.Loading) return;
 			super.EnterView(View);
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
-			view.Create_by_list(1, [ResName.L_emptymc], 0, 0, 1, 0, 0, "a_");			
+			view.Create_by_list(1, [ResName.Lobby_Scene], 0, 0, 1, 0, 0, "a_");			
 			//_tool = new AdjustTool();
 					
 			_canvas.init();			
@@ -97,8 +97,8 @@ package View.GameView
 			_Gameconfig = new URLLoader();
 			_Gameconfig.addEventListener(Event.COMPLETE, configload); //載入聊天禁言清單 完成後執行 儲存清單內容
 			_Gameconfig.dataFormat = URLLoaderDataFormat.BINARY; 
-			//_Gameconfig.load(new URLRequest("http://sqoo.t28.net/swf/gameconfig.json")); 
-			_Gameconfig.load(new URLRequest("gameconfig.json")); 
+			_Gameconfig.load(new URLRequest("http://sqoo.t28.net/swf/gameconfig.json")); 
+			//_Gameconfig.load(new URLRequest("gameconfig.json")); 
 			
 			//utilFun.SetTime(connet,0.1);
 		}

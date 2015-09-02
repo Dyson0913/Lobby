@@ -54,13 +54,16 @@ package ConnectModule.websocket
 			
 			if ( CONFIG::debug ) 
 			{				
+				utilFun.Log("ws = " +  _model.getValue("lobby_ws"));
+				//websocket = new WebSocket("ws://"+ _model.getValue("lobby_ws") +":8001/gamesocket/token/c9f0f895fb98ab9159f51fd0297e236d", "");
 				websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/c9f0f895fb98ab9159f51fd0297e236d", "");
 			}
 			else {
-				//utilFun.Log("ws = " +  _model.getValue("lobby_ws"));
+				
 				websocket = new WebSocket("ws://"+ _model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken, "");
+				//websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/" + object.accessToken, "");
 			}
-			return;
+			
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
