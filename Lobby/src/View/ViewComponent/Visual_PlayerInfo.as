@@ -41,8 +41,8 @@ package View.ViewComponent
 			var new_credit:int = _model.getValue(modelName.CREDIT);
 			var old_credit:int = _model.getValue(modelName.NEW_CREDIT_UPDATE);
 			
-			//utilFun.Log("new_credit n= "+ new_credit);
-			//utilFun.Log("old_credit c= "+ old_credit);
+			utilFun.Log("new_credit n= "+ new_credit);
+			utilFun.Log("old_credit c= "+ old_credit);
 			
 			if ( new_credit < old_credit) 
 			{

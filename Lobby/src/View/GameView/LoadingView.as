@@ -77,7 +77,14 @@ package View.GameView
 			utilFun.Log("_result = "+_result);
 			_model.putValue(modelName.LOGIN_INFO, _result);
 			
-			_model.putValue("lobby_ws","106.186.116.216");
+			if ( CONFIG::debug ) 
+			{
+				_model.putValue("_doname","106.186.116.216");
+			}
+			else
+			{
+				_model.putValue("_doname","sqoo.t28.net");
+			}
 			_model.putValue(modelName.UUID, "c9f0f895fb98ab9159f51fd0297e236d");
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));		
@@ -106,14 +113,18 @@ package View.GameView
 			{
 				//Debug.monitor(stage);
 				//utilFun.Log("welcome to perfect alcon");
-				utilFun.SetTime(connet,0.1);
+				_Gameconfig = new URLLoader();
+				_Gameconfig.addEventListener(Event.COMPLETE, configload); //載入聊天禁言清單 完成後執行 儲存清單內容
+				_Gameconfig.dataFormat = URLLoaderDataFormat.BINARY; 
+				_Gameconfig.load(new URLRequest("http://" + _model.getValue("_doname") +":8000/static/gameconfig.json")); 
+				// http://106.186.116.216:8000/static/gameconfig.json
 			}		
 			else
 			{
 				_Gameconfig = new URLLoader();
 				_Gameconfig.addEventListener(Event.COMPLETE, configload); //載入聊天禁言清單 完成後執行 儲存清單內容
 				_Gameconfig.dataFormat = URLLoaderDataFormat.BINARY; 
-				_Gameconfig.load(new URLRequest("http://sqoo.t28.net/swf/gameconfig.json")); 
+				_Gameconfig.load(new URLRequest("http://"+ _model.getValue("_doname") +"/swf/gameconfig.json")); 
 			}		
 		}
 		
@@ -122,7 +133,15 @@ package View.GameView
 			var ba:ByteArray = ByteArray(URLLoader(e.target).data); //把載入文字 丟入Byte陣列裡面
 		   var utf8Str:String = ba.readMultiByte(ba.length, 'utf8'); //把Byte陣列 轉 UTF8 格式		    
 		  var result:Object  = JSON.decode(utf8Str);
-		   _model.putValue("lobby_ws",result.online.DomainName[0].lobby_ws);		   
+		  
+		  if ( CONFIG::debug ) 
+		  {
+			  _model.putValue("lobby_ws", result.development.DomainName[0].lobby_ws);		   
+		  }
+		  else
+		  {
+			_model.putValue("lobby_ws", result.online.DomainName[0].lobby_ws);		   
+		  }
 		   utilFun.SetTime(connet,0.1);
 		}
 		

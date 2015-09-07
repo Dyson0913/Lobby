@@ -157,7 +157,7 @@ package View.ViewComponent
 			var rul:String = _model.getValue("gameweb")[gameidx];
 			if ( CONFIG::debug ) 
 			{
-				rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+				//rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
 			}
 			else
 			{

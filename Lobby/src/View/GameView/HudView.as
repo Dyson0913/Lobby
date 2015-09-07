@@ -72,9 +72,13 @@ package View.GameView
 			
 			var coin_ani:MultiObject = prepare("update_coin", new MultiObject(), this);								
 			coin_ani.Create_by_list(1, [ResName.coin_In_pack], 0 , 0, 1, 0 , 0, "Bet_");
-			coin_ani.container.x = 1480;
-			coin_ani.container.y = 970;
+			coin_ani.container.x = 310;
+			coin_ani.container.y = 980;
 			//coin_ani.ItemList[0].gotoAndStop(2);
+			
+			//_tool.SetControlMc(coin_ani.container);
+			//_tool.y = 200;
+			//addChild(_tool);	
 			
 			//name						
 			//var name:MultiObject = prepare("name", new MultiObject() , this);
