@@ -10,7 +10,9 @@ package
 	import util.utilFun;
 	import View.GameView.*;
 	import com.adobe.serialization.json.JSON;
-		
+	
+
+	
 	/**
 	 * ...
 	 * @author hhg
@@ -39,8 +41,10 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
-			Debug.monitor(stage);
-			utilFun.Log("welcome to alcon");
+			//Debug.monitor(stage);
+			//utilFun.Log("welcome to alcon");
+			
+			
 			
 			_context  = ActionScriptContextBuilder.build(appConfig, stage);
 			

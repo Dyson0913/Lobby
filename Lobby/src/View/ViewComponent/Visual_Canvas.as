@@ -159,6 +159,11 @@ package View.ViewComponent
 			{
 				rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
 			}
+			else
+			{
+				rul = utilFun.Regex_CutPatten(rul , RegExp("http://(\.*/).*/"));
+				rul =  "http://" + _model.getValue("lobby_ws") +"/swf/"+ rul;			
+			}
 			utilFun.Log("rul = " + rul);			
 			var url:URLRequest = new URLRequest(rul);
 			
@@ -169,8 +174,7 @@ package View.ViewComponent
 		}
 		
 		private function gameprogress(e:ProgressEvent):void 
-		{
-			// TODO update loader
+		{			
 			var total:Number = Math.round( e.bytesTotal/ 1024);
 			var loaded:Number = Math.round(e.bytesLoaded / 1024);
 			var percent:Number = Math.round(loaded / total * 100);
@@ -180,14 +184,8 @@ package View.ViewComponent
 			var idx:int = parseInt( s);
 			
 			var canvas:Object  = _model.getValue("newcanvas" + idx);		
-			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_percent"].text = percent.toString() + "%";
-			//var y:int = canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y;			
-			//var shift_amount:Number = utilFun.NPointInterpolateDistance( 101-percent, y,458 );						
-			//canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y = shift_amount;
+			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_percent"].text = percent.toString() + "%";	
 			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y =  622 -  ( 164 *  (percent / 100));
-			
-			//utilFun.Log("percent "+canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_percent"].text );
-//		utilFun.Log("y "+canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y);
 		}
 		
 		private function loadend(event:Event):void
@@ -210,7 +208,8 @@ package View.ViewComponent
 				//var result:Object  = JSON.decode(_para);
 				var idx:int = serial;
 				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.LOGIN_INFO));
-				(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID));
+				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID));
+				(_loader.content as MovieClip)["handshake"]([_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID), _model.getValue("lobby_ws")]);
 				
 				//if  ((_loader.content as MovieClip )["call_back"] != null)
 				//{
@@ -227,8 +226,8 @@ package View.ViewComponent
 			topicon.rollout = _btn.test_reaction;
 			topicon.mousedown = swfcommand;
 			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
-			topicon.container.x = 1854;
-			topicon.container.y = 80;			
+			topicon.container.x = 1864;
+			topicon.container.y = 50;			
 			_model.putValue("newcanvas" + serial, newcanvas);
 			
 			//removeChild(loadingPro);		

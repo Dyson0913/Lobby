@@ -62,9 +62,13 @@ package View.GameView
 			var playerinfo:MultiObject = prepare("playinfo", new MultiObject(), this);
 			playerinfo.CustomizedFun = _regular.textSetting;
 			playerinfo.CustomizedData = [_model.getValue(modelName.NICKNAME), parseInt( _model.getValue(modelName.CREDIT))]
-			playerinfo.Create_by_list(2, [ResName.L_name,ResName.L_credit], 0 , 0, 2, 1470, 0, "Bet_");
+			playerinfo.Create_by_list(2, [ResName.L_name,ResName.L_credit], 0 , 0, 2, 290, 0, "Bet_");
 			playerinfo.container.x = 90;
-			playerinfo.container.y= 1020;
+			playerinfo.container.y = 1020;
+			
+			//_tool.SetControlMc(playerinfo.ItemList[1]);
+			//_tool.y = 200;
+			//addChild(_tool);	
 			
 			var coin_ani:MultiObject = prepare("update_coin", new MultiObject(), this);								
 			coin_ani.Create_by_list(1, [ResName.coin_In_pack], 0 , 0, 1, 0 , 0, "Bet_");

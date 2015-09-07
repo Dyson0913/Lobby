@@ -17,6 +17,8 @@ package util
 	import com.hexagonstar.util.debug.Debug;
 	import View.Viewutil.MouseBehavior;
 	import Res.ResName;	
+	
+	import com.istrong.log.*;
 	/**
 	 * 常用功能
 	 * @author hhg
@@ -73,7 +75,8 @@ package util
 		 */
 		public static function Log(msg:String):void
 		{			
-			Debug.trace(msg);			
+			Logger.log("msg" + msg, 0, 0, false);
+			//Debug.trace(msg);			
 		}
 		
 		/******************** 元件操作功能 ********************/
