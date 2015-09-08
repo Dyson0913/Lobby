@@ -74,18 +74,18 @@ package View.GameView
 			Logger.displayLevel = LogLevel.DEBUG;
 			Logger.addProvider(new ArthropodLogProvider(), "Arthropod");
 			_result = result;
-			utilFun.Log("_result = "+_result);
-			_model.putValue(modelName.LOGIN_INFO, _result);
+			
 			
 			if ( CONFIG::debug ) 
 			{
-				_model.putValue("_doname","106.186.116.216");
+				_model.putValue("_doname", "106.186.116.216");				
+				if( _result == null) _result = { "accessToken":"c9f0f895fb98ab9159f51fd0297e236d"};				
 			}
 			else
-			{
+			{				
 				_model.putValue("_doname","sqoo.t28.net");
-			}
-			_model.putValue(modelName.UUID, "c9f0f895fb98ab9159f51fd0297e236d");
+			}			
+			_model.putValue(modelName.LOGIN_INFO, _result);
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));		
 			//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
@@ -108,6 +108,8 @@ package View.GameView
 			_canvas.init();			
 			//_popmsg.init();
 			//_test.init();			
+			
+			
 			
 			if ( CONFIG::debug ) 
 			{

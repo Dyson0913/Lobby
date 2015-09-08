@@ -57,8 +57,6 @@ package View.GameView
 			Mascot.container.x = -60;
 			Mascot.container.y = -40;
 			
-			utilFun.Log("model n= "+ _model.getValue(modelName.NICKNAME));
-			utilFun.Log("model c= "+ parseInt(_model.getValue(modelName.CREDIT) ));
 			var playerinfo:MultiObject = prepare("playinfo", new MultiObject(), this);
 			playerinfo.CustomizedFun = _regular.textSetting;
 			playerinfo.CustomizedData = [_model.getValue(modelName.NICKNAME), parseInt( _model.getValue(modelName.CREDIT))]

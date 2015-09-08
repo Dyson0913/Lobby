@@ -51,21 +51,7 @@ package ConnectModule.websocket
 		public function Connect():void
 		{
 			var object:Object = _model.getValue(modelName.LOGIN_INFO);						
-			
-			if ( CONFIG::debug ) 
-			{				
-				utilFun.Log("ws = " +  _model.getValue("lobby_ws"));
-				websocket = new WebSocket("ws://"+ _model.getValue("lobby_ws") +":8001/gamesocket/token/c9f0f895fb98ab9159f51fd0297e236d", "");
-				//websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/c9f0f895fb98ab9159f51fd0297e236d", "");
-			}
-			else {				
-				//utilFun.Log("r ws = " +  _model.getValue("lobby_ws"));
-				//utilFun.Log("r ws token= " +  object.accessToken);
-				//utilFun.Log("r ws link= " +  "ws://"+ _model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken);
-				websocket = new WebSocket("ws://"+ _model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken, "");
-				//websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/" + object.accessToken, "");
-			}
-			
+			websocket = new WebSocket("ws://"+ _model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken, "");			
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
@@ -96,7 +82,7 @@ package ConnectModule.websocket
 			var result:Object ;
 			if (event.message.type === WebSocketMessage.TYPE_UTF8) 
 			{
-				utilFun.Log("lobby before"+event.message.utf8Data)
+				//utilFun.Log("lobby before"+event.message.utf8Data)
 				result = JSON.decode(event.message.utf8Data);			
 			}
 			
@@ -113,7 +99,7 @@ package ConnectModule.websocket
 					{
 						if ( result.game_type == "Lobby")
 						{
-							dispatcher(new ValueObject( result.player_info.player_account,modelName.NICKNAME) );
+							dispatcher(new ValueObject( result.player_info.player_account, modelName.NICKNAME) );							
 							dispatcher(new ValueObject( result.player_info.player_uuid,modelName.UUID) );
 							//player_id
 							//player_currency

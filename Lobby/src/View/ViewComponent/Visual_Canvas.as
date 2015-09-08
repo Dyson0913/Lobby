@@ -156,8 +156,8 @@ package View.ViewComponent
 			
 			var rul:String = _model.getValue("gameweb")[gameidx];
 			if ( CONFIG::debug ) 
-			{
-				//rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+			{				
+				if ( CONFIG::Local) rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
 			}
 			else
 			{
@@ -204,11 +204,8 @@ package View.ViewComponent
 			utilFun.Log("load down");
 			//接口
 			if ( (_loader.content as MovieClip )["handshake"] != null)
-			{
-				//var result:Object  = JSON.decode(_para);
+			{				
 				var idx:int = serial;
-				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.LOGIN_INFO));
-				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID));
 				(_loader.content as MovieClip)["handshake"]([_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID), _model.getValue("lobby_ws")]);
 				
 				//if  ((_loader.content as MovieClip )["call_back"] != null)
