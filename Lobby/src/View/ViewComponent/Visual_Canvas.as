@@ -224,7 +224,7 @@ package View.ViewComponent
 			topicon.mousedown = swfcommand;
 			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
 			topicon.container.x = 1864;
-			topicon.container.y = 50;			
+			topicon.container.y = 65;			
 			_model.putValue("newcanvas" + serial, newcanvas);
 			
 			//removeChild(loadingPro);		
