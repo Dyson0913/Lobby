@@ -37,6 +37,8 @@ package Res
 		
 		public static const pa_icons:String = "s_icon1";
 		public static const dk_icons:String = "s_icon2";
+		public static const bg_icons:String = "s_icon3";
+		public static const fi_icons:String = "s_icon4";
 		
 		public static const coin_In_pack:String = "coin_In";
 		public static const PopMsg:String = "Pop_Msg";
