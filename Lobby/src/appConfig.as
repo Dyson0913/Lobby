@@ -45,8 +45,7 @@ package
 		public var _pokerhandler:Visual_poker = new Visual_poker();
 		public var _timer:Visual_timer = new Visual_timer();
 		public var _hint:Visual_Hintmsg = new Visual_Hintmsg();
-		public var _playerinfo:Visual_PlayerInfo = new Visual_PlayerInfo();
-		public var _coin:Visual_Coin = new Visual_Coin();
+		public var _playerinfo:Visual_PlayerInfo = new Visual_PlayerInfo();		
 		public var _btn:Visual_BtnHandle = new Visual_BtnHandle();
 		public var _canvas:Visual_Canvas = new Visual_Canvas();				
 		public var _popmsg:Visual_PopMsg = new Visual_PopMsg();		

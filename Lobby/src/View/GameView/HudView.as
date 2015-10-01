@@ -70,34 +70,13 @@ package View.GameView
 			
 			var coin_ani:MultiObject = prepare("update_coin", new MultiObject(), this);								
 			coin_ani.Create_by_list(1, [ResName.coin_In_pack], 0 , 0, 1, 0 , 0, "Bet_");
-			coin_ani.container.x = 310;
+			coin_ani.container.x = 510;
 			coin_ani.container.y = 980;
 			//coin_ani.ItemList[0].gotoAndStop(2);
 			
 			//_tool.SetControlMc(coin_ani.container);
 			//_tool.y = 200;
 			//addChild(_tool);	
-			
-			//name						
-			//var name:MultiObject = prepare("name", new MultiObject() , this);
-			//name.CustomizedFun = _regular.ascii_idx_setting;			
-			//name.CustomizedData =  _model.getValue(modelName.NICKNAME).split("");
-			//name.container.x = 1212  + (name.CustomizedData.length -1) * 37 * -1; //mid *-.05
-			//name.container.y = 14;
-			//name.Create_by_bitmap(name.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, name.CustomizedData.length, 37, 51, "o_");			
-			//utilFun.scaleXY(name.container, 1, 0.9);
-		
-			
-			//var creadit:int = _model.getValue(modelName.CREDIT);
-			//var credit:MultiObject = prepare(modelName.CREDIT, new MultiObject() , this);
-			//credit.CustomizedFun = _regular.ascii_idx_setting;						
-			//credit.CustomizedData = creadit.toString().split("");
-			//credit.container.x = 1593 + (credit.CustomizedData.length -1) * 37 *-1;   //right -> left *-1
-			//credit.container.y = 16;
-			//credit.Create_by_bitmap(credit.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, credit.CustomizedData.length, 37, 51, "o_");
-			//
-			
-			
 			
 			var topicon:MultiObject = prepare("topicon", new MultiObject(), this);
 			//topicon.CustomizedFun =  _btn.Btn_setting;

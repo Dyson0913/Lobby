@@ -16,7 +16,6 @@ package View.GameView
 	import View.Viewutil.*;
 	import View.ViewBase.ViewBase;
 	import util.*;
-	import View.ViewComponent.Visual_Coin;
 	
 	import Command.*;
 	
@@ -33,9 +32,6 @@ package View.GameView
 		
 		[Inject]
 		public var _regular:RegularSetting;	
-		
-		[Inject]
-		public var _visual_coin:Visual_Coin;
 		
 		[Inject]
 		public var _btn:Visual_BtnHandle;
@@ -118,11 +114,12 @@ package View.GameView
 			gameIcon.mouseup = _btn.Game_iconclick_up;
 			gameIcon.CustomizedFun = FrameSetting
 			gameIcon.CustomizedData = game_online;
-			gameIcon.Create_by_list(game_online.length,gameIconlist, 0 , 0, 3, 460 , 400, "Bet_");
-			gameIcon.container.x = 270;
-			gameIcon.container.y = 192;
+			gameIcon.Create_by_list(game_online.length,gameIconlist, 0 , 0, 3, 400 , 330, "Bet_");
+			gameIcon.container.x = 380;
+			gameIcon.container.y = 242;
 			
-			//_tool.SetControlMc(page.ItemList[1]);
+			//_tool.SetControlMc(gameIcon.container);
+			//_tool.SetControlMc(gameIcon.ItemList[3]);
 			//_tool.y = 200;
 			//addChild(_tool);
 			//return;
@@ -133,7 +130,7 @@ package View.GameView
 		
 		public function FrameSetting(mc:MovieClip, idx:int, data:Array):void
 		{
-			if( data[idx] ==0) mc.gotoAndStop(3);
+			if( data[idx] ==0) mc.gotoAndStop(4);
 			else mc.gotoAndStop(data[idx]);
 		}
 		

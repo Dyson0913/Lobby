@@ -48,6 +48,7 @@ package View.ViewComponent
 			btn.container.x = 100;
 			btn.Create_by_list(4, ["Lobby_icon_1"], 0, 0, 4, 110, 0, "Btn_");
 			
+			
 		}		
 		
 	
