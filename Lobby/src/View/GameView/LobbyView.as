@@ -138,24 +138,7 @@ package View.GameView
 		{
 			if ( idx == 1) mc.rotationY = 180;
 			
-		}
-		
-		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
-		public function round_result():void
-		{		
-
-		}
-		
-		
-		
-		private function clearn():void
-		{			
-			dispatcher(new ModelEvent("clearn"));			
-		  
-		
-				
-			//dispatcher(new BoolObject(false, "Msgqueue"));
-		}
+		}	
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="LeaveView")]
 		override public function ExitView(View:Intobject):void

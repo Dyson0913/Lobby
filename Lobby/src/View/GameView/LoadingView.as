@@ -20,8 +20,7 @@ package View.GameView
 	import Command.DataOperation;
 	import flash.text.TextFormat;
 	import View.ViewComponent.*;
-	import View.Viewutil.AdjustTool;
-	import View.Viewutil.LinkList;
+	import View.Viewutil.AdjustTool;	
 	import View.Viewutil.MultiObject;
 	import View.Viewutil.MouseBehavior;
 	
@@ -47,8 +46,6 @@ package View.GameView
 	 
 	public class LoadingView extends ViewBase
 	{	
-		[Inject]
-		public var _regular:RegularSetting;	
 		
 		[Inject]
 		public var _canvas:Visual_Canvas;
