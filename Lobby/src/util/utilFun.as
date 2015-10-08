@@ -75,7 +75,7 @@ package util
 		 */
 		public static function Log(msg:String):void
 		{			
-			Logger.log("msg" + msg, 0, 0, false);
+			Logger.log("lobby " + msg, 0, 0, false);
 			//Debug.trace(msg);			
 		}
 		

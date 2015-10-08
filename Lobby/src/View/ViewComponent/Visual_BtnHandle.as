@@ -70,11 +70,23 @@ package View.ViewComponent
 					
 					//swith visible for all  newcanvas
 					var allcanvas:int = _model.getValue("canvas_Serial");
+					utilFun.Log("allcanvas show =" + allcanvas);
 					for ( var i:int = 0; i < allcanvas ; i++)
 					{
 						var newcanvas:Object  = _model.getValue("newcanvas" + i);
-						if ( i == cav_id) newcanvas.canvas_container.visible = true;
-						else newcanvas.canvas_container.visible = false;
+						if ( i == cav_id) 
+						{							
+							newcanvas.canvas_container.visible = true;
+						}
+						else 
+						{
+							utilFun.Log("lobby hide =" + i);
+							newcanvas.canvas_container.visible = false;
+							utilFun.Log("lobby cal back =" + newcanvas.call_back);
+							var ob:Object = newcanvas.call_back;
+							utilFun.Log("lobby cal back ="+ob.cal);
+							//newcanvas.call_back(["stop_music"]);
+						}
 					}
 					
 				}

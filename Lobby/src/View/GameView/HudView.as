@@ -158,13 +158,21 @@ package View.GameView
 					var cav_id:int = btn_cavasid.getValue(idx);
 					utilFun.Log("find " +cav_id);
 					
-					//swith visible for all  newcanvas
+					//swith visible for all  newcanvas					
 					var allcanvas:int = _model.getValue("canvas_Serial");
 					for ( var i:int = 0; i < allcanvas ; i++)
 					{
 						var newcanvas:Object  = _model.getValue("newcanvas" + i);
-						if ( i == cav_id) newcanvas.canvas_container.visible = true;
-						else newcanvas.canvas_container.visible = false;
+						if ( i == cav_id) 
+						{
+							newcanvas.canvas_container.visible = true;
+							newcanvas.call_back(["START_BGM"]);
+						}
+						else 
+						{
+							newcanvas.canvas_container.visible = false;
+							newcanvas.call_back(["STOP_BGM"]);
+						}
 					}
 					
 				}

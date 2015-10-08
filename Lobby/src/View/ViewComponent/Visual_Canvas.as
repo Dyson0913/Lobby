@@ -207,15 +207,11 @@ package View.ViewComponent
 			{				
 				var idx:int = serial;
 				(_loader.content as MovieClip)["handshake"]([_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID), _model.getValue("lobby_ws")]);
-				
-				//if  ((_loader.content as MovieClip )["call_back"] != null)
-				//{
-					//utilFun.Log("call_back != null");
-					//newcanvas.call_back = (_loader.content as MovieClip )["call_back"];
-					//utilFun.Log("newcanvas.call_back ="+newcanvas.call_back);
-				//}
 			}			
 			_canve.addChild(_loader);
+			
+			music_control(serial);
+			
 			
 			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);			
 			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
@@ -228,6 +224,23 @@ package View.ViewComponent
 			_model.putValue("newcanvas" + serial, newcanvas);
 			
 			//removeChild(loadingPro);		
+		}
+		
+		public function music_control(cav_id:int):void
+		{
+			var allcanvas:int = _model.getValue("canvas_Serial");
+			for ( var i:int = 0; i < allcanvas ; i++)
+			{
+				var newcanvas:Object  = _model.getValue("newcanvas" + i);
+				if ( i == cav_id) 
+				{				
+					newcanvas.call_back(["START_BGM"]);
+				}
+				else 
+				{					
+					newcanvas.call_back(["STOP_BGM"]);
+				}
+			}
 		}
 		
 		public function BtnHint(e:Event, idx:int):Boolean
@@ -245,6 +258,13 @@ package View.ViewComponent
 			{
 				dispatcher(new ValueObject( data[1],modelName.CREDIT) );
 				dispatcher(new ModelEvent("HandShake_updateCredit"));
+			}
+			if (data[0] == "HandShake_callback")
+			{
+				var newcanvas:Object  = _model.getValue("newcanvas" + Client_serial);
+				newcanvas.call_back = data[1];
+				utilFun.Log("newcanvas.call_back" + newcanvas.call_back);
+				
 			}
 			
 		}
@@ -279,25 +299,18 @@ package View.ViewComponent
 			if ( first_live_cavas_btn != undefined) pass = first_live_cavas_btn; 
 			dispatcher(new Intobject(pass, "close_cavas"));		
 			
+			if (btn_cavasid.firstitem() != undefined)
+			{
+				music_defalt(btn_cavasid.firstitem());
+			}
+			
 			return true;
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "update_result_Credit")]
-		public function updateCredit():void
-		{
-			//TODO new credit pass to game
-			//var allcanvas:int = _model.getValue("canvas_Serial");
-			//for ( var i:int = 0; i < allcanvas ; i++)
-			//{
-				//var newcanvas:Object  = _model.getValue("newcanvas" + i);
-				//utilFun.Log("ca =" + i);
-					//utilFun.Log("newcanvas.call_back ="+newcanvas.call_back);
-				//utilFun.Log("newcanvas.credit =" + _model.getValue(modelName.CREDIT));
-				//utilFun.Log("newcanvas.credit =" + typeof( _model.getValue(modelName.CREDIT) ));
-				//
-				//newcanvas.call_back(_model.getValue(modelName.CREDIT));
-			//
-			//}
+		public function music_defalt(cav_id:int):void
+		{			
+			var newcanvas:Object  = _model.getValue("newcanvas" + cav_id);						
+			newcanvas.call_back(["START_BGM"]);
 		}
 		
 	}
