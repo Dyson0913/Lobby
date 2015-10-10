@@ -166,12 +166,12 @@ package View.GameView
 						if ( i == cav_id) 
 						{
 							newcanvas.canvas_container.visible = true;
-							newcanvas.call_back(["START_BGM"]);
+							newcanvas.call_back(["RESUME"]);
 						}
 						else 
 						{
 							newcanvas.canvas_container.visible = false;
-							newcanvas.call_back(["STOP_BGM"]);
+							newcanvas.call_back(["MUTE"]);
 						}
 					}
 					

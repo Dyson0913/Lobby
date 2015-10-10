@@ -234,11 +234,11 @@ package View.ViewComponent
 				var newcanvas:Object  = _model.getValue("newcanvas" + i);
 				if ( i == cav_id) 
 				{				
-					newcanvas.call_back(["START_BGM"]);
+					newcanvas.call_back(["RESUME"]);
 				}
 				else 
 				{					
-					newcanvas.call_back(["STOP_BGM"]);
+					newcanvas.call_back(["MUTE"]);
 				}
 			}
 		}
@@ -263,7 +263,7 @@ package View.ViewComponent
 			{
 				var newcanvas:Object  = _model.getValue("newcanvas" + Client_serial);
 				newcanvas.call_back = data[1];
-				utilFun.Log("newcanvas.call_back" + newcanvas.call_back);
+				//utilFun.Log("newcanvas.call_back" + newcanvas.call_back);
 				
 			}
 			
@@ -310,7 +310,7 @@ package View.ViewComponent
 		public function music_defalt(cav_id:int):void
 		{			
 			var newcanvas:Object  = _model.getValue("newcanvas" + cav_id);						
-			newcanvas.call_back(["START_BGM"]);
+			newcanvas.call_back(["RESUME"]);
 		}
 		
 	}
