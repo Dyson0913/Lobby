@@ -157,12 +157,13 @@ package View.ViewComponent
 			var rul:String = _model.getValue("gameweb")[gameidx];
 			if ( CONFIG::debug ) 
 			{				
-				if ( CONFIG::Local) rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+				if ( CONFIG::Local)  rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+				
 			}
 			else
 			{
-				rul = utilFun.Regex_CutPatten(rul , RegExp("http://(\.*/).*/"));
-				rul =  "http://" + _model.getValue("lobby_ws") +"/swf/"+ rul;			
+				//rul = utilFun.Regex_CutPatten(rul , RegExp("http://(\.*/).*/"));
+				//rul =  "http://" + _model.getValue("lobby_ws") +"/swf/"+ rul;			
 			}
 			utilFun.Log("rul = " + rul);			
 			var url:URLRequest = new URLRequest(rul);

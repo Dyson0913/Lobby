@@ -120,6 +120,7 @@ package View.GameView
 			}		
 			else
 			{
+				utilFun.Log("release = " + "http://"+ _model.getValue("_doname") +"/swf/gameconfig.json");
 				_Gameconfig = new URLLoader();
 				_Gameconfig.addEventListener(Event.COMPLETE, configload); //載入聊天禁言清單 完成後執行 儲存清單內容
 				_Gameconfig.dataFormat = URLLoaderDataFormat.BINARY; 
@@ -140,6 +141,7 @@ package View.GameView
 		  else
 		  {
 			_model.putValue("lobby_ws", result.online.DomainName[0].lobby_ws);		   
+			utilFun.Log("release = " + _model.getValue("lobby_ws"));
 		  }
 		   utilFun.SetTime(connet,0.1);
 		}

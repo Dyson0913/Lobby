@@ -47,7 +47,8 @@ package ConnectModule.websocket
 		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="connect")]
 		public function Connect():void
 		{
-			var object:Object = _model.getValue(modelName.LOGIN_INFO);						
+			var object:Object = _model.getValue(modelName.LOGIN_INFO);		
+			utilFun.Log("===="+_model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken);
 			websocket = new WebSocket("ws://"+ _model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken, "");			
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
