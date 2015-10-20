@@ -13,6 +13,7 @@ package View.GameView
 	import flash.net.URLRequest;
 	import flash.text.TextField;
 	import Model.valueObject.Intobject;
+	import org.osflash.signals.natives.base.SignalTextField;
 	import Res.ResName;
 	import util.DI;
 	import util.node;
@@ -155,9 +156,10 @@ package View.GameView
 		
 		private function connet():void
 		{	
+			var object:Object = _model.getValue(modelName.LOGIN_INFO);		
 				var loading_text:MultiObject = prepare("loading_text", new MultiObject(),  GetSingleItem("_view").parent.parent);
-			loading_text.CustomizedFun = _text.textSetting;
-			loading_text.CustomizedData = [{size:22,color:0xCCCCCC}, "connect"];
+			loading_text.CustomizedFun = _text.textSetting;1
+			loading_text.CustomizedData = [{size:22,color:0xCCCCCC}, "connect to\n"+_model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken+"\n"];
 			loading_text.Create_by_list(1, [ResName.TextInfo], 0 , 0, 3, 0 , 0, "Bet_");		
 			loading_text.container.x = 1920/2;
 			loading_text.container.y = 1082/2;
@@ -177,16 +179,23 @@ package View.GameView
 		public function open():void
 		{
 			Tweener.pauseTweens(GetSingleItem("loading_text", 0).getChildByName("Dy_Text"));
-			GetSingleItem("loading_text", 0).getChildByName("Dy_Text").text = "socket open";			
+			GetSingleItem("loading_text", 0).getChildByName("Dy_Text").appendText("socket open\n");
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "socket_close")]
 		public function close():void
 		{
 			Tweener.pauseTweens(GetSingleItem("loading_text", 0).getChildByName("Dy_Text"));
-			GetSingleItem("loading_text", 0).getChildByName("Dy_Text").text = "socket close";			
+			GetSingleItem("loading_text", 0).getChildByName("Dy_Text").appendText("socket close\n")
 		}
 		
+		[MessageHandler(type = "Model.ModelEvent", selector = "socket_fali")]
+		public function fail():void
+		{
+			Tweener.pauseTweens(GetSingleItem("loading_text", 0).getChildByName("Dy_Text"));
+			var str:String = _model.getValue("connectState");		
+			GetSingleItem("loading_text", 0).getChildByName("Dy_Text").appendText("socket connect fail\n");
+		}
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="LeaveView")]
 		override public function ExitView(View:Intobject):void

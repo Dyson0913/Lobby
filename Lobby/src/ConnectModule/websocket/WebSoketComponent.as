@@ -73,7 +73,9 @@ package ConnectModule.websocket
 		
 		private function handleConnectionFail(event:WebSocketErrorEvent):void 
 		{
-			utilFun.Log("Connected= fale"+ event.type);
+			utilFun.Log("Connected= fale" + event.type);
+			_model.putValue("connectState", event.type);
+			dispatcher(new ModelEvent("socket_fali"));
 		}
 		
 		
@@ -92,8 +94,7 @@ package ConnectModule.websocket
 		[MessageHandler(type = "Model.ModelEvent", selector = "popmsg")]
 		public function msghandler():void
 		{
-			   var result:Object  = _MsgModel.getMsg();
-			   
+			   var result:Object  = _MsgModel.getMsg();			   
 				switch(result.message_type)
 				{
 					case "MsgLogin":
