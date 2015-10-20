@@ -19,6 +19,7 @@ package View.GameView
 	import View.ViewBase.ViewBase;
 	import Command.DataOperation;
 	import flash.text.TextFormat;
+	import View.ViewBase.Visual_Text;
 	import View.ViewComponent.*;
 	import View.Viewutil.AdjustTool;	
 	import View.Viewutil.MultiObject;
@@ -55,6 +56,12 @@ package View.GameView
 		
 		[Inject]
 		public var _test:Visual_testInterface;
+		
+		[Inject]
+		public var _text:Visual_Text;
+		
+		[Inject]
+		public var _regular:RegularSetting;
 		
 		private var _result:Object;
 		
@@ -148,9 +155,38 @@ package View.GameView
 		
 		private function connet():void
 		{	
+				var loading_text:MultiObject = prepare("loading_text", new MultiObject(),  GetSingleItem("_view").parent.parent);
+			loading_text.CustomizedFun = _text.textSetting;
+			loading_text.CustomizedData = [{size:22,color:0xCCCCCC}, "connect"];
+			loading_text.Create_by_list(1, [ResName.TextInfo], 0 , 0, 3, 0 , 0, "Bet_");		
+			loading_text.container.x = 1920/2;
+			loading_text.container.y = 1082/2;
+			
+			//update_msg();
+			
 			dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.CONNECT));
 			
 		}
+		
+		public function update_msg():void
+		{			
+			_regular.strdotloop(GetSingleItem("loading_text", 0).getChildByName("Dy_Text"), 10, 50);			
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "socket_open")]
+		public function open():void
+		{
+			Tweener.pauseTweens(GetSingleItem("loading_text", 0).getChildByName("Dy_Text"));
+			GetSingleItem("loading_text", 0).getChildByName("Dy_Text").text = "socket open";			
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "socket_close")]
+		public function close():void
+		{
+			Tweener.pauseTweens(GetSingleItem("loading_text", 0).getChildByName("Dy_Text"));
+			GetSingleItem("loading_text", 0).getChildByName("Dy_Text").text = "socket close";			
+		}
+		
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="LeaveView")]
 		override public function ExitView(View:Intobject):void

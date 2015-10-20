@@ -82,7 +82,7 @@ package Command
 		{
 			var str:String = s.text;
 			var len:int = str.length;
-			str = str.substr(0, len) + ".";
+			str = str.substr(0, len) + ".";			
 			if ( str.length > orlength + limit) str = str.substr(0, len - limit) + ".";			
 			s.text = str;
 		}	

@@ -8,6 +8,7 @@ package
 	import org.spicefactory.parsley.core.registry.ObjectDefinition;
 	import View.ViewBase.ViewBase;
 	import ConnectModule.websocket.WebSoketComponent;
+	import View.ViewBase.Visual_Text;
 	import View.ViewComponent.*;
 	
 	import View.GameView.*;
@@ -33,6 +34,9 @@ package
 		
 		//connect module
 		public var _socket:WebSoketComponent = new WebSoketComponent();
+		
+		//util
+		public var _text:Visual_Text = new Visual_Text();
 		
 		//command 
 		public var _viewcom:ViewCommand = new ViewCommand();

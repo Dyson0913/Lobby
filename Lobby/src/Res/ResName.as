@@ -12,6 +12,7 @@ package Res
 		public static const Lobby_topbar:String = "Lobby_bar";
 		public static const L_emptymc:String = "Lobby_emptymc";
 		
+		public static const TextInfo:String = "Text_Info";	
 		
 		public static const L_Mascot:String = "Lobby_Mascot";
 		public static const L_top_icon:String = "Lobby_top_icon";

@@ -61,11 +61,13 @@ package ConnectModule.websocket
 		{			
 			if ( event.type == WebSocketEvent.OPEN)
 			{
-				utilFun.Log("Connected open="+ event.type );
+				utilFun.Log("Connected open=" + event.type );
+				dispatcher(new ModelEvent("socket_open"));
 			}
 			else if ( event.type == WebSocketEvent.CLOSED)
 			{
-				utilFun.Log("Connected close lobby="+ event.type );				
+				utilFun.Log("Connected close lobby=" + event.type );				
+				dispatcher(new ModelEvent("socket_close"));
 			}
 		}
 		

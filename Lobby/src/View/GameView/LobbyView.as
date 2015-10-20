@@ -31,9 +31,6 @@ package View.GameView
 		public var _betCommand:BetCommand;
 		
 		[Inject]
-		public var _regular:RegularSetting;	
-		
-		[Inject]
 		public var _btn:Visual_BtnHandle;
 		
 		public function LobbyView()  
