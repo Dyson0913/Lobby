@@ -9,7 +9,7 @@ package Interface
 	public interface ViewComponentInterface 
 	{
 		function setContainer(sp:DisplayObjectContainer):void;
-		function getContainer():DisplayObjectContainer;
+		function getContainer():DisplayObjectContainer;		
 		function OnExit():void;
 	}
 	

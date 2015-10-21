@@ -13,18 +13,20 @@ package util
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
 	import Interface.ViewComponentInterface;
+	import Model.MsgQueue;
 	
 	import com.hexagonstar.util.debug.Debug;
 	import View.Viewutil.MouseBehavior;
 	import Res.ResName;	
 	
-	import com.istrong.log.*;
+		import com.istrong.log.*;
 	/**
 	 * 常用功能
 	 * @author hhg
 	 */
 	public class utilFun
 	{		
+		
 		
 		public function utilFun() 
 		{
@@ -77,6 +79,7 @@ package util
 		{			
 			Logger.log("lobby " + msg, 0, 0, false);
 			//Debug.trace(msg);			
+			
 		}
 		
 		/******************** 元件操作功能 ********************/

@@ -25,6 +25,7 @@ package View.GameView
 	import View.Viewutil.AdjustTool;	
 	import View.Viewutil.MultiObject;
 	import View.Viewutil.MouseBehavior;
+	import View.Viewutil.Visual_Log;
 	
 	import Model.*;
 	import util.utilFun;
@@ -68,18 +69,24 @@ package View.GameView
 		
 		public var _Gameconfig:URLLoader;
 		
+		[Inject]
+		public var _Log:Visual_Log;
+		
 		public function LoadingView()  
 		{
 			
 		}
 		
 			
-		public function FirstLoad(result:Object):void
+		public function FirstLoad(result:Object,slog:MovieClip):void
 		{
-			Logger.displayLevel = LogLevel.DEBUG;
-			Logger.addProvider(new ArthropodLogProvider(), "Arthropod");
+			//Logger.displayLevel = LogLevel.DEBUG;
+			//Logger.addProvider(new ArthropodLogProvider(), "Arthropod");
 			_result = result;
 			
+			//new log
+			_Log.init();
+			_Log.logTarget(slog);
 			
 			if ( CONFIG::debug ) 
 			{
@@ -87,10 +94,12 @@ package View.GameView
 				if( _result == null) _result = { "accessToken":"c9f0f895fb98ab9159f51fd0297e236d"};				
 			}
 			else
-			{				
+			{
 				_model.putValue("_doname","sqoo.t28.net");
 			}			
 			_model.putValue(modelName.LOGIN_INFO, _result);
+			
+			
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));		
 			//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
@@ -108,32 +117,32 @@ package View.GameView
 			if (View.Value != modelName.Loading) return;
 			super.EnterView(View);
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
-			view.Create_by_list(1, [ResName.L_emptymc], 0, 0, 1, 0, 0, "a_");			
-			//_tool = new AdjustTool();				
+			view.Create_by_list(1, [ResName.L_emptymc], 0, 0, 1, 0, 0, "a_");
+			
 			_canvas.init();			
 			//_popmsg.init();
 			//_test.init();			
 			
 			
-			
+			var jsonconfig:String;
 			if ( CONFIG::debug ) 
 			{
-				//Debug.monitor(stage);
-				//utilFun.Log("welcome to perfect alcon");
+				jsonconfig = "http://" + _model.getValue("_doname") +":8000/static/gameconfig.json";
 				_Gameconfig = new URLLoader();
 				_Gameconfig.addEventListener(Event.COMPLETE, configload); //載入聊天禁言清單 完成後執行 儲存清單內容
 				_Gameconfig.dataFormat = URLLoaderDataFormat.BINARY; 
-				_Gameconfig.load(new URLRequest("http://" + _model.getValue("_doname") +":8000/static/gameconfig.json")); 
+				_Gameconfig.load(new URLRequest(jsonconfig)); 
 				// http://106.186.116.216:8000/static/gameconfig.json
 			}		
 			else
 			{
-				utilFun.Log("release = " + "http://"+ _model.getValue("_doname") +"/swf/gameconfig.json");
+				jsonconfig = "http://" + _model.getValue("_doname") +"/swf/gameconfig.json";				
 				_Gameconfig = new URLLoader();
 				_Gameconfig.addEventListener(Event.COMPLETE, configload); //載入聊天禁言清單 完成後執行 儲存清單內容
 				_Gameconfig.dataFormat = URLLoaderDataFormat.BINARY; 
-				_Gameconfig.load(new URLRequest("http://"+ _model.getValue("_doname") +"/swf/gameconfig.json")); 
-			}		
+				_Gameconfig.load(new URLRequest(jsonconfig)); 
+			}
+			_Log.Log("config : "+jsonconfig);
 		}
 		
 		public function configload(e:Event):void
@@ -148,9 +157,9 @@ package View.GameView
 		  }
 		  else
 		  {
-			_model.putValue("lobby_ws", result.online.DomainName[0].lobby_ws);		   
-			utilFun.Log("release = " + _model.getValue("lobby_ws"));
+			_model.putValue("lobby_ws", result.online.DomainName[0].lobby_ws);			
 		  }
+		  _Log.Log("DomainName = "+_model.getValue("lobby_ws"));
 		   utilFun.SetTime(connet,0.1);
 		}
 		
@@ -158,7 +167,7 @@ package View.GameView
 		{	
 			var object:Object = _model.getValue(modelName.LOGIN_INFO);		
 				var loading_text:MultiObject = prepare("loading_text", new MultiObject(),  GetSingleItem("_view").parent.parent);
-			loading_text.CustomizedFun = _text.textSetting;1
+			loading_text.CustomizedFun = _text.textSetting;
 			loading_text.CustomizedData = [{size:22,color:0xCCCCCC}, "connect to\n"+_model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken+"\n"];
 			loading_text.Create_by_list(1, [ResName.TextInfo], 0 , 0, 3, 0 , 0, "Bet_");		
 			loading_text.container.x = 1920/2;
@@ -201,8 +210,7 @@ package View.GameView
 		override public function ExitView(View:Intobject):void
 		{
 			if (View.Value != modelName.Loading) return;
-			super.ExitView(View);
-			utilFun.Log("LoadingView ExitView");
+			super.ExitView(View);			
 		}
 		
 		

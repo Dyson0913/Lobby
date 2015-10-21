@@ -12,6 +12,7 @@ package ConnectModule.websocket
 	import flash.utils.ByteArray;
 	import flash.system.Security;
 	import Model.*;	
+	import View.Viewutil.Visual_Log;
 	
 	import Model.valueObject.*;	
 	
@@ -37,6 +38,9 @@ package ConnectModule.websocket
 		[Inject]
 		public var _model:Model;
 		
+		[Inject]
+		public var _Log:Visual_Log;
+		
 		private var websocket:WebSocket;
 		
 		public function WebSoketComponent() 
@@ -47,8 +51,8 @@ package ConnectModule.websocket
 		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="connect")]
 		public function Connect():void
 		{
-			var object:Object = _model.getValue(modelName.LOGIN_INFO);		
-			utilFun.Log("===="+_model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken);
+			var object:Object = _model.getValue(modelName.LOGIN_INFO);			
+			_Log.Log("connect to " + "ws:// "+ _model.getValue("lobby_ws") + ":8001/gamesocket/token/" + object.accessToken);
 			websocket = new WebSocket("ws://"+ _model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken, "");			
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
@@ -62,20 +66,19 @@ package ConnectModule.websocket
 			if ( event.type == WebSocketEvent.OPEN)
 			{
 				utilFun.Log("Connected open=" + event.type );
-				dispatcher(new ModelEvent("socket_open"));
+				_Log.Log("socket open");
 			}
 			else if ( event.type == WebSocketEvent.CLOSED)
 			{
-				utilFun.Log("Connected close lobby=" + event.type );				
-				dispatcher(new ModelEvent("socket_close"));
+				utilFun.Log("Connected close lobby=" + event.type );
+				_Log.Log("socket socket_close");
 			}
 		}
 		
 		private function handleConnectionFail(event:WebSocketErrorEvent):void 
 		{
 			utilFun.Log("Connected= fale" + event.type);
-			_model.putValue("connectState", event.type);
-			dispatcher(new ModelEvent("socket_fali"));
+			_Log.Log("socket ConnectionFail = "+ event.type);
 		}
 		
 		
@@ -84,7 +87,8 @@ package ConnectModule.websocket
 			var result:Object ;
 			if (event.message.type === WebSocketMessage.TYPE_UTF8) 
 			{
-				utilFun.Log("lobby before"+event.message.utf8Data)
+				//utilFun.Log("lobby before" + event.message.utf8Data)
+				//_Log.Log("lobby pack ConnectionFail = "+ event.message.utf8Data);
 				result = JSON.decode(event.message.utf8Data);			
 			}
 			
@@ -114,6 +118,7 @@ package ConnectModule.websocket
 							
 							dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH));		
 							dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;				
+							
 						}
 					}
 					break
@@ -141,6 +146,7 @@ package ConnectModule.websocket
 		public function SendMsg(msg:Object):void 
 		{
 			var jsonString:String = JSON.encode(msg);
+			_Log.Log("lobby send jsonString = "+ jsonString);
 			websocket.sendUTF(jsonString);
 		}
 		

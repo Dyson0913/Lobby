@@ -6,10 +6,12 @@ package
 	import Model.*;
 	import org.spicefactory.parsley.asconfig.processor.ActionScriptConfigurationProcessor;
 	import org.spicefactory.parsley.core.registry.ObjectDefinition;
+	import util.utilFun;
 	import View.ViewBase.ViewBase;
 	import ConnectModule.websocket.WebSoketComponent;
 	import View.ViewBase.Visual_Text;
 	import View.ViewComponent.*;
+	import View.Viewutil.Visual_Log;
 	
 	import View.GameView.*;
 	/**
@@ -36,7 +38,8 @@ package
 		public var _socket:WebSoketComponent = new WebSoketComponent();
 		
 		//util
-		public var _text:Visual_Text = new Visual_Text();
+		public var _text:Visual_Text = new Visual_Text();		
+		public var _Log:Visual_Log = new Visual_Log();
 		
 		//command 
 		public var _viewcom:ViewCommand = new ViewCommand();
