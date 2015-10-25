@@ -57,9 +57,12 @@ package View.GameView
 			Mascot.container.x = -60;
 			Mascot.container.y = -40;
 			
+			//utilFun.Log("name= "+_model.getValue(modelName.NICKNAME));
+			//utilFun.Log("credit= " + _model.getValue(modelName.CREDIT));
+			var credit:int = _model.getValue(modelName.CREDIT);
 			var playerinfo:MultiObject = prepare("playinfo", new MultiObject(), this);
 			playerinfo.CustomizedFun = _regular.textSetting;
-			playerinfo.CustomizedData = [_model.getValue(modelName.NICKNAME), parseInt( _model.getValue(modelName.CREDIT))]
+			playerinfo.CustomizedData = [_model.getValue(modelName.NICKNAME),credit]
 			playerinfo.Create_by_list(2, [ResName.L_name,ResName.L_credit], 0 , 0, 2, 290, 0, "Bet_");
 			playerinfo.container.x = 90;
 			playerinfo.container.y = 1020;
