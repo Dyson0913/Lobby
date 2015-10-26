@@ -54,8 +54,8 @@ package View.GameView
 			
 			var Mascot:MultiObject = prepare("Mascot", new MultiObject(), this);
 			Mascot.Create_by_list(1, [ResName.L_Mascot], 0 , 0, 1, 0, 0, "Bet_");
-			Mascot.container.x = -60;
-			Mascot.container.y = -40;
+			Mascot.container.x = -72;
+			Mascot.container.y = -65;
 			
 			//utilFun.Log("name= "+_model.getValue(modelName.NICKNAME));
 			//utilFun.Log("credit= " + _model.getValue(modelName.CREDIT));
@@ -67,7 +67,7 @@ package View.GameView
 			playerinfo.container.x = 90;
 			playerinfo.container.y = 1020;
 			
-			//_tool.SetControlMc(playerinfo.ItemList[1]);
+			//_tool.SetControlMc(Mascot.container);
 			//_tool.y = 200;
 			//addChild(_tool);	
 			
