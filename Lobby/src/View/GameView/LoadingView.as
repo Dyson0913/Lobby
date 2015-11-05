@@ -95,7 +95,7 @@ package View.GameView
 			}
 			else
 			{
-				_model.putValue("_doname","sqoo.t28.net");
+				_model.putValue("_doname","www.mm9900.net");
 			}			
 			_model.putValue(modelName.LOGIN_INFO, _result);
 			
