@@ -33,11 +33,7 @@ package View.ViewComponent
 	public class Visual_Canvas  extends VisualHandler
 	{		
 		[Inject]
-		public var _betCommand:BetCommand;
-		
-		[Inject]
-		public var _opration:DataOperation;
-		
+		public var _betCommand:BetCommand;		
 		
 		[Inject]
 		public var _btn:Visual_BtnHandle;		

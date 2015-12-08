@@ -28,6 +28,18 @@ package View.Viewutil
 		}
 		
 		public var stop_Propagation:Boolean = false;
+
+		private var _ItemNameList:Array = [];
+		
+		public function get resList():Array
+		{
+			return _ItemNameList;
+		}
+		
+		public function set resList(value:Array ):void
+		{
+			_ItemNameList = value;
+		}
 		
 		//客制化功能
 		public var CustomizedFun:Function = null;
@@ -41,6 +53,8 @@ package View.Viewutil
 		public var rollover:Function;
 		public var mousedown:Function;
 		public var mouseup:Function;
+		
+		public var _drag_handle:Function;
 		
 		//元件命名
 		private var _ItemName:String;		
@@ -157,7 +171,40 @@ package View.Viewutil
 			Listen();
 		}		
 		
-		private function customized():void
+		public function Create_(ItemNum:int):void
+		{
+			CleanList();
+			
+			compensatory_diff(ItemNum);
+			_ItemName = _Container.name;
+			for (var i:int = 0 ; i < ItemNum; i++)
+			{
+				var mc:MovieClip = utilFun.GetClassByString(resList[i]);				
+				
+				//mc.name = _ItemName + "_" + i;				
+				mc.name = _ItemName  + i;
+				
+				
+				ItemList.push(mc);
+				_Container.addChild(mc);
+			}
+			
+			//customized area		
+			customized();			
+			Listen();
+		}		
+		
+		private function compensatory_diff(num:int):void
+		{
+			var diff:int = num - resList.length;
+			if ( diff >0)
+			{
+				var lastItem:String = resList[ resList.length - 1];
+				for ( var j:int = 0; j < diff ;j++) resList.push(lastItem);
+			}
+		}
+		
+		public function customized():void
 		{
 			var ItemNum:int = ItemList.length;
 			for (var i:int = 0 ; i < ItemNum; i++)
@@ -222,11 +269,20 @@ package View.Viewutil
 			if( _autoClean ) CleanList();
 		}
 		
+		public function getName():String
+		{
+			return _Container.name;
+		}
+		
+		public function getDisplayobject():DisplayObjectContainer
+		{
+			return _Container;
+		}
+		
 		public function Clear_ItemChildren():void
 		{
 			//removeListen();
-			var cnt:int = ItemList.length;
-			utilFun.Log("cnt[i] = "+cnt);
+			var cnt:int = ItemList.length;			
 			for ( var i:int = 0; i < cnt; i++)
 			{
 			
@@ -234,10 +290,43 @@ package View.Viewutil
 			}			
 		}
 		
+		
+		public function put_to_lsit(viewcomponent:ViewComponentInterface):void
+		{
+			ItemList.push(viewcomponent);
+		}
+		
 		public function Getidx(name:String):int 
 		{
 			var s:String = utilFun.Regex_CutPatten(name, new RegExp(_ItemName, "i"));
 			return parseInt(s);
+		}
+		
+		public function order_switch(target:int ,to:int):void
+		{			
+			_Container.swapChildrenAt(target, to);
+		}	
+		
+		public function Drag(idx:int,handle:Function):void
+		{
+			_drag_handle = handle;
+			ItemList[idx].addEventListener(MouseEvent.MOUSE_DOWN, cut_name);			
+		}
+		
+		public function cut_name(e:Event):void
+		{
+			//utilFun.Log("cut_name ="+ e.currentTarget.name);
+			//utilFun.Log("cut_name =" + _ItemName);
+			var pa_st:String = _ItemName.substr(_ItemName.length - 1, _ItemName.length);
+			
+			if( _drag_handle) _drag_handle(e, parseInt(pa_st));
+		}
+		
+		public static function get_Container_idx(name:String):int
+		{			
+			var contain_name_with_idx:String = name.substr(0 ,name.length - 1);
+			var contain_idx:String = contain_name_with_idx.substr(contain_name_with_idx.length -1 , contain_name_with_idx.length);
+			return parseInt( contain_idx);
 		}
 		
 		private function Listen():void

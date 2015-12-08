@@ -12,7 +12,7 @@ package View.GameView
 	import util.DI;
 	import Model.*
 	import util.node;
-	import View.ViewComponent.Visual_BtnHandle;
+	import View.ViewComponent.*;
 	import View.Viewutil.*;
 	import View.ViewBase.ViewBase;
 	import util.*;
@@ -20,7 +20,6 @@ package View.GameView
 	import Command.*;
 	
 	import caurina.transitions.Tweener;	
-	import caurina.transitions.properties.CurveModifiers;
 	/**
 	 * ...
 	 * @author hhg
@@ -32,6 +31,9 @@ package View.GameView
 		
 		[Inject]
 		public var _btn:Visual_BtnHandle;
+		
+		[Inject]
+		public var _Version:Visual_Version;
 		
 		public function LobbyView()  
 		{
@@ -122,7 +124,7 @@ package View.GameView
 			//return;
 			
 			//coin_ani.ItemList[0];
-			
+			_Version.init();
 		}			 
 		
 		public function FrameSetting(mc:MovieClip, idx:int, data:Array):void

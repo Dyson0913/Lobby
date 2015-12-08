@@ -21,9 +21,7 @@ package
 	public class Main extends MovieClip 
 	{
 		private var _context:Context;
-		public var result:Object ;
-		
-		private var _appconfig:appConfig = new appConfig();
+		public var result:Object ;	
 		
 		//slog
 		private var _slog:MovieClip;
@@ -74,7 +72,7 @@ package
 			
 		}
 		
-		function keyUpHandler(event:KeyboardEvent):void 
+		public function keyUpHandler(event:KeyboardEvent):void 
 		{
 			utilFun.Log("event.keyCode = "+event.keyCode);
 			if ( event.keyCode == checkList[0])

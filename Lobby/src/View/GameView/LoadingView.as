@@ -70,7 +70,7 @@ package View.GameView
 		public var _Gameconfig:URLLoader;
 		
 		[Inject]
-		public var _Log:Visual_Log;
+		public var _Log:Visual_Log;	
 		
 		public function LoadingView()  
 		{
@@ -103,12 +103,7 @@ package View.GameView
 			
 			dispatcher(new Intobject(modelName.Loading, ViewCommand.SWITCH));		
 			//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
-			return;
-			
-			//local test
-			//dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH));		
-			//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
-			
+			return;	
 		}
 		
 		[MessageHandler(type="Model.valueObject.Intobject",selector="EnterView")]
@@ -159,8 +154,11 @@ package View.GameView
 		  {
 			_model.putValue("lobby_ws", result.online.DomainName[0].lobby_ws);			
 		  }
-		  _Log.Log("DomainName = "+_model.getValue("lobby_ws"));
-		   utilFun.SetTime(connet,0.1);
+		  _Log.Log("DomainName = " + _model.getValue("lobby_ws"));
+		  
+		  
+		   utilFun.SetTime(connet, 0.1);
+		   //_test.init();
 		}
 		
 		private function connet():void
