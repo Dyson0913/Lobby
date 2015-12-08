@@ -1,5 +1,6 @@
 package View.ViewComponent 
 {
+	import asunit.errors.UnimplementedFeatureError;
 	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -138,11 +139,21 @@ package View.ViewComponent
 			newcanvas.canvas_container.addChild( utilFun.GetClassByString(ResName.Loading_Scene));
 			newcanvas.canvas_container.name = newcanvas.Serial;
 			
+			//wired ,pass newcanvas.canvas_container as container will be Null
+			var _canve:Sprite =  newcanvas.canvas_container;			
+			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);			
+			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			topicon.rollover = this.BtnHint;
+			topicon.rollout = _btn.test_reaction;
+			topicon.mousedown = swfcommand;
+			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
+			topicon.container.x = 1864;
+			topicon.container.y = 65;	
 			
 			//移除完才觸發scroll事件,idx 會錯亂目前不用 (用name 解)
 			//_canve.addEventListener(MouseEvent.MOUSE_DOWN, ScrollDrag);
 			//_model.getValue("canvas_container").putValue(_model.getValue("canvas_Serial").toString(), _canve);
-			_model.putValue("newcanvas" + serial,newcanvas);
+			_model.putValue("newcanvas" + serial, newcanvas);
 			
 			
 			//_canve1.doubleClickEnabled = true;
@@ -209,20 +220,25 @@ package View.ViewComponent
 				var idx:int = serial;
 				(_loader.content as MovieClip)["handshake"]([_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID), _model.getValue("lobby_ws")]);
 			}			
-			_canve.addChild(_loader);
 			
+			var mc:Sprite = _canve.getChildAt(0) as Sprite;
+			
+			utilFun.Log("mc name = " + mc.name);
+		    //TEXT
+			_canve.addChild(_loader);			
+			_canve.swapChildrenAt(2, 3);
 			music_control(serial);
 			
 			
-			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);			
-			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
-			topicon.rollover = this.BtnHint;
-			topicon.rollout = _btn.test_reaction;
-			topicon.mousedown = swfcommand;
-			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
-			topicon.container.x = 1864;
-			topicon.container.y = 65;			
-			_model.putValue("newcanvas" + serial, newcanvas);
+			//var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);			
+			//topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			//topicon.rollover = this.BtnHint;
+			//topicon.rollout = _btn.test_reaction;
+			//topicon.mousedown = swfcommand;
+			//topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
+			//topicon.container.x = 1864;
+			//topicon.container.y = 65;			
+			//_model.putValue("newcanvas" + serial, newcanvas);
 			
 			//removeChild(loadingPro);		
 		}
