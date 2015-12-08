@@ -43,7 +43,7 @@
     <option loadExterns="" />
     <option staticLinkRSL="True" />
     <option additional="" />
-    <option compilerConstants="CONFIG::Local,true" />
+    <option compilerConstants="CONFIG::Local,false" />
     <option minorVersion="" />
   </build>
   <!-- SWC Include Libraries -->

@@ -5,13 +5,11 @@ package View.ViewComponent
 	import Model.valueObject.*;
 	import Model.*;
 	import util.*;	
-	import Command.*;
-	import flash.utils.setInterval;
+	import Command.*;	
 	
 	import View.Viewutil.*;
-	import Res.ResName;
-	import caurina.transitions.Tweener;	
-	
+	import Res.ResName;	
+	import util.time.time_format;
 	
 	
 	/**
@@ -35,7 +33,7 @@ package View.ViewComponent
 		{
 			var version_container:MultiObject = create("version_container", [ResName.L_emptymc]);			
 			version_container.CustomizedFun = version_init;			
-			version_container.container.x = 1790;
+			version_container.container.x = 1750;
 			version_container.container.y = 1040;
 			version_container.Create_(1);
 			
@@ -47,7 +45,7 @@ package View.ViewComponent
 			var name:String = "version_";
 			var component:Array =  [version_text];
 			
-			var font:Array = [{size:24,align:_text.align_left,color:0xFFFFFF},"v1.0"];
+			var font:Array = [ { size:20, align:_text.align_left, color:0xFFFFFF }, major_minor_build() ];
 			//font = font.concat(mylist);
 			var ob_cotainer:MultiObject = create(name + idx, component , mc);			
 			ob_cotainer.CustomizedFun =  _text.textSetting;
@@ -64,14 +62,16 @@ package View.ViewComponent
 			put_to_lsit(ob_cotainer);	
 		}		
 		
-		public function appear():void
+		private function major_minor_build():String
 		{
-		
-		}
-		
-		public function disappear():void
-		{
-			
+			//major.minor(.build)
+			//major : mass update
+			//minor : new feture
+			//build : bug fix
+			var major:String = "0";
+			var minor:String = "1";
+			var build:String = "01";
+			return "V" + major + "." + minor + "." + build + "." + CONFIG::timeStamp;
 		}
 		
 	}
