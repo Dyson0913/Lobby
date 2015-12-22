@@ -36,6 +36,7 @@ package Res
 		public static const L_game_3:String = "game_3";
 		public static const L_game_4:String = "game_4";
 		public static const L_game_5:String = "game_5";
+		public static const L_game_6:String = "game_6";
 		
 		public static const pa_icons:String = "s_icon1";
 		public static const dk_icons:String = "s_icon2";

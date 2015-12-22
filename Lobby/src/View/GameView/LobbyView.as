@@ -72,7 +72,8 @@ package View.GameView
 			icon_mapping.putValue("PerfectAngel", 1);
 			icon_mapping.putValue("Bingo", 2);
 			icon_mapping.putValue("Finance", 3);
-			var gameIconlist:Array = [ResName.L_game_3,ResName.L_game_2, ResName.L_game_4, ResName.L_game_5];
+			icon_mapping.putValue("7pk", 4);
+			var gameIconlist:Array = [ResName.L_game_3,ResName.L_game_2, ResName.L_game_4, ResName.L_game_6,ResName.L_game_5];
 			var arr:Array = _model.getValue(modelName.OPEN_STATE);
 			
 			var gameweb:Array = [];
