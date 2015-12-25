@@ -108,7 +108,7 @@ package View.GameView
 			avtivelist.container.y= 4;
 			avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,2,0]);
 			avtivelist.mousedown = myreaction;
-			avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons,ResName.fi_icons], 0, 0, avalibe.length, 50, 0, "o_");			
+			avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons,ResName.biany_icons], 0, 0, avalibe.length, 50, 0, "o_");			
 			
 			
 			//_tool.SetControlMc(coin_ani.ItemList[]);

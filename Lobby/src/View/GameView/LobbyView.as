@@ -54,16 +54,17 @@ package View.GameView
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Lobby_Scene], 0, 0, 1, 0, 0, "a_");			
 			
-			var page:MultiObject = prepare("pagearr", new MultiObject(), this);
-			page.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
-			page.mousedown = _btn.test_reaction;
-			page.mouseup = _btn.test_reaction;		
-			page.rollover = _btn.test_reaction;		
-			page.rollout = _btn.test_reaction;		
-			page.CustomizedFun = arror_turn;
-			page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1880 , 0, "Bet_");
-			page.container.x = 10;
-			page.container.y = 502;
+			//arrow
+			//var page:MultiObject = prepare("pagearr", new MultiObject(), this);
+			//page.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			//page.mousedown = _btn.test_reaction;
+			//page.mouseup = _btn.test_reaction;		
+			//page.rollover = _btn.test_reaction;		
+			//page.rollout = _btn.test_reaction;		
+			//page.CustomizedFun = arror_turn;
+			//page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1880 , 0, "Bet_");
+			//page.container.x = 10;
+			//page.container.y = 502;
 			
 			
 			//TODO fun -->map 
@@ -118,8 +119,12 @@ package View.GameView
 			gameIcon.container.x = 380;
 			gameIcon.container.y = 242;
 			
-			//_tool.SetControlMc(gameIcon.container);
-			//_tool.SetControlMc(gameIcon.ItemList[3]);
+			var sport:MultiObject = prepare("spotr", new MultiObject() , this);
+			sport.container.x = 1180;
+			sport.container.y = 572;
+			sport.Create_by_list(1, [ResName.L_game_sport], 0, 0, 1, 0, 0, "a_");			
+			
+			//_tool.SetControlMc(sport.container);			
 			//_tool.y = 200;
 			//addChild(_tool);
 			//return;
