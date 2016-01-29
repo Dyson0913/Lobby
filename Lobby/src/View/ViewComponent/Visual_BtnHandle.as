@@ -163,7 +163,7 @@ package View.ViewComponent
 		public function gonewpage(e:Event, idx:int):Boolean
 		{
 			//TODO button mapping to multiob ?
-			if ( idx == 1)
+			if ( idx == 0)
 			{
 				//GetSingleItem("_view").parent.parent.stage
 				if ( GetSingleItem("_view").parent.parent.stage.displayState == StageDisplayState.NORMAL)
@@ -181,8 +181,8 @@ package View.ViewComponent
 			}
 			else
 			{
-				var request:URLRequest = new URLRequest("https://www.google.com.tw/");			
-				navigateToURL( request, "_blank" );
+				//var request:URLRequest = new URLRequest("https://www.google.com.tw/");			
+				//navigateToURL( request, "_blank" );
 				return true;
 			}
 			

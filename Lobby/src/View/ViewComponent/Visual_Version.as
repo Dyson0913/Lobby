@@ -33,7 +33,7 @@ package View.ViewComponent
 		{
 			var version_container:MultiObject = create("version_container", [ResName.L_emptymc]);			
 			version_container.CustomizedFun = version_init;			
-			version_container.container.x = 1750;
+			version_container.container.x = 1745;
 			version_container.container.y = 1040;
 			version_container.Create_(1);
 			

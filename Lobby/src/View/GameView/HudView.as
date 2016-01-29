@@ -83,14 +83,14 @@ package View.GameView
 			
 			var topicon:MultiObject = prepare("topicon", new MultiObject(), this);
 			//topicon.CustomizedFun =  _btn.Btn_setting;
-			topicon.CustomizedData = [2, 6, 4, 5];
+			topicon.CustomizedData = [6];
 			//topicon.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
 			//topicon.Post_CustomizedData = [[0, 0], [80, 0], [157, -2], [230, 0]];
 			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,0]);			
 			topicon.rollover = _btn.BtnHint;
 			topicon.rollout = _btn.Btn_roout;
 			topicon.mousedown = _btn.gonewpage;
-			topicon.Create_by_list(2, [ ResName.L_icon_Coustomer_call ,ResName.L_icon_Full_Screen], 0 , 0,2 , 50 , 0, "Bet_");
+			topicon.Create_by_list(1, [ ResName.L_icon_Full_Screen], 0 , 0,2 , 50 , 0, "Bet_");
 			topicon.container.x = 1790;
 			topicon.container.y = 2;
 			
