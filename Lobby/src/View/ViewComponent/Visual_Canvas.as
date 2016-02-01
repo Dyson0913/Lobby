@@ -56,11 +56,13 @@ package View.ViewComponent
 		{
 			
 			//gameidx.Value = 4;
-			utilFun.Log("game = " + gameidx.Value);	
+			utilFun.Log("game = " + gameidx.Value);				
+			var game_name:String = _model.getValue("gametype")[ gameidx.Value];
 			var serial:int = _model.getValue("canvas_Serial");
 			var newcanvas:Object = { "Serial": serial, 
 			                                        "canvas_container":  new Sprite(),
 										            "canvas_loader":new Loader(),
+													"game_name":game_name,
 													"call_back":null
 			                                      };
 												  
@@ -283,23 +285,33 @@ package View.ViewComponent
 		}
 		
 		public function pop_asking(e:Event, idx:int):Boolean
-		{
-			utilFun.Log("pop_asking = " + idx);
+		{			
 			var popmsg:MultiObject = Get("popmst");
-			if ( popmsg.container.visible) return true;
+			if ( popmsg.container.visible) return true;			
 			
 			_model.putValue("cancel_canvas_name", e.currentTarget.name);
+			
 			popmsg.container.visible = true;
+			
+			//龍王msg,不一樣
+			var name:String = _model.getValue("cancel_canvas_name");			
+			var s:Array = utilFun.Regex_Match(name, new RegExp("game_(.+)_.", "i"));
+			var idx:int = parseInt(s[1]);
+			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
+			if (  newcanvas.game_name == "BigWin")
+			{
+				popmsg.ItemList[0]["_content"].gotoAndStop(2);
+			}
+			else popmsg.ItemList[0]["_content"].gotoAndStop(1);
+			
 			
 			return true;
 		}
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "swf_close")]
 		public function swf_close():void
-		{
-			utilFun.Log("swfcommand idx= ");
-			var name:String = _model.getValue("cancel_canvas_name");
-			utilFun.Log("swfcommand name= " + name);
+		{			
+			var name:String = _model.getValue("cancel_canvas_name");		
 			var s:Array = utilFun.Regex_Match(name, new RegExp("game_(.+)_.", "i"));
 			var idx:int = parseInt(s[1]);
 			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
@@ -337,47 +349,6 @@ package View.ViewComponent
 			var popmsg:MultiObject = Get("popmst");
 			popmsg.container.visible = false;
 			
-		}
-		
-		public function swfcommand(e:Event, idx:int):Boolean
-		{			
-			utilFun.Log("swfcommand idx= " + idx);
-			var name:String = _model.getValue("cancel_canvas_name");
-			utilFun.Log("swfcommand name= " + name);
-			var s:Array = utilFun.Regex_Match(name, new RegExp("game_(.+)_.", "i"));
-			var idx:int = parseInt(s[1]);
-			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
-			var serial:int = newcanvas.Serial;
-			
-			
-			var _loader:Loader = newcanvas.canvas_loader;
-			var _canve:Sprite =  newcanvas.canvas_container; 
-			if ( _canve ) 
-			{			
-				_loader.unloadAndStop(true);
-				Del("gameicon_" + serial.toString() );
-				removie(_canve);				
-			}
-			
-			var cavasid_btn:DI = _model.getValue("cavasid_btnid");
-			var btn_cavasid:DI =  _model.getValue("Topgameicon_blind");
-			var cancel_btn_id:int =  cavasid_btn.getValue(serial)
-			
-			btn_cavasid.Del(cancel_btn_id); 
-			cavasid_btn.Del(serial);
-			//find first avtive canvas		
-			
-			var pass:int = -1;
-			var first_live_cavas_btn:* = cavasid_btn.firstitem();
-			if ( first_live_cavas_btn != undefined) pass = first_live_cavas_btn; 
-			dispatcher(new Intobject(pass, "close_cavas"));		
-			
-			if (btn_cavasid.firstitem() != undefined)
-			{
-				music_defalt(btn_cavasid.firstitem());
-			}
-			
-			return true;
 		}
 		
 		public function music_defalt(cav_id:int):void
