@@ -178,8 +178,7 @@ package View.ViewComponent
 			var url:URLRequest = new URLRequest(rul);
 			
 			//var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
-			var loaderContext:LoaderContext = new LoaderContext(false, new ApplicationDomain());
-				
+			var loaderContext:LoaderContext = new LoaderContext(false, new ApplicationDomain());				
 			_loader.load( url, loaderContext);
 		}
 		

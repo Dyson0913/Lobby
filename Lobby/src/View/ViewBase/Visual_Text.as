@@ -39,6 +39,13 @@ package View.ViewBase
 			
 		}
 		
+		public function textSetting_s(mc:MovieClip, data:Array):void
+		{						
+			var str:TextField = dynamic_text(data[1], data[0]);
+			str.name = "Dy_Text";
+			mc.addChild(str);
+		}
+		
 		public function textSetting(mc:MovieClip, idx:int, data:Array):void
 		{						
 			var str:TextField = dynamic_text(data[idx + 1], data[0]);			
@@ -65,10 +72,14 @@ package View.ViewBase
 			var textColor:uint = 0xFFFFFF;
 			var align:String = TextFormatAlign.LEFT;
 			var bold:Boolean = false;
+			var x:Number = 0;
+			var y:Number = 0;
 			
 			if ( para["color"] != undefined)  textColor = para.color;
-			if( para["align"] != undefined)  align = para.align;
+			if ( para["align"] != undefined)  align = para.align;
 			if( para["bold"] != undefined)  bold = para.bold;
+			if( para["x"] != undefined)  x = para.x;
+			if( para["y"] != undefined)  y = para.y;
 						
 			var _NickName:TextField = new TextField();
 			_NickName.width = 626.95;
@@ -87,7 +98,9 @@ package View.ViewBase
 			myFormat.font = "Microsoft JhengHei";			
 			
 			_NickName.defaultTextFormat = myFormat;				
-			_NickName.text = text;			
+			_NickName.text = text;
+			_NickName.x = x;
+			_NickName.y = y;			
 			return _NickName;
 		}
 		

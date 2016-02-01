@@ -110,7 +110,7 @@ package View.GameView
 			avtivelist.mousedown = myreaction;
 			avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons,ResName.biany_icons], 0, 0, avalibe.length, 50, 0, "o_");			
 			
-			
+			//退出確定鈕
 			//0 = bg 1 = cancel 2 = confirm
 			var pop_msg:MultiObject = prepare("popmst", new MultiObject() , this);			
 			pop_msg.container.x = 1920 / 2;
@@ -128,9 +128,9 @@ package View.GameView
 			pop_msg.ItemList[2]["_btn_context"].gotoAndStop(1);
 			
 			//_activelist.init();
-			_tool.SetControlMc(pop_msg.container);			
-			_tool.y = 200;
-			addChild(_tool);
+			//_tool.SetControlMc(pop_msg.container);			
+			//_tool.y = 200;
+			//addChild(_tool);
 		}
 		
 		public function empty_reaction(e:Event, idx:int):Boolean

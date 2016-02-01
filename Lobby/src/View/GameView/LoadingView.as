@@ -116,8 +116,9 @@ package View.GameView
 			
 			_canvas.init();			
 			//_popmsg.init();
+			//dispatcher(new Intobject(1,"Pop_msg_handle"));
 			//_test.init();			
-			
+			//return;
 			
 			var jsonconfig:String;
 			if ( CONFIG::debug ) 
