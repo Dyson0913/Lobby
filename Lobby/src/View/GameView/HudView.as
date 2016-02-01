@@ -111,17 +111,49 @@ package View.GameView
 			avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons,ResName.biany_icons], 0, 0, avalibe.length, 50, 0, "o_");			
 			
 			
-			//_tool.SetControlMc(coin_ani.ItemList[]);
-			//_tool.SetControlMc(coin_ani.container);
-			//_tool.y = 200;
-			//addChild(_tool);
-			//return;
+			//0 = bg 1 = cancel 2 = confirm
+			var pop_msg:MultiObject = prepare("popmst", new MultiObject() , this);			
+			pop_msg.container.x = 1920 / 2;
+			pop_msg.container.y = 1080 / 2;
+			pop_msg.CustomizedData = [[0,0] ,[-156.15,59.95],[21.85,60.95]]
+			//pop_msg.CustomizedData = [[0,0] ,[-68.15,59.95],[-68.15,59.95]]
+			pop_msg.CustomizedFun = _regular.Posi_xy_Setting;
+			pop_msg.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,2,0]);
+			pop_msg.Create_by_list(3, [ResName.PopMsg, ResName.PopBtn, ResName.PopBtn], 0, 0, 1, 50, 0, "o_");			
+			pop_msg.rollout = empty_reaction;
+			pop_msg.rollover = empty_reaction;
+			pop_msg.mousedown = cliek;
+			pop_msg.container.visible = false;
+			pop_msg.ItemList[1]["_btn_context"].gotoAndStop(2);
+			pop_msg.ItemList[2]["_btn_context"].gotoAndStop(1);
 			
 			//_activelist.init();
-			//_tool.SetControlMc(credit.container);
-			//_tool.SetControlMc(topicon.ItemList[2]);
-			//_tool.y = 200;
-			//addChild(_tool);
+			_tool.SetControlMc(pop_msg.container);			
+			_tool.y = 200;
+			addChild(_tool);
+		}
+		
+		public function empty_reaction(e:Event, idx:int):Boolean
+		{			
+			return true;
+		}
+		
+		public function cliek(e:Event, idx:int):Boolean
+		{			
+			utilFun.Log("click = " + idx);
+			//0 = bg 1 = cancel 2 = confirm
+			if ( idx == 1) 
+			{
+				var popmsg:MultiObject = Get("popmst");
+				popmsg.container.visible = false;
+			}
+			
+			if ( idx == 2)
+			{				
+				dispatcher(new ModelEvent("swf_close"));				
+			}
+			
+			return true;
 		}
 		
 		public function get_avalible(arr:Array):Array
@@ -142,6 +174,13 @@ package View.GameView
 		
 		public function myreaction(e:Event, idx:int):Boolean
 		{
+			var popmsg:MultiObject = Get("popmst");
+			if ( popmsg.container.visible )
+			{
+				utilFun.Log("promet not repley");
+				return false;
+			}
+			
 			//utilFun.Log("e.u" + e.currentTarget.currentFrame);			
 			if ( e.currentTarget.currentFrame == 1) 
 			{

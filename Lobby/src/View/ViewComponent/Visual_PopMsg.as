@@ -37,18 +37,18 @@ package View.ViewComponent
 		
 		public function init():void
 		{
-			var wid:int =  (GetSingleItem("_view").parent.parent.stage.width / 2 );
-			var height:int =  (GetSingleItem("_view").parent.parent.stage.height / 2 );
-			var _msg:MultiObject = prepare("popmsg", new MultiObject(),  GetSingleItem("_view").parent.parent);			
-			_msg.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
-			_msg.Post_CustomizedData = [[0, 0], [ -208.5, 47.35] , [74.5, 46.35] ];
-			_msg.Create_by_list(3, [ResName.PopMsg,ResName.PopBtn,ResName.PopBtn], 0 , 0, 3, 0 , 0, "Bet_");			
-			_msg.container.x =  wid;
-			_msg.container.y = height;
-			
-			_tool.SetControlMc(_msg.ItemList[1]);
-			_tool.y = 200;
-			add(_tool);
+			//var wid:int =  (GetSingleItem("_view").parent.parent.stage.width / 2 );
+			//var height:int =  (GetSingleItem("_view").parent.parent.stage.height / 2 );
+			//var _msg:MultiObject = prepare("popmsg", new MultiObject(),  GetSingleItem("_view").parent.parent);			
+			//_msg.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			//_msg.Post_CustomizedData = [[0, 0], [ -208.5, 47.35] , [74.5, 46.35] ];
+			//_msg.Create_by_list(3, [ResName.PopMsg,ResName.PopBtn,ResName.PopBtn], 0 , 0, 3, 0 , 0, "Bet_");			
+			//_msg.container.x =  wid;
+			//_msg.container.y = height;
+			//
+			//_tool.SetControlMc(_msg.ItemList[1]);
+			//_tool.y = 200;
+			//add(_tool);
 			//return;
 		}
 		

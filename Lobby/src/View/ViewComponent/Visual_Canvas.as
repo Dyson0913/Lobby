@@ -141,7 +141,7 @@ package View.ViewComponent
 			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
 			topicon.rollover = this.BtnHint;
 			topicon.rollout = _btn.test_reaction;
-			topicon.mousedown = swfcommand;
+			topicon.mousedown = pop_asking;
 			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
 			topicon.container.x = 1864;
 			topicon.container.y = 65;	
@@ -282,9 +282,69 @@ package View.ViewComponent
 			
 		}
 		
+		public function pop_asking(e:Event, idx:int):Boolean
+		{
+			utilFun.Log("pop_asking = " + idx);
+			var popmsg:MultiObject = Get("popmst");
+			if ( popmsg.container.visible) return true;
+			
+			_model.putValue("cancel_canvas_name", e.currentTarget.name);
+			popmsg.container.visible = true;
+			
+			return true;
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "swf_close")]
+		public function swf_close():void
+		{
+			utilFun.Log("swfcommand idx= ");
+			var name:String = _model.getValue("cancel_canvas_name");
+			utilFun.Log("swfcommand name= " + name);
+			var s:Array = utilFun.Regex_Match(name, new RegExp("game_(.+)_.", "i"));
+			var idx:int = parseInt(s[1]);
+			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
+			var serial:int = newcanvas.Serial;
+			
+			
+			var _loader:Loader = newcanvas.canvas_loader;
+			var _canve:Sprite =  newcanvas.canvas_container; 
+			if ( _canve ) 
+			{			
+				_loader.unloadAndStop(true);
+				Del("gameicon_" + serial.toString() );
+				removie(_canve);				
+			}
+			
+			var cavasid_btn:DI = _model.getValue("cavasid_btnid");
+			var btn_cavasid:DI =  _model.getValue("Topgameicon_blind");
+			var cancel_btn_id:int =  cavasid_btn.getValue(serial)
+			
+			btn_cavasid.Del(cancel_btn_id); 
+			cavasid_btn.Del(serial);
+			//find first avtive canvas		
+			
+			var pass:int = -1;
+			var first_live_cavas_btn:* = cavasid_btn.firstitem();
+			if ( first_live_cavas_btn != undefined) pass = first_live_cavas_btn; 
+			dispatcher(new Intobject(pass, "close_cavas"));		
+			
+			if (btn_cavasid.firstitem() != undefined)
+			{
+				music_defalt(btn_cavasid.firstitem());
+			}
+			
+			//close pop_msg
+			var popmsg:MultiObject = Get("popmst");
+			popmsg.container.visible = false;
+			
+		}
+		
 		public function swfcommand(e:Event, idx:int):Boolean
 		{			
-			var s:Array = utilFun.Regex_Match(e.currentTarget.name, new RegExp("game_(.+)_.", "i"));
+			utilFun.Log("swfcommand idx= " + idx);
+			var name:String = _model.getValue("cancel_canvas_name");
+			utilFun.Log("swfcommand name= " + name);
+			var s:Array = utilFun.Regex_Match(name, new RegExp("game_(.+)_.", "i"));
 			var idx:int = parseInt(s[1]);
 			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
 			var serial:int = newcanvas.Serial;
