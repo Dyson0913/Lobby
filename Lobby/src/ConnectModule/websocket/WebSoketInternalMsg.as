@@ -12,6 +12,7 @@ package ConnectModule.websocket
 		public static const NO_CREDIT:String = "CreditNotEnough";
 		public static const BETRESULT:String = "Betresult";		
 		
+		
 		[Selector]
 		public var selector:String
 		

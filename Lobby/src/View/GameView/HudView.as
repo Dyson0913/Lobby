@@ -2,6 +2,7 @@ package View.GameView
 {
 	import Command.BetCommand;
 	import Command.RegularSetting;
+	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -14,6 +15,7 @@ package View.GameView
 	import Model.*;
 	import util.utilFun;
 	import Res.ResName;
+	import ConnectModule.Error_Msg;
 	
 	/**
 	 * ...
@@ -110,6 +112,17 @@ package View.GameView
 			avtivelist.mousedown = myreaction;
 			avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons,ResName.biany_icons], 0, 0, avalibe.length, 50, 0, "o_");			
 			
+			
+			hud_pre_init();
+			//_activelist.init();
+			//_tool.SetControlMc(pop_msg.container);			
+			//_tool.y = 200;
+			//addChild(_tool);
+		}
+		
+		public function hud_pre_init():void
+		{
+		
 			//退出確定鈕
 			//0 = bg 1 = cancel 2 = confirm
 			var pop_msg:MultiObject = prepare("popmst", new MultiObject() , this);			
@@ -122,15 +135,10 @@ package View.GameView
 			pop_msg.Create_by_list(3, [ResName.PopMsg, ResName.PopBtn, ResName.PopBtn], 0, 0, 1, 50, 0, "o_");			
 			pop_msg.rollout = empty_reaction;
 			pop_msg.rollover = empty_reaction;
-			pop_msg.mousedown = cliek;
+			//pop_msg.mousedown = cliek;
 			pop_msg.container.visible = false;
 			pop_msg.ItemList[1]["_btn_context"].gotoAndStop(2);
 			pop_msg.ItemList[2]["_btn_context"].gotoAndStop(1);
-			
-			//_activelist.init();
-			//_tool.SetControlMc(pop_msg.container);			
-			//_tool.y = 200;
-			//addChild(_tool);
 		}
 		
 		public function empty_reaction(e:Event, idx:int):Boolean
@@ -138,21 +146,33 @@ package View.GameView
 			return true;
 		}
 		
-		public function cliek(e:Event, idx:int):Boolean
+		
+		
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "msgbox")]
+		public function pop_handle(msg:ModelEvent):void
 		{			
-			utilFun.Log("click = " + idx);
-			//0 = bg 1 = cancel 2 = confirm
-			if ( idx == 1) 
+			var popmsg:MultiObject = Get("popmst");			
+			popmsg.container.visible = true;
+			
+			if ( msg.Value == Error_Msg.NET_DISCONNECT)
 			{
-				var popmsg:MultiObject = Get("popmst");
-				popmsg.container.visible = false;
+				popmsg.CustomizedData = [[0, 0] , [ -68.15, 59.95], [ -68.15, 59.95]];
+				popmsg.CustomizedFun = _regular.Posi_xy_Setting;
+				popmsg.FlushObject();
+				popmsg.mousedown = handle_;
+				popmsg.ItemList[0]["_content"].gotoAndStop(3);
 			}
 			
-			if ( idx == 2)
-			{				
-				dispatcher(new ModelEvent("swf_close"));				
-			}
+		}
+		
+		public function handle_(e:Event, idx:int):Boolean
+		{			
+			var popmsg:MultiObject = Get("popmst");			
+			popmsg.container.visible = false;
 			
+			//斷線後處理
+			//dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.CONNECT));
 			return true;
 		}
 		

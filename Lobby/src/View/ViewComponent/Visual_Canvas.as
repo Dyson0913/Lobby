@@ -291,6 +291,7 @@ package View.ViewComponent
 			_model.putValue("cancel_canvas_name", e.currentTarget.name);
 			
 			popmsg.container.visible = true;
+			popmsg.mousedown = cliek;
 			
 			//龍王msg,不一樣
 			var name:String = _model.getValue("cancel_canvas_name");			
@@ -303,6 +304,24 @@ package View.ViewComponent
 			}
 			else popmsg.ItemList[0]["_content"].gotoAndStop(1);
 			
+			
+			return true;
+		}
+		
+		public function cliek(e:Event, idx:int):Boolean
+		{			
+			utilFun.Log("click = " + idx);
+			//0 = bg 1 = cancel 2 = confirm
+			if ( idx == 1) 
+			{
+				var popmsg:MultiObject = Get("popmst");
+				popmsg.container.visible = false;
+			}
+			
+			if ( idx == 2)
+			{				
+				dispatcher(new ModelEvent("swf_close"));				
+			}
 			
 			return true;
 		}

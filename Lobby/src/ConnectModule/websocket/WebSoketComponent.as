@@ -17,7 +17,7 @@ package ConnectModule.websocket
 	import Model.valueObject.*;	
 	
 	import util.utilFun;	
-
+	import ConnectModule.Error_Msg;
 
 	
 	/**
@@ -67,11 +67,13 @@ package ConnectModule.websocket
 			{
 				utilFun.Log("Connected open=" + event.type );
 				_Log.Log("socket open");
+				
 			}
 			else if ( event.type == WebSocketEvent.CLOSED)
 			{
 				utilFun.Log("Connected close lobby=" + event.type );
 				_Log.Log("socket socket_close");
+				dispatcher(new ModelEvent("msgbox",Error_Msg.NET_DISCONNECT));
 			}
 		}
 		

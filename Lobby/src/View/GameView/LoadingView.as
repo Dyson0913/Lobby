@@ -72,6 +72,9 @@ package View.GameView
 		[Inject]
 		public var _Log:Visual_Log;	
 		
+		[Inject]
+		public var _HudView:HudView;
+		
 		public function LoadingView()  
 		{
 			
@@ -115,9 +118,11 @@ package View.GameView
 			view.Create_by_list(1, [ResName.L_emptymc], 0, 0, 1, 0, 0, "a_");
 			
 			_canvas.init();			
+			_HudView.hud_pre_init();
 			//_popmsg.init();
 			//dispatcher(new Intobject(1,"Pop_msg_handle"));
 			//_test.init();			
+			
 			//return;
 			
 			var jsonconfig:String;
