@@ -13,6 +13,7 @@ package View.ViewComponent
 	import flash.system.LoaderContext;
 	import flash.display.Loader;
 	import flash.events.Event;
+	import Res.ShareManager;
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
@@ -23,7 +24,7 @@ package View.ViewComponent
 	import Res.ResName;
 	import caurina.transitions.Tweener;
 	import flash.events.MouseEvent;
-	
+	import ConnectModule.Error_Msg;
 	
 	
 	/**
@@ -166,14 +167,13 @@ package View.ViewComponent
 			var rul:String = _model.getValue("gameweb")[gameidx];
 			if ( CONFIG::debug ) 
 			{				
-				if ( CONFIG::Local)  rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+				if ( CONFIG::Local)  
+				{
+					rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+				}
 				
 			}
-			else
-			{
-				//rul = utilFun.Regex_CutPatten(rul , RegExp("http://(\.*/).*/"));
-				//rul =  "http://" + _model.getValue("lobby_ws") +"/swf/"+ rul;			
-			}
+			
 			utilFun.Log("rul = " + rul);			
 			var url:URLRequest = new URLRequest(rul);
 			
@@ -211,11 +211,20 @@ package View.ViewComponent
 			
 			_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadend);
 			utilFun.Log("load down");
-			//接口
+			//接口(大廳傳入遊戲)
 			if ( (_loader.content as MovieClip )["handshake"] != null)
 			{				
 				var idx:int = serial;
-				(_loader.content as MovieClip)["handshake"]([_model.getValue(modelName.CREDIT), idx, handshake, _model.getValue(modelName.UUID), _model.getValue("lobby_ws")]);
+				(_loader.content as MovieClip)["handshake"](
+				[
+					_model.getValue(modelName.CREDIT), //可用餘額
+					idx, //clinet id
+					handshake, //call back
+					_model.getValue(modelName.UUID), //uuid
+					_model.getValue("lobby_ws"), //domain name
+					ShareManager.shareApp //ShareApp
+				] 
+				);
 			}			
 			
 			var mc:Sprite = _canve.getChildAt(0) as Sprite;
@@ -250,7 +259,7 @@ package View.ViewComponent
 				{				
 					newcanvas.call_back(["RESUME"]);
 				}
-				else 
+				else if(newcanvas != null)
 				{					
 					newcanvas.call_back(["MUTE"]);
 				}
@@ -264,6 +273,7 @@ package View.ViewComponent
 			return true;
 		}
 		
+		//遊戲呼叫大廳
 		public function handshake(Client_serial:int , data:Array):void
 		{
 			utilFun.Log("handshake response " + Client_serial + " date = " + data);
@@ -273,12 +283,19 @@ package View.ViewComponent
 				dispatcher(new ValueObject( data[1],modelName.CREDIT) );
 				dispatcher(new ModelEvent("HandShake_updateCredit"));
 			}
+			
+			//大廳呼叫遊戲
 			if (data[0] == "HandShake_callback")
 			{
 				var newcanvas:Object  = _model.getValue("newcanvas" + Client_serial);
 				newcanvas.call_back = data[1];
 				//utilFun.Log("newcanvas.call_back" + newcanvas.call_back);
 				
+			}
+			
+			//遊戲斷線
+			if (data[0] == "GameDisconnect") {
+				dispatcher(new ModelEvent("msgbox",Error_Msg.NET_DISCONNECT));
 			}
 			
 		}
@@ -339,7 +356,8 @@ package View.ViewComponent
 			var _loader:Loader = newcanvas.canvas_loader;
 			var _canve:Sprite =  newcanvas.canvas_container; 
 			if ( _canve ) 
-			{			
+			{
+				newcanvas.call_back(["LOBBY_DISCONNET"]);
 				_loader.unloadAndStop(true);
 				Del("gameicon_" + serial.toString() );
 				removie(_canve);				
@@ -367,12 +385,27 @@ package View.ViewComponent
 			var popmsg:MultiObject = Get("popmst");
 			popmsg.container.visible = false;
 			
+			//_model.Del("newcanvas" + idx);
 		}
 		
 		public function music_defalt(cav_id:int):void
 		{			
 			var newcanvas:Object  = _model.getValue("newcanvas" + cav_id);						
 			newcanvas.call_back(["RESUME"]);
+		}
+		
+		//廣播餘額
+		[MessageHandler(type = "Model.ModelEvent", selector = "update_result_Credit")]
+		public function publish_credit():void {
+			var allcanvas:int = _model.getValue("canvas_Serial");
+			for ( var i:int = 0; i < allcanvas ; i++)
+			{
+				var credit:int = _model.getValue(modelName.CREDIT);
+				var newcanvas:Object  = _model.getValue("newcanvas" + i);	
+				if(newcanvas != null){
+					newcanvas.call_back(["UPDATE_CREDIT", credit]);
+				}
+			}
 		}
 		
 	}

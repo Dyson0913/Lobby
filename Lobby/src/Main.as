@@ -12,7 +12,7 @@ package
 	import com.adobe.serialization.json.JSON;
 	import flash.events.KeyboardEvent;
 
-	
+	import Res.ShareManager;
 	/**
 	 * ...
 	 * @author hhg
@@ -63,13 +63,18 @@ package
 			addChild(_context.getObjectByType(HudView) as HudView);			
 			addChild(_slog);
 			
-			var Enter:LoadingView = _context.getObject("Enter") as LoadingView;			
-			Enter.FirstLoad(result,_slog);
+			
 			
 			_scode = [83, 72, 79, 87, 77, 69, 76, 79, 71];
 			checkList = checkList.concat(_scode);		
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyUpHandler);   
-			
+			EnterLoadingView();
+			//ShareManager.loadSahreSwf( "http://106.186.116.216:8000/static/share.swf", EnterLoadingView);
+		}
+		
+		public function EnterLoadingView() {
+				var Enter:LoadingView = _context.getObject("Enter") as LoadingView;			
+				Enter.FirstLoad(result,_slog);
 		}
 		
 		public function keyUpHandler(event:KeyboardEvent):void 

@@ -43,8 +43,8 @@ package View.ViewComponent
 				GetSingleItem("update_coin").gotoAndPlay(2);
 			}
 		
-			
-			utilFun.SetText(GetSingleItem("playinfo", 1)["_Text"], _model.getValue(modelName.CREDIT));
+			var credit:int = _model.getValue(modelName.CREDIT);
+			utilFun.SetText(GetSingleItem("playinfo", 1)["_Text"], credit.toString());
 			
 			
 			

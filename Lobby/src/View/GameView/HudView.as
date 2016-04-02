@@ -56,8 +56,8 @@ package View.GameView
 			
 			var Mascot:MultiObject = prepare("Mascot", new MultiObject(), this);
 			Mascot.Create_by_list(1, [ResName.L_Mascot], 0 , 0, 1, 0, 0, "Bet_");
-			Mascot.container.x = -72;
-			Mascot.container.y = -65;
+			Mascot.container.x = -42;
+			Mascot.container.y = -25;
 			
 			//utilFun.Log("name= "+_model.getValue(modelName.NICKNAME));
 			//utilFun.Log("credit= " + _model.getValue(modelName.CREDIT));
@@ -104,6 +104,8 @@ package View.GameView
 			utilFun.Log("gameonline ="+gamestate);			
 			
 			var avalibe:Array =  get_avalible(gamestate);
+			//拿掉二元期權
+			//avalibe.pop();
 			utilFun.Log("avalibe ="+avalibe);			
 			var avtivelist:MultiObject = prepare("avtivelist", new MultiObject() , this);				
 			avtivelist.container.x = 180;
@@ -111,7 +113,8 @@ package View.GameView
 			avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,2,0]);
 			avtivelist.mousedown = myreaction;
 			avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons,ResName.biany_icons], 0, 0, avalibe.length, 50, 0, "o_");			
-			
+			//拿掉二元期權
+			//avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons], 0, 0, avalibe.length, 50, 0, "o_");		
 			
 			hud_pre_init();
 			//_activelist.init();
@@ -126,26 +129,53 @@ package View.GameView
 			//退出確定鈕
 			//0 = bg 1 = cancel 2 = confirm
 			var pop_msg:MultiObject = prepare("popmst", new MultiObject() , this);			
-			pop_msg.container.x = 1920 / 2;
-			pop_msg.container.y = 1080 / 2;
-			pop_msg.CustomizedData = [[0,0] ,[-156.15,59.95],[21.85,60.95]]
-			//pop_msg.CustomizedData = [[0,0] ,[-68.15,59.95],[-68.15,59.95]]
+			pop_msg.container.x = 1590;
+			pop_msg.container.y = 130;
+			pop_msg.CustomizedData = [[0, 0] ,[60,90],[170,90]]
 			pop_msg.CustomizedFun = _regular.Posi_xy_Setting;
-			pop_msg.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,2,0]);
+			//pop_msg.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,2,0]);
 			pop_msg.Create_by_list(3, [ResName.PopMsg, ResName.PopBtn, ResName.PopBtn], 0, 0, 1, 50, 0, "o_");			
-			pop_msg.rollout = empty_reaction;
-			pop_msg.rollover = empty_reaction;
+			pop_msg.rollout = pop_msg_rollout;
+			pop_msg.rollover = pop_msg_rollover;
 			//pop_msg.mousedown = cliek;
 			pop_msg.container.visible = false;
 			pop_msg.ItemList[1]["_btn_context"].gotoAndStop(2);
 			pop_msg.ItemList[2]["_btn_context"].gotoAndStop(1);
 		}
 		
-		public function empty_reaction(e:Event, idx:int):Boolean
+		public function pop_msg_rollout(e:Event, idx:int):Boolean
 		{			
+			if(e.currentTarget["_btn_context"] != undefined){
+			
+				if (e.currentTarget["_btn_context"].currentFrame == 2) {
+					Get("popmst").ItemList[1].gotoAndStop(1);
+					Get("popmst").ItemList[1]["_btn_context"].visible = true;
+				}else if (e.currentTarget["_btn_context"].currentFrame == 1) {
+					Get("popmst").ItemList[2].gotoAndStop(1);
+					Get("popmst").ItemList[2]["_btn_context"].visible = true;
+				}
+			
+			}
+			
 			return true;
 		}
 		
+		public function pop_msg_rollover(e:Event, idx:int):Boolean
+		{			
+			if (e.currentTarget["_btn_context"] != undefined) {
+				
+				if (e.currentTarget["_btn_context"].currentFrame == 2) {
+					Get("popmst").ItemList[1].gotoAndStop(2);
+					Get("popmst").ItemList[1]["_btn_context"].visible = false;
+				}else if (e.currentTarget["_btn_context"].currentFrame == 1) {
+					Get("popmst").ItemList[2].gotoAndStop(3);
+					Get("popmst").ItemList[2]["_btn_context"].visible = false;
+				}
+			
+			}
+			
+			return true;
+		}
 		
 		
 		
@@ -157,7 +187,7 @@ package View.GameView
 			
 			if ( msg.Value == Error_Msg.NET_DISCONNECT)
 			{
-				popmsg.CustomizedData = [[0, 0] , [ -68.15, 59.95], [ -68.15, 59.95]];
+				popmsg.CustomizedData = [[0, 0] , [ 115, 90], [ 115, 90]];
 				popmsg.CustomizedFun = _regular.Posi_xy_Setting;
 				popmsg.FlushObject();
 				popmsg.mousedown = handle_;
@@ -206,7 +236,7 @@ package View.GameView
 			{
 				var btn_cavasid:DI =  _model.getValue("Topgameicon_blind");					
 				if (btn_cavasid.getValue(idx)== null)
-				{						
+				{	
 					var cav_id:int = _model.getValue("canvas_Serial");
 					utilFun.Log("no find");									
 					btn_cavasid.putValue(idx, cav_id);
@@ -230,7 +260,7 @@ package View.GameView
 							newcanvas.canvas_container.visible = true;
 							newcanvas.call_back(["RESUME"]);
 						}
-						else 
+						else if(newcanvas != null)
 						{
 							newcanvas.canvas_container.visible = false;
 							newcanvas.call_back(["MUTE"]);

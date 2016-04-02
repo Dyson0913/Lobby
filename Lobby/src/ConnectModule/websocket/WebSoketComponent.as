@@ -89,7 +89,7 @@ package ConnectModule.websocket
 			var result:Object ;
 			if (event.message.type === WebSocketMessage.TYPE_UTF8) 
 			{
-				//utilFun.Log("lobby before" + event.message.utf8Data)
+				utilFun.Log("lobby before" + event.message.utf8Data)
 				//_Log.Log("lobby pack ConnectionFail = "+ event.message.utf8Data);
 				result = JSON.decode(event.message.utf8Data);			
 			}

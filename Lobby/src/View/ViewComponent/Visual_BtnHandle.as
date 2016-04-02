@@ -78,7 +78,7 @@ package View.ViewComponent
 						{							
 							newcanvas.canvas_container.visible = true;
 						}
-						else 
+						else if(newcanvas != null)
 						{
 							utilFun.Log("lobby hide =" + i);
 							newcanvas.canvas_container.visible = false;
