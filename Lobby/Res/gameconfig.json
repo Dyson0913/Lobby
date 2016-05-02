@@ -1,0 +1,19 @@
+{
+  "online":{
+             "DomainName":[
+                     {"lobby_ws":"www.mm9900.net"
+                                                 
+                     }
+                    ]
+           },
+ "development":{
+             "DomainName":[
+                     {"lobby_ws":"106.186.116.216"
+                     }
+                    ]
+               }
+}
+
+
+
+ 
