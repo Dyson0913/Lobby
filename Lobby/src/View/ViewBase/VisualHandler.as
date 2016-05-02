@@ -4,12 +4,14 @@ package View.ViewBase
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import Model.Model;
-	import Command.ViewCommand;
+	import Command.*;
 	import Interface.ViewComponentInterface;
+	import Model.valueObject.*;	
 	import util.*;
 	import Model.*;
-	import View.Viewutil.AdjustTool;
+	import View.Viewutil.*;	
 	
 	/**
 	 * handle display item how to presentation
@@ -28,11 +30,54 @@ package View.ViewBase
 		[Inject]
 		public var _viewcom:ViewCommand;
 		
+		[Inject]
+		public var _regular:RegularSetting;
+		
+		[Inject]
+		public var _opration:DataOperation;
+		
+		[Inject]
+		public var _sound:SoundCommand;
+		
+		[Inject]
+		public var _text:Visual_Text;
+		
+		[Inject]
+		public var _debugTool:Visual_debugTool;
+		
+		private var _miss_id:Array = [];
+		
 		public var _tool:AdjustTool;
 		
 		public function VisualHandler() 
 		{
 			_tool = new AdjustTool();
+		}
+		
+		public function set_mission_id(id:int ):void
+		{
+			_miss_id.push(id);
+		}
+		
+		public function mission_id( ):int
+		{
+			if ( _miss_id.length == 0) return -1;
+			//TODO multi mission
+			return _miss_id[0];
+		}		
+		
+		public function put_to_lsit(viewcompo:ViewComponentInterface):void
+		{
+			if ( CONFIG::release ) return;
+			
+			dispatcher(new ArrayObject([viewcompo], "debug_item"));			
+		}
+		
+		public function debug():void
+		{
+			if ( CONFIG::release ) return;	
+			
+			dispatcher(new TestEvent("debug_start"));			
 		}
 		
 		//only for same view clean item
@@ -44,7 +89,7 @@ package View.ViewBase
 		protected function Get(name:*):*
 		{			
 			return _viewcom.currentViewDI.getValue(name);
-		}		
+		}
 		
 		protected function GetSingleItem(name:*,idx:int = 0):*
 		{
@@ -54,6 +99,33 @@ package View.ViewBase
 				return ob.ItemList[idx];
 			}
 			return null;
+		}
+		
+		protected function setFrame(name:*, frame:int):void
+		{
+			var a:MultiObject = Get(name);
+			for ( var i:int = 0; i <  a.ItemList.length; i++)
+			{				
+				GetSingleItem(name, i).gotoAndStop(frame);
+			}
+		}		
+		
+		public function empty_reaction(e:Event, idx:int):Boolean
+		{			
+			return true;
+		}
+		
+		//public function Log(log:String):void
+		//{
+			//utilFun.Log(log);
+		//}
+		
+		protected function changeBG(name:String):void
+		{
+			var view:MultiObject = Get("_view");
+			view.CleanList();
+			view.resList = [name];
+			view.Create_(1);
 		}
 		
 		protected function add(item:*):void
@@ -69,10 +141,51 @@ package View.ViewBase
 		
 		protected function prepare(name:*, ob:ViewComponentInterface, container:DisplayObjectContainer = null):*
 		{
-			ob.setContainer(new Sprite());
+			var sp:Sprite = new Sprite();
+			sp.name  = name;
+			ob.setContainer(sp);			
 			return utilFun.prepare(name,ob , _viewcom.currentViewDI , container);
 		}
 		
+		//========================= better way
+		protected function create(name:*,resNameArr:Array, Stick_in_container:DisplayObjectContainer = null):*
+		{
+			if ( Stick_in_container == null) Stick_in_container = GetSingleItem("_view").parent.parent;
+			var ob:MultiObject = new MultiObject();
+			ob.resList = resNameArr;
+			
+			var sp:Sprite = new Sprite();
+			sp.name  = name;
+			ob.setContainer(sp);
+			return utilFun.prepare(name,ob , _viewcom.currentViewDI , Stick_in_container);
+		}
+		
+		protected function create_dynamic(name:*,resNameArr:Array,Stick_in_container:DisplayObjectContainer ):*
+		{
+			var mu:MultiObject = new MultiObject();
+			mu.resList = resNameArr;
+			var sp:Sprite = new Sprite();
+			sp.name  = name;
+			mu.setContainer(sp);
+			Stick_in_container.addChild(sp);
+			
+			return mu;
+		}
+		
+		protected function play_sound(soundname:String):void
+		{			
+			_sound.playSound(new StringObject(soundname,"sound") );			
+		}
+		
+		protected function pause_sound(soundname:String):void
+		{
+			_sound.stopMusic(new StringObject(soundname,"Music_pause" ));
+		}
+		
+		protected function loop_sound(soundname:String):void
+		{
+			_sound.loop_sound(new StringObject(soundname,"loop_sound" ));
+		}
 	}
 
 }

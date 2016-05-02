@@ -15,6 +15,7 @@ package View.ViewComponent
 	import View.GameView.*;
 	import Res.ResName;
 	import caurina.transitions.Tweener;
+	import flash.display.StageDisplayState;
 	
 	/**
 	 * btn handle present way
@@ -64,16 +65,28 @@ package View.ViewComponent
 				}
 				else
 				{
-					var cav_id:int = btn_cavasid.getValue(idx);
+					cav_id = btn_cavasid.getValue(idx);
 					utilFun.Log("find " +cav_id);
 					
 					//swith visible for all  newcanvas
 					var allcanvas:int = _model.getValue("canvas_Serial");
+					utilFun.Log("allcanvas show =" + allcanvas);
 					for ( var i:int = 0; i < allcanvas ; i++)
 					{
 						var newcanvas:Object  = _model.getValue("newcanvas" + i);
-						if ( i == cav_id) newcanvas.canvas_container.visible = true;
-						else newcanvas.canvas_container.visible = false;
+						if ( i == cav_id) 
+						{							
+							newcanvas.canvas_container.visible = true;
+						}
+						else if(newcanvas != null)
+						{
+							utilFun.Log("lobby hide =" + i);
+							newcanvas.canvas_container.visible = false;
+							utilFun.Log("lobby cal back =" + newcanvas.call_back);
+							var ob:Object = newcanvas.call_back;
+							utilFun.Log("lobby cal back ="+ob.cal);
+							//newcanvas.call_back(["stop_music"]);
+						}
 					}
 					
 				}
@@ -98,18 +111,81 @@ package View.ViewComponent
 			return true;
 		}
 		
+		public function Btn_setting(mc:MovieClip, idx:int, data:Array):void
+		{			
+			mc.gotoAndStop(2);
+			mc["_hintText"].gotoAndStop(data[idx]);			
+		}
+		
 		
 		public function BtnHint(e:Event, idx:int):Boolean
 		{
+			var data:Array  = Get("topicon").CustomizedData;
+			if ( e.currentTarget.currentFrame == 4 )			
+			{
+				e.currentTarget.gotoAndStop(5);
+				e.currentTarget["_hintText"].gotoAndStop(data[idx]);
+				return false;
+			}
+			
+			if (  e.currentTarget.currentFrame == 5)
+			{
+				e.currentTarget.gotoAndStop(4);
+				//e.currentTarget["_hintText"].gotoAndStop(data[idx]);
+				return false;
+			}
+			
 			e.currentTarget.gotoAndStop(2);
-			e.currentTarget["_hintText"].gotoAndStop(idx+1);
+			e.currentTarget["_hintText"].gotoAndStop(data[idx]);
 			return true;
 		}
 		
+		public function Btn_roout(e:Event, idx:int):Boolean
+		{
+			var data:Array  = Get("topicon").CustomizedData;
+			utilFun.Log("idx =" + idx);
+			if ( e.currentTarget.currentFrame == 4)
+			{
+				return false;
+			}
+			if ( e.currentTarget.currentFrame == 5)
+			{
+				e.currentTarget.gotoAndStop(4);
+				return false;
+			}
+			
+			e.currentTarget.gotoAndStop(2);
+			e.currentTarget["_hintText"].gotoAndStop(data[idx]);
+			return true;
+		}
+		
+		
 		public function gonewpage(e:Event, idx:int):Boolean
 		{
-			var request:URLRequest = new URLRequest("https://www.google.com.tw/");			
-			navigateToURL( request, "_blank" );
+			//TODO button mapping to multiob ?
+			if ( idx == 0)
+			{
+				//GetSingleItem("_view").parent.parent.stage
+				if ( GetSingleItem("_view").parent.parent.stage.displayState == StageDisplayState.NORMAL)
+				{
+					GetSingleItem("_view").parent.parent.stage.displayState = StageDisplayState.FULL_SCREEN; 
+					
+					e.currentTarget.gotoAndStop(4);
+				}
+				else
+				{
+					GetSingleItem("_view").parent.parent.stage.displayState = StageDisplayState.NORMAL; 
+					e.currentTarget.gotoAndStop(1);
+				}
+				return false;
+			}
+			else
+			{
+				//var request:URLRequest = new URLRequest("https://www.google.com.tw/");			
+				//navigateToURL( request, "_blank" );
+				return true;
+			}
+			
 			return true;
 		}
 	}

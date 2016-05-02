@@ -1,5 +1,6 @@
 package View.ViewComponent 
 {
+	import asunit.errors.UnimplementedFeatureError;
 	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -12,6 +13,7 @@ package View.ViewComponent
 	import flash.system.LoaderContext;
 	import flash.display.Loader;
 	import flash.events.Event;
+	import Res.ShareManager;
 	import View.ViewBase.VisualHandler;
 	import Model.valueObject.*;
 	import Model.*;
@@ -22,24 +24,17 @@ package View.ViewComponent
 	import Res.ResName;
 	import caurina.transitions.Tweener;
 	import flash.events.MouseEvent;
-	
-	
+	import ConnectModule.Error_Msg;
+	import ConnectModule.websocket.WebSoketInternalMsg;
 	
 	/**
 	 * Canvas , loading other display swf
 	 * @author ...
 	 */
 	public class Visual_Canvas  extends VisualHandler
-	{
+	{		
 		[Inject]
-		public var _regular:RegularSetting;
-	
-		[Inject]
-		public var _betCommand:BetCommand;
-		
-		[Inject]
-		public var _opration:DataOperation;
-		
+		public var _betCommand:BetCommand;		
 		
 		[Inject]
 		public var _btn:Visual_BtnHandle;		
@@ -62,11 +57,14 @@ package View.ViewComponent
 		{
 			
 			//gameidx.Value = 4;
-			utilFun.Log("game = " + gameidx.Value);	
+			utilFun.Log("game = " + gameidx.Value);				
+			var game_name:String = _model.getValue("gametype")[ gameidx.Value];
 			var serial:int = _model.getValue("canvas_Serial");
 			var newcanvas:Object = { "Serial": serial, 
 			                                        "canvas_container":  new Sprite(),
-										            "canvas_loader":new Loader()
+										            "canvas_loader":new Loader(),
+													"game_name":game_name,
+													"call_back":null
 			                                      };
 												  
 			_model.putValue("newcanvas" + serial, newcanvas);
@@ -100,9 +98,9 @@ package View.ViewComponent
 				break;
 				case "mouseUp":
 					//utilFun.Log("e.cur =  + up ");
-					var serial:int = _model.getValue("canvas_Current_Serial");
-					var newcanvas:Object  = _model.getValue("newcanvas" + serial);
-					var _canve:Sprite =  newcanvas.canvas_container; //_model.getValue("canvas_container").getValue(serial.toString());
+					 serial = _model.getValue("canvas_Current_Serial");
+					newcanvas  = _model.getValue("newcanvas" + serial);
+					 _canve =  newcanvas.canvas_container; //_model.getValue("canvas_container").getValue(serial.toString());
 					_canve.stopDrag();
 					_canve.removeEventListener(MouseEvent.MOUSE_MOVE, ScrollDrag);
 					_canve.removeEventListener(MouseEvent.MOUSE_UP, ScrollDrag);
@@ -140,11 +138,21 @@ package View.ViewComponent
 			newcanvas.canvas_container.addChild( utilFun.GetClassByString(ResName.Loading_Scene));
 			newcanvas.canvas_container.name = newcanvas.Serial;
 			
+			//wired ,pass newcanvas.canvas_container as container will be Null
+			var _canve:Sprite =  newcanvas.canvas_container;			
+			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);			
+			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			topicon.rollover = this.BtnHint;
+			topicon.rollout = _btn.test_reaction;
+			topicon.mousedown = pop_asking;
+			topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
+			topicon.container.x = 1864;
+			topicon.container.y = 65;	
 			
 			//移除完才觸發scroll事件,idx 會錯亂目前不用 (用name 解)
 			//_canve.addEventListener(MouseEvent.MOUSE_DOWN, ScrollDrag);
 			//_model.getValue("canvas_container").putValue(_model.getValue("canvas_Serial").toString(), _canve);
-			_model.putValue("newcanvas" + serial,newcanvas);
+			_model.putValue("newcanvas" + serial, newcanvas);
 			
 			
 			//_canve1.doubleClickEnabled = true;
@@ -158,34 +166,35 @@ package View.ViewComponent
 			
 			var rul:String = _model.getValue("gameweb")[gameidx];
 			if ( CONFIG::debug ) 
-			{
-				rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+			{				
+				if ( CONFIG::Local)  
+				{
+					rul = utilFun.Regex_CutPatten(rul , RegExp("http://\.*/"));
+				}
+				
 			}
+			
 			utilFun.Log("rul = " + rul);			
 			var url:URLRequest = new URLRequest(rul);
 			
 			//var loaderContext:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
-			var loaderContext:LoaderContext = new LoaderContext(false, new ApplicationDomain());
-				
+			var loaderContext:LoaderContext = new LoaderContext(false, new ApplicationDomain());				
 			_loader.load( url, loaderContext);
 		}
 		
 		private function gameprogress(e:ProgressEvent):void 
-		{
-			// TODO update loader
+		{			
 			var total:Number = Math.round( e.bytesTotal/ 1024);
 			var loaded:Number = Math.round(e.bytesLoaded / 1024);
 			var percent:Number = Math.round(loaded / total * 100);
 			
 			var loader:LoaderInfo = e.currentTarget as LoaderInfo;
 			var s:String = utilFun.Regex_CutPatten(loader.loader.name, new RegExp("canvas_", "i"));
-			var idx:int = parseInt( s);			
-			//utilFun.Log("percent "+percent);
+			var idx:int = parseInt( s);
 			
 			var canvas:Object  = _model.getValue("newcanvas" + idx);		
-			var y:int = canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y;			
-			var shift_amount:Number = utilFun.NPointInterpolateDistance( 101-percent, y,458 );						
-			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y = shift_amount;
+			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_percent"].text = percent.toString() + "%";	
+			canvas.canvas_container.getChildByName(ResName.Loading_Scene)["_mask"].y =  622 -  ( 164 *  (percent / 100));
 		}
 		
 		private function loadend(event:Event):void
@@ -202,55 +211,159 @@ package View.ViewComponent
 			
 			_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadend);
 			utilFun.Log("load down");
-			//接口
+			//接口(大廳傳入遊戲)
 			if ( (_loader.content as MovieClip )["handshake"] != null)
-			{
-				//var result:Object  = JSON.decode(_para);
-				var idx:int = serial;
-				//(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.LOGIN_INFO));
-				(_loader.content as MovieClip)["handshake"](_model.getValue(modelName.CREDIT),idx,handshake,_model.getValue(modelName.UUID));
+			{				
+				 idx = serial;
+				(_loader.content as MovieClip)["handshake"](
+				[
+					_model.getValue(modelName.CREDIT), //可用餘額
+					idx, //clinet id
+					handshake, //call back
+					_model.getValue(modelName.UUID), //uuid
+					_model.getValue("lobby_ws"), //domain name
+					ShareManager.shareApp //ShareApp
+				] 
+				);
 			}			
-			_canve.addChild(_loader);
 			
-			var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);
-			topicon.Posi_CustzmiedFun = _regular.Posi_x_Setting;
-			topicon.Post_CustomizedData = [0, 160, 230];
-			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
-			topicon.rollover = this.BtnHint;
-			topicon.rollout = _btn.test_reaction;
-			topicon.mousedown = swfcommand;
-			topicon.Create_by_list(1, [ResName.L_icon_3], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
-			topicon.container.x = 1854;
-			topicon.container.y = 80;			
-			//utilFun.scaleXY(topicon.container, 1, 0.9);
+			var mc:Sprite = _canve.getChildAt(0) as Sprite;
 			
-			_model.putValue("newcanvas" + serial, newcanvas);
+			utilFun.Log("mc name = " + mc.name);
+		    //TEXT
+			_canve.addChild(_loader);			
+			_canve.swapChildrenAt(2, 3);
+			music_control(serial);
+			
+			
+			//var topicon:MultiObject = prepare("gameicon_" + serial, new MultiObject(), _canve);			
+			//topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			//topicon.rollover = this.BtnHint;
+			//topicon.rollout = _btn.test_reaction;
+			//topicon.mousedown = swfcommand;
+			//topicon.Create_by_list(1, [ResName.L_icon_exit_game], 0 , 0, 1, 50 , 0, "game_"+serial+"_");
+			//topicon.container.x = 1864;
+			//topicon.container.y = 65;			
+			//_model.putValue("newcanvas" + serial, newcanvas);
 			
 			//removeChild(loadingPro);		
 		}
 		
-		public function BtnHint(e:Event, idx:int):Boolean
+		public function music_control(cav_id:int):void
 		{
+			var allcanvas:int = _model.getValue("canvas_Serial");
+			for ( var i:int = 0; i < allcanvas ; i++)
+			{
+				var newcanvas:Object  = _model.getValue("newcanvas" + i);
+				if ( i == cav_id) 
+				{				
+					newcanvas.call_back(["RESUME"]);
+				}
+				else if(newcanvas != null)
+				{					
+					newcanvas.call_back(["MUTE"]);
+				}
+			}
+		}
+		
+		public function BtnHint(e:Event, idx:int):Boolean
+		{			
 			e.currentTarget.gotoAndStop(2);
-			e.currentTarget["_hintText"].gotoAndStop(3);
+			e.currentTarget["_hintText"].gotoAndStop(5);
 			return true;
 		}
 		
+		//遊戲呼叫大廳
 		public function handshake(Client_serial:int , data:Array):void
 		{
 			utilFun.Log("handshake response " + Client_serial + " date = " + data);
 			
 			if (data[0] == "HandShake_updateCredit")
-			{
-				dispatcher(new ValueObject( data[1],modelName.CREDIT) );
+			{				
+				dispatcher(new ValueObject( data[1], modelName.CREDIT) );
+				_model.putValue("credit_update_by", data[2]);
 				dispatcher(new ModelEvent("HandShake_updateCredit"));
+			}
+			
+			//大廳呼叫遊戲
+			if (data[0] == "HandShake_callback")
+			{
+				var newcanvas:Object  = _model.getValue("newcanvas" + Client_serial);
+				newcanvas.call_back = data[1];
+				//utilFun.Log("newcanvas.call_back" + newcanvas.call_back);
+				
+			}
+			
+			//遊戲斷線
+			if (data[0] == "GameDisconnect") {
+				dispatcher(new ModelEvent("msgbox",Error_Msg.NET_DISCONNECT));
+			}
+			
+			//----new archi
+			
+			//遊戲請求加入
+			if (data[0] == "GameJoin") 
+			{				
+			    _model.putValue("join_game_type", data[1]);
+				dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.GAME_JOIN));
+			}
+			
+			if (data[0] == "game_credit_update") 
+			{
+				_model.putValue("game_bet", data[1]);
+				dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.GAME_BET));
 			}
 			
 		}
 		
-		public function swfcommand(e:Event, idx:int):Boolean
-		{
-			var s:Array = utilFun.Regex_Match(e.currentTarget.name, new RegExp("game_(.)_.","i"));		
+		public function pop_asking(e:Event, idx:int):Boolean
+		{			
+			var popmsg:MultiObject = Get("popmst");
+			if ( popmsg.container.visible) return true;			
+			
+			_model.putValue("cancel_canvas_name", e.currentTarget.name);
+			
+			popmsg.container.visible = true;
+			popmsg.mousedown = cliek;
+			
+			//龍王msg,不一樣
+			var name:String = _model.getValue("cancel_canvas_name");			
+			var s:Array = utilFun.Regex_Match(name, new RegExp("game_(.+)_.", "i"));
+			var idx:int = parseInt(s[1]);
+			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
+			if (  newcanvas.game_name == "BigWin")
+			{
+				popmsg.ItemList[0]["_content"].gotoAndStop(2);
+			}
+			else popmsg.ItemList[0]["_content"].gotoAndStop(1);
+			
+			
+			return true;
+		}
+		
+		public function cliek(e:Event, idx:int):Boolean
+		{			
+			utilFun.Log("click = " + idx);
+			//0 = bg 1 = cancel 2 = confirm
+			if ( idx == 1) 
+			{
+				var popmsg:MultiObject = Get("popmst");
+				popmsg.container.visible = false;
+			}
+			
+			if ( idx == 2)
+			{				
+				dispatcher(new ModelEvent("swf_close"));				
+			}
+			
+			return true;
+		}
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "swf_close")]
+		public function swf_close():void
+		{			
+			var name:String = _model.getValue("cancel_canvas_name");		
+			var s:Array = utilFun.Regex_Match(name, new RegExp("game_(.+)_.", "i"));
 			var idx:int = parseInt(s[1]);
 			var newcanvas:Object  = _model.getValue("newcanvas" + idx);			
 			var serial:int = newcanvas.Serial;
@@ -259,7 +372,8 @@ package View.ViewComponent
 			var _loader:Loader = newcanvas.canvas_loader;
 			var _canve:Sprite =  newcanvas.canvas_container; 
 			if ( _canve ) 
-			{			
+			{
+				newcanvas.call_back(["LOBBY_DISCONNET"]);
 				_loader.unloadAndStop(true);
 				Del("gameicon_" + serial.toString() );
 				removie(_canve);				
@@ -278,8 +392,42 @@ package View.ViewComponent
 			if ( first_live_cavas_btn != undefined) pass = first_live_cavas_btn; 
 			dispatcher(new Intobject(pass, "close_cavas"));		
 			
-			return true;
+			if (btn_cavasid.firstitem() != undefined)
+			{
+				music_defalt(btn_cavasid.firstitem());
+			}
+			
+			//close pop_msg
+			var popmsg:MultiObject = Get("popmst");
+			popmsg.container.visible = false;
+			
+			//_model.Del("newcanvas" + idx);
 		}
+		
+		public function music_defalt(cav_id:int):void
+		{			
+			var newcanvas:Object  = _model.getValue("newcanvas" + cav_id);						
+			newcanvas.call_back(["RESUME"]);
+		}
+		
+		
+		
+		//封包轉傳
+		[MessageHandler(type = "Model.ModelEvent", selector = "update_package")]
+		public function publish_package():void 
+		{
+			var allcanvas:int = _model.getValue("canvas_Serial");
+			var mypackage:Object = _model.getValue("pass_to_game_pagcage");
+			for ( var i:int = 0; i < allcanvas ; i++)
+			{
+				
+				var newcanvas:Object  = _model.getValue("newcanvas" + i);	
+				if(newcanvas != null){
+					newcanvas.call_back(["package_from_lobby", mypackage]);
+				}
+			}
+		}
+		
 	}
 
 }

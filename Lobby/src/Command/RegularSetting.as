@@ -43,8 +43,15 @@ package Command
 		
 		public function textSetting(mc:MovieClip, idx:int, data:Array):void
 		{			
-			utilFun.SetText(mc["_Text"],data[idx])
+			text_setting_single(mc, data[idx]);
+			//utilFun.SetText(mc["_Text"],data[idx])
 		}
+		
+		public function text_setting_single(mc:MovieClip, str:String):void
+		{			
+			utilFun.SetText(mc["_Text"],str)
+		}
+		
 		
 		public function FadeIn(mc:MovieClip,  in_t:int , out_t:int, onComF:Function):void
 		{
@@ -75,7 +82,7 @@ package Command
 		{
 			var str:String = s.text;
 			var len:int = str.length;
-			str = str.substr(0, len) + ".";
+			str = str.substr(0, len) + ".";			
 			if ( str.length > orlength + limit) str = str.substr(0, len - limit) + ".";			
 			s.text = str;
 		}	
@@ -89,6 +96,24 @@ package Command
 		{
 			var code:int  = data[idx].toString().charCodeAt(0) -32;
 			mc.drawTile(code);
+		}
+		
+		public function Posi_Colum_first_Setting(mc:MovieClip, idx:int, data:Array):void
+		{			
+			var ColumnCnt:int = data[0];
+			var xdiff:Number = data[1];
+			var ydiff:Number = data[2];
+			mc.x = ( Math.floor(idx / ColumnCnt) * data[1]);		
+			mc.y = (idx % ColumnCnt * ydiff);
+		}
+		
+		public function Posi_Row_first_Setting(mc:MovieClip, idx:int, data:Array):void
+		{			
+			var RowCnt:int = data[0];
+			var xdiff:Number = data[1];
+			var ydiff:Number = data[2];
+			mc.x = (idx % RowCnt * xdiff);			
+			mc.y = Math.floor(idx / RowCnt) * ydiff;		
 		}
 		
 	}

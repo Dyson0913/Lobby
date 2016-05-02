@@ -12,7 +12,7 @@ package Model
 		
 		public static const CREDIT:int = Num++;
 		public static const NICKNAME:int = Num++;
-		public static const UUID:int = Num++;
+		public static const UUID:int = Num++;		
 		
 		public static const OPEN_STATE:int = Num++;
 		

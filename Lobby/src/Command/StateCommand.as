@@ -17,6 +17,11 @@ package Command
 		[Inject]
 		public var _model:Model;
 		
+		public static const INITIAL:int = 0;
+		public static const NEW_ROUND:int = 1;
+		public static const END_BET:int = 2;
+		public static const START_OPEN:int = 3;
+		public static const END_ROUND:int = 4;
 		
 		public function StateCommand() 
 		{
@@ -27,15 +32,15 @@ package Command
 		public function state_update():void
 		{
 			var state:int = _model.getValue(modelName.GAMES_STATE);		
-			if ( state  == gameState.NEW_ROUND)
+			if ( state  == NEW_ROUND)
 			{
 				dispatcher(new ModelEvent("clearn"));
 				dispatcher(new ModelEvent("display"));
 				//clearn();
 			}
-			else if ( state == gameState.END_BET) dispatcher(new ModelEvent("hide"));
-			else if ( state == gameState.START_OPEN) { }
-			else if ( state == gameState.END_ROUND) { }
+			else if ( state == END_BET) dispatcher(new ModelEvent("hide"));
+			else if ( state == START_OPEN) { }
+			else if ( state == END_ROUND) { }
 		}
 	}
 

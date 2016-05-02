@@ -2,6 +2,7 @@ package View.GameView
 {
 	import Command.BetCommand;
 	import Command.RegularSetting;
+	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -14,6 +15,7 @@ package View.GameView
 	import Model.*;
 	import util.utilFun;
 	import Res.ResName;
+	import ConnectModule.Error_Msg;
 	
 	/**
 	 * ...
@@ -49,82 +51,159 @@ package View.GameView
 			//view.Create_by_list(1, [ResName.L_emptymc], 0, 0, 1, 0, 0, "a_");			
 			
 			var barback:MultiObject = prepare("TopBar", new MultiObject(), this);
-			barback.Create_by_list(1920, [ResName.Lobby_topbar], 0 , 0, 1920, 1, 0, "Bet_");			
-			utilFun.scaleXY(barback.container, 1, 0.9);
+			barback.Create_by_list(1, [ResName.Lobby_topbar], 0 , 0, 1, 1, 0, "Bet_");			
+			
 			
 			var Mascot:MultiObject = prepare("Mascot", new MultiObject(), this);
 			Mascot.Create_by_list(1, [ResName.L_Mascot], 0 , 0, 1, 0, 0, "Bet_");
-			utilFun.scaleXY(Mascot.container, 1, 0.9);
+			Mascot.container.x = -42;
+			Mascot.container.y = -25;
 			
-			
-			
-			//var topGameState:MultiObject = prepare("top_icon", new MultiObject(), this);
-			//topGameState.MouseFrame = utilFun.Frametype(MouseBehavior.SencetiveBtn);			
-			//topGameState.rollover = _btn.test_reaction;
-			//topGameState.mousedown = _btn.test_reaction;
-			//topGameState.Create_by_list(5, [ResName.L_top_icon], 0 , 0, 5, 114, 0, "Bet_");
-			//topGameState.container.x = 108;			
-			//topGameState.container.y = 5;			
-			
+			//utilFun.Log("name= "+_model.getValue(modelName.NICKNAME));
+			//utilFun.Log("credit= " + _model.getValue(modelName.CREDIT));
+			var credit:int = _model.getValue(modelName.CREDIT);
 			var playerinfo:MultiObject = prepare("playinfo", new MultiObject(), this);
-			playerinfo.Create_by_list(2, [ResName.L_name,ResName.L_credit], 0 , 0, 2, 360, 0, "Bet_");
-			playerinfo.container.x = 940;
-			playerinfo.container.y = 10;
-			utilFun.scaleXY(playerinfo.container,1, 0.9);
+			playerinfo.CustomizedFun = _regular.textSetting;
+			playerinfo.CustomizedData = [_model.getValue(modelName.NICKNAME),credit]
+			playerinfo.Create_by_list(2, [ResName.L_name,ResName.L_credit], 0 , 0, 2, 290, 0, "Bet_");
+			playerinfo.container.x = 90;
+			playerinfo.container.y = 1020;
 			
-			//name
-			var name:MultiObject = prepare("name", new MultiObject() , this);
-			name.CustomizedFun = _regular.ascii_idx_setting;			
-			name.CustomizedData =  _model.getValue(modelName.NICKNAME).split("");
-			name.container.x = 1212  + (name.CustomizedData.length -1) * 37 * -1; //mid *-.05
-			name.container.y = 14;
-			name.Create_by_bitmap(name.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, name.CustomizedData.length, 37, 51, "o_");			
-			utilFun.scaleXY(name.container, 1, 0.9);
+			//_tool.SetControlMc(Mascot.container);
+			//_tool.y = 200;
+			//addChild(_tool);	
 			
-			var creadit:int = _model.getValue(modelName.CREDIT);
-			var credit:MultiObject = prepare(modelName.CREDIT, new MultiObject() , this);
-			credit.CustomizedFun = _regular.ascii_idx_setting;						
-			credit.CustomizedData = creadit.toString().split("");
-			credit.container.x = 1593 + (credit.CustomizedData.length -1) * 37 *-1;   //right -> left *-1
-			credit.container.y = 16;
-			credit.Create_by_bitmap(credit.CustomizedData.length, utilFun.Getbitmap(ResName.L_altas), 0, 0, credit.CustomizedData.length, 37, 51, "o_");
-			utilFun.scaleXY(credit.container,1, 0.9);
+			var coin_ani:MultiObject = prepare("update_coin", new MultiObject(), this);								
+			coin_ani.Create_by_list(1, [ResName.coin_In_pack], 0 , 0, 1, 0 , 0, "Bet_");
+			coin_ani.container.x = 510;
+			coin_ani.container.y = 980;
+			//coin_ani.ItemList[0].gotoAndStop(2);
+			
+			//_tool.SetControlMc(coin_ani.container);
+			//_tool.y = 200;
+			//addChild(_tool);	
 			
 			var topicon:MultiObject = prepare("topicon", new MultiObject(), this);
-			topicon.Posi_CustzmiedFun = _regular.Posi_x_Setting;
-			topicon.Post_CustomizedData = [0, 160, 230,230];
-			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			//topicon.CustomizedFun =  _btn.Btn_setting;
+			topicon.CustomizedData = [6];
+			//topicon.Posi_CustzmiedFun = _regular.Posi_xy_Setting;
+			//topicon.Post_CustomizedData = [[0, 0], [80, 0], [157, -2], [230, 0]];
+			topicon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,0]);			
 			topicon.rollover = _btn.BtnHint;
-			topicon.rollout = _btn.test_reaction;
+			topicon.rollout = _btn.Btn_roout;
 			topicon.mousedown = _btn.gonewpage;
-			topicon.Create_by_list(4, [ResName.L_icon_1, ResName.L_icon_2 ,ResName.L_icon_3,ResName.L_icon_4], 0 , 0, 4, 0 , 0, "Bet_");
-			topicon.container.x = 1624;
-			topicon.container.y = 10;
-			utilFun.scaleXY(topicon.container, 1, 0.9);
+			topicon.Create_by_list(1, [ ResName.L_icon_Full_Screen], 0 , 0,2 , 50 , 0, "Bet_");
+			topicon.container.x = 1790;
+			topicon.container.y = 2;
+			
+			
+		
 		
 			// TODO hud di
-			var gamestate:Array  =_model.getValue("gamestat");
-			utilFun.Log("gamestate ="+gamestate);			
+			var gamestate:Array  =_model.getValue("gameonline");
+			utilFun.Log("gameonline ="+gamestate);			
 			
 			var avalibe:Array =  get_avalible(gamestate);
+			//拿掉二元期權
+			//avalibe.pop();
 			utilFun.Log("avalibe ="+avalibe);			
 			var avtivelist:MultiObject = prepare("avtivelist", new MultiObject() , this);				
-			avtivelist.container.x = 120;
-			avtivelist.container.x = 120;
-			avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);
-			avtivelist.mousedown = test_reaction;
-			avtivelist.CustomizedFun = gameframe;
-			avtivelist.CustomizedData = avalibe;
-			avtivelist.Create_by_list(avalibe.length, [ResName.L_top_icon], 0, 0, avalibe.length, 102, 51, "o_");			
+			avtivelist.container.x = 180;
+			avtivelist.container.y= 4;
+			avtivelist.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[0,0,2,0]);
+			avtivelist.mousedown = myreaction;
+			avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons,ResName.biany_icons], 0, 0, avalibe.length, 50, 0, "o_");			
+			//拿掉二元期權
+			//avtivelist.Create_by_list(avalibe.length, [ResName.pa_icons,ResName.dk_icons,ResName.bg_icons,ResName.s7pk_icons], 0, 0, avalibe.length, 50, 0, "o_");		
 			
-			//_tool = new AdjustTool();
-			//_tool.SetControlMc(avtivelist.container);
-			//addChild(_tool);
-			
+			hud_pre_init();
 			//_activelist.init();
-			//_tool.SetControlMc(credit.container);
-			//_tool.SetControlMc(topicon.ItemList[2]);
+			//_tool.SetControlMc(pop_msg.container);			
+			//_tool.y = 200;
 			//addChild(_tool);
+		}
+		
+		public function hud_pre_init():void
+		{
+		
+			//退出確定鈕
+			//0 = bg 1 = cancel 2 = confirm
+			var pop_msg:MultiObject = prepare("popmst", new MultiObject() , this);			
+			pop_msg.container.x = 1590;
+			pop_msg.container.y = 130;
+			pop_msg.CustomizedData = [[0, 0] ,[60,90],[170,90]]
+			pop_msg.CustomizedFun = _regular.Posi_xy_Setting;
+			//pop_msg.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,2,0]);
+			pop_msg.Create_by_list(3, [ResName.PopMsg, ResName.PopBtn, ResName.PopBtn], 0, 0, 1, 50, 0, "o_");			
+			pop_msg.rollout = pop_msg_rollout;
+			pop_msg.rollover = pop_msg_rollover;
+			//pop_msg.mousedown = cliek;
+			pop_msg.container.visible = false;
+			pop_msg.ItemList[1]["_btn_context"].gotoAndStop(2);
+			pop_msg.ItemList[2]["_btn_context"].gotoAndStop(1);
+		}
+		
+		public function pop_msg_rollout(e:Event, idx:int):Boolean
+		{			
+			if(e.currentTarget["_btn_context"] != undefined){
+			
+				if (e.currentTarget["_btn_context"].currentFrame == 2) {
+					Get("popmst").ItemList[1].gotoAndStop(1);
+					Get("popmst").ItemList[1]["_btn_context"].visible = true;
+				}else if (e.currentTarget["_btn_context"].currentFrame == 1) {
+					Get("popmst").ItemList[2].gotoAndStop(1);
+					Get("popmst").ItemList[2]["_btn_context"].visible = true;
+				}
+			
+			}
+			
+			return true;
+		}
+		
+		public function pop_msg_rollover(e:Event, idx:int):Boolean
+		{			
+			if (e.currentTarget["_btn_context"] != undefined) {
+				
+				if (e.currentTarget["_btn_context"].currentFrame == 2) {
+					Get("popmst").ItemList[1].gotoAndStop(2);
+					Get("popmst").ItemList[1]["_btn_context"].visible = false;
+				}else if (e.currentTarget["_btn_context"].currentFrame == 1) {
+					Get("popmst").ItemList[2].gotoAndStop(3);
+					Get("popmst").ItemList[2]["_btn_context"].visible = false;
+				}
+			
+			}
+			
+			return true;
+		}
+		
+		
+		
+		[MessageHandler(type = "Model.ModelEvent", selector = "msgbox")]
+		public function pop_handle(msg:ModelEvent):void
+		{			
+			var popmsg:MultiObject = Get("popmst");			
+			popmsg.container.visible = true;
+			
+			if ( msg.Value == Error_Msg.NET_DISCONNECT)
+			{
+				popmsg.CustomizedData = [[0, 0] , [ 115, 90], [ 115, 90]];
+				popmsg.CustomizedFun = _regular.Posi_xy_Setting;
+				popmsg.FlushObject();
+				popmsg.mousedown = handle_;
+				popmsg.ItemList[0]["_content"].gotoAndStop(3);
+			}
+			
+		}
+		
+		public function handle_(e:Event, idx:int):Boolean
+		{			
+			var popmsg:MultiObject = Get("popmst");			
+			popmsg.container.visible = false;
+			
+			//斷線後處理
+			//dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.CONNECT));
+			return true;
 		}
 		
 		public function get_avalible(arr:Array):Array
@@ -142,23 +221,22 @@ package View.GameView
 			
 			return ava;
 		}
-			
 		
-		public function gameframe(mc:MovieClip, idx:int, data:Array):void
-		{		
-			mc["_game_name"].gotoAndStop(data[idx]+1);
-			mc["_game_state"].gotoAndStop(5);
-		}
-		
-		public function test_reaction(e:Event, idx:int):Boolean
+		public function myreaction(e:Event, idx:int):Boolean
 		{
-			//utilFun.Log("e.u" + e.currentTarget.currentFrame);		
-			//1 載入,2
+			var popmsg:MultiObject = Get("popmst");
+			if ( popmsg.container.visible )
+			{
+				utilFun.Log("promet not repley");
+				return false;
+			}
+			
+			//utilFun.Log("e.u" + e.currentTarget.currentFrame);			
 			if ( e.currentTarget.currentFrame == 1) 
 			{
 				var btn_cavasid:DI =  _model.getValue("Topgameicon_blind");					
 				if (btn_cavasid.getValue(idx)== null)
-				{						
+				{	
 					var cav_id:int = _model.getValue("canvas_Serial");
 					utilFun.Log("no find");									
 					btn_cavasid.putValue(idx, cav_id);
@@ -169,20 +247,29 @@ package View.GameView
 				}
 				else
 				{
-					var cav_id:int = btn_cavasid.getValue(idx);
+					cav_id = btn_cavasid.getValue(idx);
 					utilFun.Log("find " +cav_id);
 					
-					//swith visible for all  newcanvas
+					//swith visible for all  newcanvas					
 					var allcanvas:int = _model.getValue("canvas_Serial");
 					for ( var i:int = 0; i < allcanvas ; i++)
 					{
 						var newcanvas:Object  = _model.getValue("newcanvas" + i);
-						if ( i == cav_id) newcanvas.canvas_container.visible = true;
-						else newcanvas.canvas_container.visible = false;
+						if ( i == cav_id) 
+						{
+							newcanvas.canvas_container.visible = true;
+							newcanvas.call_back(["RESUME"]);
+						}
+						else if(newcanvas != null)
+						{
+							newcanvas.canvas_container.visible = false;
+							newcanvas.call_back(["MUTE"]);
+						}
 					}
 					
 				}
-				
+				// e.currentTarget["_game_name"].gotoAndStop(idx);
+				 
 			}
 			else 
 			{
@@ -191,7 +278,8 @@ package View.GameView
 			};
 			
 			var activelist:MultiObject = Get("avtivelist");			
-			activelist.exclusive(idx,1);
+			activelist.exclusive(idx, 1);
+			utilFun.Log("click ok ");				
 			return true;
 		}
 		
@@ -222,9 +310,31 @@ package View.GameView
 			
 			
 			
-			var activelist:MultiObject = Get("avtivelist");			
+			activelist = Get("avtivelist");			
 			activelist.anti_exclusive( clickbtn.Value,2,1);
 		}
+		
+	
+		[MessageHandler(type = "Model.ModelEvent", selector = "HandShake_updateCredit")]
+		public function updateCredit():void
+		{			
+			var new_credit:int = _model.getValue(modelName.CREDIT);		
+			var old_credit_s:String = GetSingleItem("playinfo", 1)["_Text"].text;
+			var old_credit:int = parseInt(old_credit_s);
+			
+			utilFun.Log("new_credit = "+ new_credit);
+			utilFun.Log("old_credit = "+ old_credit);
+			if ( new_credit > old_credit ) 
+			{
+				//噴金
+				GetSingleItem("update_coin").gotoAndPlay(2);
+				utilFun.Log( " game +++++++++ " + _model.getValue("credit_update_by"));
+			}
+			var credit:int = _model.getValue(modelName.CREDIT);
+			utilFun.SetText(GetSingleItem("playinfo", 1)["_Text"], credit.toString());
+			
+		}				
+		
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="LeaveView")]
 		override public function ExitView(View:Intobject):void

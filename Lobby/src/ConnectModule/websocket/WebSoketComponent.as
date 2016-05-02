@@ -12,14 +12,13 @@ package ConnectModule.websocket
 	import flash.utils.ByteArray;
 	import flash.system.Security;
 	import Model.*;	
+	import util.DI;
+	import View.Viewutil.Visual_Log;
 	
-	import Model.valueObject.*;
-		
-	import View.GameView.CardType;
+	import Model.valueObject.*;	
 	
 	import util.utilFun;	
-	import ConnectModule.websocket.Message
-
+	import ConnectModule.Error_Msg;
 
 	
 	/**
@@ -40,6 +39,9 @@ package ConnectModule.websocket
 		[Inject]
 		public var _model:Model;
 		
+		[Inject]
+		public var _Log:Visual_Log;
+		
 		private var websocket:WebSocket;
 		
 		public function WebSoketComponent() 
@@ -50,15 +52,9 @@ package ConnectModule.websocket
 		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="connect")]
 		public function Connect():void
 		{
-			var object:Object = _model.getValue(modelName.LOGIN_INFO);						
-			
-			if ( CONFIG::debug ) 
-			{
-				 websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/1679091c5a880faf6fb5e6087eb1b2dc", "");
-			}
-			else {
-				websocket = new WebSocket("ws://106.186.116.216:8001/gamesocket/token/" + object.accessToken, "");
-			}
+			var object:Object = _model.getValue(modelName.LOGIN_INFO);			
+			_Log.Log("connect to " + "ws:// "+ _model.getValue("lobby_ws") + ":8001/gamesocket/token/" + object.accessToken);
+			websocket = new WebSocket("ws://"+ _model.getValue("lobby_ws")+ ":8001/gamesocket/token/" + object.accessToken, "");			
 			websocket.addEventListener(WebSocketEvent.OPEN, handleWebSocket);
 			websocket.addEventListener(WebSocketEvent.CLOSED, handleWebSocket);
 			websocket.addEventListener(WebSocketErrorEvent.CONNECTION_FAIL, handleConnectionFail);
@@ -70,17 +66,22 @@ package ConnectModule.websocket
 		{			
 			if ( event.type == WebSocketEvent.OPEN)
 			{
-				utilFun.Log("Connected open="+ event.type );
+				utilFun.Log("Connected open=" + event.type );
+				_Log.Log("socket open");
+				
 			}
 			else if ( event.type == WebSocketEvent.CLOSED)
 			{
-				utilFun.Log("Connected close lobby="+ event.type );
+				utilFun.Log("Connected close lobby=" + event.type );
+				_Log.Log("socket socket_close");
+				dispatcher(new ModelEvent("msgbox",Error_Msg.NET_DISCONNECT));
 			}
 		}
 		
 		private function handleConnectionFail(event:WebSocketErrorEvent):void 
 		{
-			utilFun.Log("Connected= fale"+ event.type);
+			utilFun.Log("Connected= fale" + event.type);
+			_Log.Log("socket ConnectionFail = "+ event.type);
 		}
 		
 		
@@ -89,7 +90,8 @@ package ConnectModule.websocket
 			var result:Object ;
 			if (event.message.type === WebSocketMessage.TYPE_UTF8) 
 			{
-				utilFun.Log("lobby before"+event.message.utf8Data)
+				utilFun.Log("before" + event.message.utf8Data)
+				//_Log.Log("lobby pack ConnectionFail = "+ event.message.utf8Data);
 				result = JSON.decode(event.message.utf8Data);			
 			}
 			
@@ -99,183 +101,83 @@ package ConnectModule.websocket
 		[MessageHandler(type = "Model.ModelEvent", selector = "popmsg")]
 		public function msghandler():void
 		{
-			   var result:Object  = _MsgModel.getMsg();
+			   var result:Object  = _MsgModel.getMsg();			   
 				switch(result.message_type)
 				{
 					case "MsgLogin":
 					{
 						if ( result.game_type == "Lobby")
 						{
-							dispatcher(new ValueObject( result.player_info.player_account,modelName.NICKNAME) );
+							dispatcher(new ValueObject( result.player_info.player_account, modelName.NICKNAME) );							
 							dispatcher(new ValueObject( result.player_info.player_uuid,modelName.UUID) );
 							//player_id
 							//player_currency
-							dispatcher(new ValueObject( result.player_info.player_credit, modelName.CREDIT) );
-							
-							
+							dispatcher(new ValueObject( result.player_info.player_credit, modelName.CREDIT) );							
 						
-							dispatcher(new ValueObject( result.game_list, modelName.OPEN_STATE) );
+							//TODO find name dynamic
+							var bingo:Object = result.game_list["Bingo-1"];
+							var binary:Object = result.game_list["Binary-1"];
+							var pa:Object = result.game_list["PerfectAngel-1"];
+							var super7:Object = result.game_list["Super7PK-1"];
+							var bigwin:Object = result.game_list["BigWin-1"];
+							
+							var gamelist:Array = [];
+							gamelist.push(pa);
+							gamelist.push(bigwin);
+							gamelist.push(bingo);
+							gamelist.push(super7);
+							gamelist.push(binary);
+							
+							dispatcher(new ValueObject( gamelist, modelName.OPEN_STATE) );
 							
 							dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH));		
 							dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;				
+							
 						}
 					}
 					break
 					
-					case "MsgPlayerCreditUpdate":
-					{
-						if ( result.game_type == "Lobby")
-						{
-							dispatcher(new ValueObject( result.player_credit, modelName.CREDIT) );						
-							dispatcher(new ModelEvent("update_result_Credit"));
-						}
-					}
-					
-					
-					case Message.MSG_TYPE_LOGIN:
-					{					
-						//server 要求login 資料
-						var msg:Object = {"message_type":Message.MSG_TYPE_LOGIN, "login_info":_model.getValue(modelName.LOGIN_INFO)};
-						SendMsg(msg);
-						//test
-						break;
-					}
-					case Message.MSG_TYPE_LOGIN_ERROR:
-					{					
-						break;
-					}
-					
-					case Message.MSG_TYPE_LOBBY:
-					{
-						
-						//接收大廳資料
-						
-						dispatcher(new ValueObject( result.playerinfo.nickname,modelName.NICKNAME) );
-						dispatcher(new ValueObject( result.playerinfo.userid,modelName.UUID) );
-						dispatcher(new ValueObject( result.playerinfo.credit,modelName.CREDIT) );
-						dispatcher(new ValueObject( result.open_state,modelName.OPEN_STATE) );
-						
-						
-						
-						dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH));		
-						dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;				
-						
-						//模擬點擊某遊戲ICON (單一遊戲都1
-						//var lobby:Object = {"message_type":Message.MSG_TYPE_SELECT_GAME, "game_type":1};
-						//SendMsg(lobby);
-						break;
-					}
-					case Message.MSG_TYPE_GAME_LOBBY:
-					{						
-						//接收特定遊/戲大廳資料
-						//dispatcher(new ViewState(ViewState.Lobb,ViewState.ENTER) );
-						//dispatcher(new ViewState(ViewState.Loading,ViewState.LEAVE) );
-						
-						//模擬點擊進入遊戲
-						var gamelobby:Object = {"message_type":Message.MSG_TYPE_INTO_GAME, "game_room":3};
-						SendMsg(gamelobby);
-						break;
-					}
-					
-					case Message.MSG_TYPE_INTO_GAME:
-					{						
-						//進入 遊戲,得到第一個畫面(不論半途或一開始
-						
-						dispatcher(new ValueObject( result.inside_game_info.player_info.nickname,modelName.NICKNAME) );
-						dispatcher(new ValueObject( result.inside_game_info.player_info.userid,modelName.UUID) );
-						dispatcher(new ValueObject( result.inside_game_info.player_info.credit,modelName.CREDIT) );
-						
-						dispatcher(new ValueObject(  result.inside_game_info.remain_time,modelName.REMAIN_TIME) );						
-						dispatcher(new ValueObject(  result.inside_game_info.games_state, modelName.GAMES_STATE) );						
-						dispatcher(new ValueObject(  result.inside_game_info.split_symbol, modelName.SPLIT_SYMBOL) );
-						
-                        dispatcher( new ValueObject(result.inside_game_info.game_info["player_card_list"], modelName.PLAYER_POKER) );
-                        dispatcher( new ValueObject(result.inside_game_info.game_info["banker_card_list"], modelName.BANKER_POKER) );
-						
-						dispatcher(new Intobject(modelName.lobby, ViewCommand.SWITCH) );
-						//dispatcher(new Intobject(modelName.Hud, ViewCommand.ADD)) ;
-						
-						dispatcher(new ModelEvent("update_state"));
-						dispatcher(new Intobject(modelName.PLAYER_POKER, "pokerupdate"));
-						dispatcher(new Intobject(modelName.BANKER_POKER, "pokerupdate"));						
-						
-						break;
-					}
-					
-					case Message.MSG_TYPE_STATE_INFO:
-					{					  
-					  
-					  dispatcher(new ValueObject(  result.games_state, modelName.GAMES_STATE) );
-					  dispatcher(new ValueObject(  result.remain_time,modelName.REMAIN_TIME) );
-					   dispatcher(new ModelEvent("update_state"));
-					   break;
-					}
-					
+					//new archi
 					case Message.MSG_TYPE_GAME_OPEN_INFO:
-					{
-						dispatcher(new ValueObject(  result.games_state, modelName.GAMES_STATE) );
-                        var card:Array = result.card_info["card_list"];
-                        var card_type:int = result.card_info["card_type"];
-						if ( card_type == CardType.PLAYER)
-						{
-							dispatcher( new ValueObject( card, modelName.PLAYER_POKER) );
-							dispatcher(new ModelEvent("playerpokerAni"));
-						}
-						else if ( card_type == CardType.BANKER)
-						{							
-						    dispatcher( new ValueObject(card, modelName.BANKER_POKER) );							
-							dispatcher(new ModelEvent("playerpokerAni2"));
-						}
-						
-						break;
-					}					
 					case Message.MSG_TYPE_BET_INFO:
-					{
-						if (result.result)
-						{
-							dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.BETRESULT));
-							dispatcher(new ModelEvent("updateCredit"));
-							dispatcher(new ModelEvent("updateCoin"));
-						}
-						else
-						{
-							_actionqueue.dropMsg();
-							//error handle
-						}
-						break;
-					}
+					case Message.MSG_TYPE_STATE_INFO:
 					case Message.MSG_TYPE_ROUND_INFO:
+					case Message.MSG_TYPE_ENTER_GAME:
 					{
-						dispatcher( new ValueObject(result.bet_amount,modelName.BET_AMOUNT));
-						dispatcher( new ValueObject(result.settle_amount,modelName.SETTLE_AMOUNT));
-						
-						dispatcher(new ValueObject( result.player_info.credit,modelName.CREDIT) );
-						
-						dispatcher( new ValueObject(result.win_type, modelName.ROUND_RESULT));
-						dispatcher(new ModelEvent("round_result"));
-						dispatcher(new ModelEvent("update_result_Credit"));
-						
-						break;
-					}
+						_model.putValue("pass_to_game_pagcage", result);
+						dispatcher(new ModelEvent("update_package"));
+					}				
+					
+					break;
 				}
 		}
 		
-		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="Bet")]
-		public function SendBet():void
+		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="GameJoin")]
+		public function game_join():void
 		{
-			var ob:Object = _actionqueue.getMsg();
-			var bet:Object = { "message_type":Message.MSG_TYPE_BET, 
-			                               "serial_no":0,
-										   "game_type":1,
-										   "bet_type":ob["betType"],
-										    "amount":ob["bet_amount"]};
-										   
+			var game_info:DI = _model.getValue("game_info");
+			var join_game_info:Object = game_info.getValue(_model.getValue("join_game_type"));
+			var join_info:Object = { "id": "11111",
+											"timestamp":2222,
+											"message_type":Message.MSG_TYPE_ENTER_GAME, 
+			                                "game_type": _model.getValue("join_game_type"),
+											"game_id":join_game_info.game_id
+			};			
+			
+			SendMsg(join_info);
+		}
+		
+		[MessageHandler(type="ConnectModule.websocket.WebSoketInternalMsg",selector="game_credit_update")]
+		public function update_bet_from_game():void
+		{
+			var bet:Object = _model.getValue("game_bet");			
 			SendMsg(bet);
 		}
 		
 		public function SendMsg(msg:Object):void 
 		{
 			var jsonString:String = JSON.encode(msg);
+			//_Log.Log("lobby send jsonString = "+ jsonString);
 			websocket.sendUTF(jsonString);
 		}
 		

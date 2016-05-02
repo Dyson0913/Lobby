@@ -15,9 +15,7 @@ package View.ViewComponent
 	 * @author ...
 	 */
 	public class Visual_Hintmsg  extends VisualHandler
-	{
-		[Inject]
-		public var _regular:RegularSetting;
+	{	
 		
 		public function Visual_Hintmsg() 
 		{
@@ -26,7 +24,7 @@ package View.ViewComponent
 		
 		[MessageHandler(type = "Model.ModelEvent", selector = "display")]
 		public function display():void
-		{
+		{			
 			GetSingleItem(modelName.HINT_MSG).gotoAndStop(1);	
 			_regular.FadeIn( GetSingleItem(modelName.HINT_MSG), 2, 2, _regular.Fadeout);		
 		}

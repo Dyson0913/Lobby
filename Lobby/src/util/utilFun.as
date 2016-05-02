@@ -13,16 +13,20 @@ package util
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
 	import Interface.ViewComponentInterface;
+	import Model.MsgQueue;
 	
 	import com.hexagonstar.util.debug.Debug;
 	import View.Viewutil.MouseBehavior;
 	import Res.ResName;	
+	
+		import com.istrong.log.*;
 	/**
 	 * 常用功能
 	 * @author hhg
 	 */
 	public class utilFun
 	{		
+		
 		
 		public function utilFun() 
 		{
@@ -73,7 +77,9 @@ package util
 		 */
 		public static function Log(msg:String):void
 		{			
-			Debug.trace(msg);			
+			Logger.log("lobby " + msg, 0, 0, false);
+			//Debug.trace(msg);			
+			
 		}
 		
 		/******************** 元件操作功能 ********************/
@@ -159,15 +165,6 @@ package util
 			}			
 		}
 		
-		public static function GotoAndStop(e:Event,frame:int):void
-		{			
-			if ( frame == 0 )
-			{				
-				return;
-			}			
-			e.currentTarget.gotoAndStop(frame);		
-		}
-		
 		public static function Frametype(type:int,customized:Array = null):Array
 		{
 			var BtnMouseFrame:Array;
@@ -176,6 +173,15 @@ package util
 			if (type == MouseBehavior.Customized ) BtnMouseFrame = customized;
 			
 			return BtnMouseFrame;
+		}
+		
+		public static function GotoAndStop(e:Event,frame:int):void
+		{			
+			if ( frame == 0 )
+			{				
+				return;
+			}			
+			e.currentTarget.gotoAndStop(frame);		
 		}
 		
 		public static function easy_combination(list:Array, lenght:int):Array

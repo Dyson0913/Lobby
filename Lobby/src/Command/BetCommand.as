@@ -41,20 +41,10 @@ package Command
 		public function betTypeMain(e:Event,idx:int):Boolean
 		{			
 			idx += 1;			
-			//擋狀態
-			if ( _model.getValue(modelName.GAMES_STATE)  != gameState.NEW_ROUND )
-			{				
-				return false;
-			}
+			
 			
 			if ( _Actionmodel.length() > 0) return false;
 			
-			//押注金額判定
-			if ( get_total_bet(CardType.PLAYER) + get_total_bet(CardType.BANKER)  + get_total_bet(CardType.Tie)+ _opration.array_idx("coin_list", "coin_selectIdx") > _model.getValue(modelName.CREDIT))
-			{
-				dispatcher( new WebSoketInternalMsg(WebSoketInternalMsg.NO_CREDIT));
-				return false;
-			}
 			
 			var bet:Object = { "betType": idx, 
 			                               "bet_amount":  get_total_bet(idx) + _opration.array_idx("coin_list", "coin_selectIdx")

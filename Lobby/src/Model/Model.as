@@ -31,6 +31,10 @@ package Model
 		{
 			return _di.getValue(name);
 		}
+		
+		public function Del(name:*):void {
+			_di.Del(name);
+		}
 	}
 
 }

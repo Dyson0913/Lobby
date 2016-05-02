@@ -1,26 +1,28 @@
 package View.GameView
 {
+	import com.adobe.webapis.events.ServiceEvent;
 	import ConnectModule.websocket.WebSoketInternalMsg;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.media.ID3Info;
 	import flash.text.TextField;
 	import Model.valueObject.*
 	import Res.ResName;
 	import util.DI;
 	import Model.*
 	import util.node;
-	import View.ViewComponent.Visual_BtnHandle;
+	import View.ViewComponent.*;
 	import View.Viewutil.*;
 	import View.ViewBase.ViewBase;
 	import util.*;
-	import View.ViewComponent.Visual_Coin;
+	import flash.text.TextFormat;
 	
 	import Command.*;
 	
 	import caurina.transitions.Tweener;	
-	import caurina.transitions.properties.CurveModifiers;
 	/**
 	 * ...
 	 * @author hhg
@@ -31,13 +33,10 @@ package View.GameView
 		public var _betCommand:BetCommand;
 		
 		[Inject]
-		public var _regular:RegularSetting;	
-		
-		[Inject]
-		public var _visual_coin:Visual_Coin;
-		
-		[Inject]
 		public var _btn:Visual_BtnHandle;
+		
+		[Inject]
+		public var _Version:Visual_Version;
 		
 		public function LobbyView()  
 		{
@@ -58,55 +57,65 @@ package View.GameView
 			var view:MultiObject = prepare("_view", new MultiObject() , this);
 			view.Create_by_list(1, [ResName.Lobby_Scene], 0, 0, 1, 0, 0, "a_");			
 			
-			var page:MultiObject = prepare("pagearr", new MultiObject(), this);
-			page.MouseFrame = utilFun.Frametype(MouseBehavior.ClickBtn);			
-			page.mousedown = _btn.test_reaction;		
-			page.mouseup = _btn.test_reaction;		
-			page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1820 , 0, "Bet_");
-			page.container.x = 10;
-			page.container.y = 502;
+			//arrow
+			//var page:MultiObject = prepare("pagearr", new MultiObject(), this);
+			//page.MouseFrame = utilFun.Frametype(MouseBehavior.Customized,[1,2,3,1]);			
+			//page.mousedown = _btn.test_reaction;
+			//page.mouseup = _btn.test_reaction;		
+			//page.rollover = _btn.test_reaction;		
+			//page.rollout = _btn.test_reaction;		
+			//page.CustomizedFun = arror_turn;
+			//page.Create_by_list(2, [ResName.L_arrow_l, ResName.L_arrow_r], 0 , 0, 2, 1880 , 0, "Bet_");
+			//page.container.x = 10;
+			//page.container.y = 502;
+			
 			
 			//TODO fun -->map 
-			var gameIconlist:Array = [ResName.L_game_3,ResName.L_game_2, ResName.L_game_4, ResName.L_game_5];
+			var icon_mapping:DI = new DI();
+			icon_mapping.putValue("BigWin", 0);
+			icon_mapping.putValue("PerfectAngel", 1);
+			icon_mapping.putValue("Bingo", 2);
+			icon_mapping.putValue("Finance", 3);
+			icon_mapping.putValue("7pk", 4);
+			var gameIconlist:Array = [ResName.L_game_pa,ResName.L_game_dk, ResName.L_game_bingo, ResName.L_game_7pk,ResName.L_game_financial];
 			var arr:Array = _model.getValue(modelName.OPEN_STATE);
-			//
-			var gamestat:Array = [];
+			
 			var gameweb:Array = [];
 			var gametype:Array = [];
 			var game_online:Array = [];
+			var game_id:Array = [];
+			var game_info_di:DI = new DI();
 			for ( var i:int = 0; i < arr.length ; i++)
-			{
-				//	var resultinfo:Array = arr[i].split("|");
-				if ( arr[i].game_type == "BigWin")
-				{
-					gamestat.push( arr[i].game_online);
-				}
-				if ( arr[i].game_type == "PerfectAngel")
-				{
-					gamestat.push(arr[i].game_online);
-				}
-			
-				if ( arr[i].game_type == "Bingo")
-				{
-					gamestat.push( arr[i].game_online);
-				}
-				if ( arr[i].game_type == "Finance")
-				{
-					gamestat.push( arr[i].game_online);
-				}
+			{				
+				var gameinfo_ob:Object = arr[i];
+				//{"Bingo-1": {"game_website": "http://106.186.116.216:8000/static/bingo_d.swf",
+                //	                   "game_description": "Lottary Bingo", 
+				//                     "game_type": "Bingo", 
+				//                     "redis_db": 6, 
+				//                      "online": false, 
+				//                      "game_id": "Bingo-1"}
+				var gameinfo:Object = { "game_online": gameinfo_ob.online, 
+														"game_website":  gameinfo_ob.game_website,
+														"game_type":gameinfo_ob.game_type,
+														"game_id":gameinfo_ob.game_id
+			                                      };
+								
+				gameweb.push(gameinfo_ob.game_website);
+				gametype.push(gameinfo_ob.game_type);
+				game_online.push(gameinfo_ob.online);
+				game_id.push(gameinfo_ob.game_id);
 				
-				gameweb.push(arr[i].game_website);
-				gametype.push(arr[i].game_type);
-				game_online.push(arr[i].game_online);
-				//game_description
-			
+				game_info_di.putValue(gameinfo_ob.game_type, gameinfo);
 			}			
 			
 			utilFun.Log("gameweb = "+gameweb);
 			utilFun.Log("game_online = "+game_online);
-			_model.putValue("gameweb", gameweb);
-			_model.putValue("gamestat", gamestat);
+			utilFun.Log("game_id = "+game_id);
+			_model.putValue("gameweb", gameweb);			
 			_model.putValue("gametype", gametype);
+			_model.putValue("gameonline", game_online);
+			_model.putValue("game_info", game_info_di);
+			
 			var gameIcon:MultiObject = prepare("gameIcon", new MultiObject(), this);
 			gameIcon.MouseFrame = utilFun.Frametype(MouseBehavior.Customized, [1, 2, 2, 1]);
 			gameIcon.rollover = _btn.Game_iconhandle;
@@ -114,35 +123,93 @@ package View.GameView
 			gameIcon.mousedown = _btn.Game_iconclick_down;
 			gameIcon.mouseup = _btn.Game_iconclick_up;
 			gameIcon.CustomizedFun = FrameSetting
-			gameIcon.CustomizedData = gamestat;
-			gameIcon.Create_by_list(gamestat.length,gameIconlist, 0 , 0, 3, 550 , 400, "Bet_");
-			gameIcon.container.x = 210;
-			gameIcon.container.y = 192;
+			gameIcon.CustomizedData = game_online;
+			gameIcon.Create_by_list(game_online.length,gameIconlist, 0 , 0, 3, 300 , 280, "Bet_");
+			gameIcon.container.x = 550;
+			gameIcon.container.y = 420;
+			
+			var sport:MultiObject = prepare("sport", new MultiObject() , this);
+			sport.container.x = 1160;
+			sport.container.y = 700;
+			sport.Create_by_list(1, [ResName.L_game_sport], 0, 0, 1, 0, 0, "a_");			
+			utilFun.scaleXY(GetSingleItem("sport", 0), 0.95, 0.95);
+			
+			//_tool.SetControlMc(sport.container);			
+			//_tool.y = 200;
+			//addChild(_tool);
+			//return;
+			
+			//coin_ani.ItemList[0];
+			_Version.init();
+				
+			var ad_mask:MultiObject = prepare("ad_mask", new MultiObject() , this);
+			ad_mask.container.x = 0;
+			ad_mask.container.y = 50;
+			ad_mask.Create_by_list(1, ["ad_mask"], 0, 0, 1, 0, 0, "ad_mask_");			
+			
+			//廣告
+			var ad_arr:Array = [];
+			var ad_pa:MovieClip = utilFun.GetClassByString("ad_pa");
+			var ad_dk:MovieClip = utilFun.GetClassByString("ad_dk");
+			var ad_bingo:MovieClip = utilFun.GetClassByString("ad_bingo");
+			var ad_7pk:MovieClip = utilFun.GetClassByString("ad_7pk");
+			ad_pa.name = "ad_pa";
+			ad_dk.name = "ad_dk";
+			ad_bingo.name = "ad_bingo";
+			ad_7pk.name = "ad_7pk";
+			ad_arr.push(ad_pa);
+			ad_arr.push(ad_dk);
+			ad_arr.push(ad_bingo);
+			ad_arr.push(ad_7pk);
+			var lobbyAdMc:MovieClip = new LobbyAd(ad_arr);
+			lobbyAdMc.x = 0;
+			lobbyAdMc.y = 50;
+			lobbyAdMc.mask = ad_mask.container;
+			
+			var _view:MultiObject = Get("_view") as MultiObject;
+			_view.container.addChild(lobbyAdMc);
+			lobbyAdMc.buttonMode = true;
+			lobbyAdMc.addEventListener(MouseEvent.CLICK, ad_click_handler);
 			
 		}			 
 		
+		private function ad_click_handler(e:MouseEvent):void {
+			var game_idx:int = 0;
+			var ad_name:String = e.target.name;
+			switch(ad_name) {
+				case "ad_pa":
+					game_idx = 0;
+				break;
+				case "ad_dk":
+					game_idx = 1;
+				break;
+				case "ad_bingo":
+					game_idx = 2;
+				break;
+				case "ad_7pk":
+					game_idx = 3;
+				break;
+			}
+			
+			var obj:MultiObject = Get("gameIcon");
+			var pa_icon:MovieClip = obj.ItemList[game_idx] as MovieClip;
+			pa_icon.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+			pa_icon.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP));
+		}
+		
 		public function FrameSetting(mc:MovieClip, idx:int, data:Array):void
 		{
-			if( data[idx] ==0) mc.gotoAndStop(3);
+			if( data[idx] ==0) mc.gotoAndStop(4);
 			else mc.gotoAndStop(data[idx]);
+			
+			utilFun.scaleXY(mc, 0.95, 0.95);
 		}
 		
-		[MessageHandler(type = "Model.ModelEvent", selector = "round_result")]
-		public function round_result():void
-		{		
-
-		}
-		
-		
-		
-		private function clearn():void
-		{			
-			dispatcher(new ModelEvent("clearn"));			
-		  
-		
-				
-			//dispatcher(new BoolObject(false, "Msgqueue"));
-		}
+		public function arror_turn(mc:MovieClip, idx:int, data:Array):void
+		{
+			if ( idx == 1) mc.rotationY = 180;
+			
+		}	
 		
 		[MessageHandler(type = "Model.valueObject.Intobject",selector="LeaveView")]
 		override public function ExitView(View:Intobject):void
